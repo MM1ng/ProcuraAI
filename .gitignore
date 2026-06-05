@@ -1,0 +1,85 @@
+# ============================================
+# ProcuraAI .gitignore
+# ============================================
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# --- Virtual Environments ---
+.venv/
+venv/
+env/
+
+# --- IDE / Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- Environment ---
+.env
+.env.local
+.env.production
+.env.development
+
+# --- Logs ---
+logs/
+*.log
+
+# --- Cache ---
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Node / Frontend ---
+node_modules/
+.next/
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# --- Python Build Artifacts ---
+*.egg
+*.whl
+
+# --- Database ---
+*.db
+*.sqlite
+*.sqlite3
+
+# --- LangChain / RAG / Vector Store ---
+.chroma/
+vector_store/
+faiss_index/
+storage/
+mlruns/
+
+# --- Temporary ---
+tmp/
+temp/
+
+# --- Runtime / Generated Files ---
+data/retrieval_index.json
+
+# --- Screenshots / Demo Assets ---
+*.png
+
+# --- Playwright / Test Artifacts ---
+.playwright-cli/
+.runlogs/
+
+# --- Codex / Agent Artifacts ---
+.codex-remote-attachments/
+.playwright-mcp/

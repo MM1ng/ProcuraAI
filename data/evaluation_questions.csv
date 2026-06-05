@@ -1,0 +1,6 @@
+question,ground_truth
+"We need to buy equipment for 20 interns under $3000. Each person needs a keyboard, mouse and headset.","The answer should recommend one item per category, check budget, stock, rating and delivery."
+"Recommend office equipment for a remote team of 10 people. Need webcams, headsets and docking stations.","The answer should retrieve webcams, headsets and docking stations and produce a valid plan."
+"Find high rating monitors and keyboards with delivery within 5 days.","The answer should filter by rating and delivery constraints."
+"Make this procurement plan cheaper but keep rating above 4.2.","The answer should preserve rating constraints while reducing cost."
+"Replace the current headset with a lower cost model delivered within 5 days.","The answer should select a cheaper headset satisfying delivery."

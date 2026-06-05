@@ -1,0 +1,292 @@
+[
+  {
+    "order_id": "ORD-957E650E52",
+    "user_id": "demo-user",
+    "order_items": [
+      {
+        "order_item_id": "673712ac-57a3-43f9-bbdb-fe2d511dfcd2",
+        "product_id": "P-0069",
+        "name": "Keychron Ergo Keyboard 118",
+        "quantity": 20,
+        "unit_price": 54.71,
+        "subtotal": 1094.2
+      },
+      {
+        "order_item_id": "73125c21-0be9-48dd-bb49-91b17afc8904",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 20,
+        "unit_price": 17.94,
+        "subtotal": 358.8
+      },
+      {
+        "order_item_id": "53eb9181-c258-4b04-903d-be526174e268",
+        "product_id": "P-0101",
+        "name": "Jabra Ergo Headset 100",
+        "quantity": 20,
+        "unit_price": 60.4,
+        "subtotal": 1208.0
+      }
+    ],
+    "total_amount": 2661.0,
+    "status": "pending_payment",
+    "stripe_session_id": null,
+    "created_at": "2026-06-04T01:48:37.511539+00:00"
+  },
+  {
+    "order_id": "ORD-B707FB44D3",
+    "user_id": "demo-user",
+    "order_items": [
+      {
+        "order_item_id": "934ce8c6-e477-4d0d-8a8f-87fc1d407afe",
+        "product_id": "P-0069",
+        "name": "Keychron Ergo Keyboard 118",
+        "quantity": 20,
+        "unit_price": 54.71,
+        "subtotal": 1094.2
+      },
+      {
+        "order_item_id": "619d4d7a-2b3c-4511-99aa-152db76326a4",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 20,
+        "unit_price": 17.94,
+        "subtotal": 358.8
+      },
+      {
+        "order_item_id": "0ad67090-d8f4-4ccb-a76d-9251ad7718f5",
+        "product_id": "P-0101",
+        "name": "Jabra Ergo Headset 100",
+        "quantity": 20,
+        "unit_price": 60.4,
+        "subtotal": 1208.0
+      }
+    ],
+    "total_amount": 2661.0,
+    "status": "pending_payment",
+    "stripe_session_id": null,
+    "created_at": "2026-06-04T01:49:26.900307+00:00"
+  },
+  {
+    "order_id": "ORD-B5A7B8D8B1",
+    "user_id": "demo-user",
+    "order_items": [
+      {
+        "order_item_id": "6ab329f1-8f6c-466c-9369-23275a9377b6",
+        "product_id": "P-0069",
+        "name": "Keychron Ergo Keyboard 118",
+        "quantity": 20,
+        "unit_price": 54.71,
+        "subtotal": 1094.2
+      },
+      {
+        "order_item_id": "bcaa3929-3425-4538-aed6-1e5b6bc5fe3b",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 20,
+        "unit_price": 17.94,
+        "subtotal": 358.8
+      },
+      {
+        "order_item_id": "1c4f0ddd-5785-4799-9123-706aac07957a",
+        "product_id": "P-0101",
+        "name": "Jabra Ergo Headset 100",
+        "quantity": 20,
+        "unit_price": 60.4,
+        "subtotal": 1208.0
+      }
+    ],
+    "total_amount": 2661.0,
+    "status": "pending_payment",
+    "stripe_session_id": null,
+    "created_at": "2026-06-04T02:17:54.467083+00:00"
+  },
+  {
+    "order_id": "ORD-B2DFC08C28",
+    "user_id": "demo-user",
+    "order_items": [
+      {
+        "order_item_id": "c49ef50c-e568-4267-abb1-b3af09e18333",
+        "product_id": "P-0069",
+        "name": "Keychron Ergo Keyboard 118",
+        "quantity": 20,
+        "unit_price": 54.71,
+        "subtotal": 1094.2
+      },
+      {
+        "order_item_id": "ca6b4004-4800-465a-98a5-b589f5af60eb",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 20,
+        "unit_price": 17.94,
+        "subtotal": 358.8
+      },
+      {
+        "order_item_id": "8754752e-4e70-4a1d-8054-6f9e3babef5f",
+        "product_id": "P-0101",
+        "name": "Jabra Ergo Headset 100",
+        "quantity": 20,
+        "unit_price": 60.4,
+        "subtotal": 1208.0
+      }
+    ],
+    "total_amount": 2661.0,
+    "status": "pending_payment",
+    "stripe_session_id": null,
+    "created_at": "2026-06-04T02:24:42.459884+00:00"
+  },
+  {
+    "order_id": "ORD-D1DDB6A7B3",
+    "user_id": "demo-user",
+    "order_items": [
+      {
+        "order_item_id": "22b8ad30-93da-4012-9506-5e374e7af026",
+        "product_id": "P-0069",
+        "name": "Keychron Ergo Keyboard 118",
+        "quantity": 20,
+        "unit_price": 54.71,
+        "subtotal": 1094.2
+      },
+      {
+        "order_item_id": "4f5aadd0-50d6-4fd8-a379-ebe024ea784f",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 20,
+        "unit_price": 17.94,
+        "subtotal": 358.8
+      },
+      {
+        "order_item_id": "dc39421b-475b-4952-b91f-0b77bbb0e948",
+        "product_id": "P-0101",
+        "name": "Jabra Ergo Headset 100",
+        "quantity": 20,
+        "unit_price": 60.4,
+        "subtotal": 1208.0
+      }
+    ],
+    "total_amount": 2661.0,
+    "status": "pending_payment",
+    "stripe_session_id": null,
+    "created_at": "2026-06-05T13:39:39.249750+00:00"
+  },
+  {
+    "order_id": "ORD-1F387502CC",
+    "user_id": "demo-user",
+    "order_items": [
+      {
+        "order_item_id": "dc10e6a0-d422-4035-831f-eede82944c7f",
+        "product_id": "P-0052",
+        "name": "HP Essential Keyboard 101",
+        "quantity": 20,
+        "unit_price": 55.48,
+        "subtotal": 1109.6
+      },
+      {
+        "order_item_id": "f0ec8829-bc59-456d-89bf-81261e854c18",
+        "product_id": "P-0085",
+        "name": "Dell Essential Mouse 109",
+        "quantity": 20,
+        "unit_price": 20.45,
+        "subtotal": 409.0
+      },
+      {
+        "order_item_id": "2524f4de-6479-48de-93af-8cbd5b8ffd0d",
+        "product_id": "P-0106",
+        "name": "Sony Pro Headset 105",
+        "quantity": 20,
+        "unit_price": 117.97,
+        "subtotal": 2359.4
+      }
+    ],
+    "total_amount": 3878.0,
+    "status": "pending_payment",
+    "stripe_session_id": null,
+    "created_at": "2026-06-05T13:59:58.712241+00:00"
+  },
+  {
+    "order_id": "ORD-D6DCBB2D65",
+    "user_id": "demo-user",
+    "order_items": [
+      {
+        "order_item_id": "196ab91e-7702-4662-b68c-261d66ae7ff9",
+        "product_id": "P-0069",
+        "name": "Keychron Ergo Keyboard 118",
+        "quantity": 20,
+        "unit_price": 54.71,
+        "subtotal": 1094.2
+      },
+      {
+        "order_item_id": "b34cebe2-427b-49d0-929d-15c1a18cdf8a",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 20,
+        "unit_price": 17.94,
+        "subtotal": 358.8
+      },
+      {
+        "order_item_id": "2e57432f-3cf1-4040-b885-135be3c08dfa",
+        "product_id": "P-0101",
+        "name": "Jabra Ergo Headset 100",
+        "quantity": 20,
+        "unit_price": 60.4,
+        "subtotal": 1208.0
+      }
+    ],
+    "total_amount": 2661.0,
+    "status": "pending_payment",
+    "stripe_session_id": null,
+    "created_at": "2026-06-05T14:53:10.315050+00:00"
+  },
+  {
+    "order_id": "ORD-B5507BB465",
+    "user_id": "demo-user",
+    "order_items": [
+      {
+        "order_item_id": "6ca25a4e-ffae-4614-8dd5-694278d15472",
+        "product_id": "P-0007",
+        "name": "HP Secure Laptop 106",
+        "quantity": 10,
+        "unit_price": 700.05,
+        "subtotal": 7000.5
+      }
+    ],
+    "total_amount": 7000.5,
+    "status": "pending_payment",
+    "stripe_session_id": null,
+    "created_at": "2026-06-05T14:55:59.198732+00:00"
+  },
+  {
+    "order_id": "ORD-B36CE0F29B",
+    "user_id": "demo-user",
+    "order_items": [
+      {
+        "order_item_id": "5bbba707-929f-4c2b-9bf1-c5eb9dbac4c1",
+        "product_id": "P-0101",
+        "name": "Jabra Ergo Headset 100",
+        "quantity": 10,
+        "unit_price": 60.4,
+        "subtotal": 604.0
+      },
+      {
+        "order_item_id": "6aeec752-d612-4f61-aaf8-5f3eb67749dd",
+        "product_id": "P-0144",
+        "name": "Razer Pro Webcam 118",
+        "quantity": 10,
+        "unit_price": 41.19,
+        "subtotal": 411.9
+      },
+      {
+        "order_item_id": "56da649c-26cd-422e-ae12-01ccd528e5cd",
+        "product_id": "P-0179",
+        "name": "Dell Pro Docking Station 103",
+        "quantity": 10,
+        "unit_price": 144.07,
+        "subtotal": 1440.7
+      }
+    ],
+    "total_amount": 2456.6,
+    "status": "pending_payment",
+    "stripe_session_id": null,
+    "created_at": "2026-06-05T18:06:31.822338+00:00"
+  }
+]

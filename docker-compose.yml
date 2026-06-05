@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: procurement-agent-postgres
+    environment:
+      POSTGRES_DB: procurement_agent
+      POSTGRES_USER: procurement
+      POSTGRES_PASSWORD: procurement
+    ports:
+      - "5432:5432"
+    volumes:
+      - procurement_postgres:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer:4
+    container_name: procurement-agent-adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  procurement_postgres:

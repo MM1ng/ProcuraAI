@@ -12,9 +12,39 @@ days, and compliance level. The local ingest script writes this context to
 Retrieval combines:
 
 - Text matching over product context.
-- Category filtering from parsed intent.
+- Category filtering from parsed and normalized intent.
 - Structured constraints for price, rating, stock, and delivery days.
 - Ranking by text score, rating, delivery speed, and price.
+
+## Dynamic Category Normalization
+
+Before category filtering, the agent loads allowed categories from
+`data/products.csv`. This keeps category normalization tied to the actual
+catalog instead of a fixed code-only list.
+
+The normalization order is:
+
+1. Exact match against an allowed category.
+2. Case-insensitive match against an allowed category.
+3. Stable multilingual aliases for common procurement terms.
+4. Conservative string similarity for close English variants.
+5. Optional LLM category selection, constrained to the allowed categories.
+
+When confidence is low, the original category is preserved and the parsed
+intent includes a warning. This avoids silently mapping an unknown request to
+the wrong catalog category.
+
+Each parsed intent can include trace data:
+
+- `original_category`
+- `normalized_category`
+- `normalization_method`
+- `allowed_categories`
+- `warning`
+
+For example, the Chinese request category `显示器` normalizes to `Monitor`
+before retrieval, so the structured category filter can match the Monitor rows
+in the catalog.
 
 ## Agent Tools
 

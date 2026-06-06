@@ -37,9 +37,64 @@ pytest
 - `GET /api/observability/summary`
 - `GET /api/evaluation/summary`
 - `POST /api/evaluation/run-agent`
+- `GET /api/history`
+- `GET /api/history/{id}`
+- `POST /api/history`
+- `DELETE /api/history/{id}`
 
 The default path uses CSV and JSON fallback files so the demo works without
 Alibaba Cloud, OpenAI, Stripe, Langfuse, Ragas, or MLflow credentials.
+
+## Procurement History API
+
+The v2 branch adds a lightweight local history store backed by
+`data/procurement_history.json`. The file is ignored by Git because it contains
+local demo/session data.
+
+Create a history record:
+
+```powershell
+Invoke-RestMethod http://localhost:8000/api/history `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body '{
+    "original_request": "Buy monitors for a new office",
+    "parsed_intent": {"categories": ["Monitor"]},
+    "procurement_plan": {"items": [], "total_amount": 0},
+    "trace": {"trace_id": "trace-demo"},
+    "reasoning_summary": "Saved procurement plan"
+  }'
+```
+
+List, restore, and delete:
+
+```text
+GET    /api/history
+GET    /api/history/{id}
+DELETE /api/history/{id}
+```
+
+## Category Normalization
+
+The intent parser normalizes requested categories against categories loaded
+from `data/products.csv`. It supports exact matches, case-insensitive matches,
+stable multilingual aliases, conservative similarity, and optional LLM category
+selection constrained to the catalog's allowed categories.
+
+The parsed intent includes `category_normalization` trace entries:
+
+```json
+{
+  "original_category": "显示器",
+  "normalized_category": "Monitor",
+  "normalization_method": "alias",
+  "allowed_categories": ["Laptop", "Monitor", "Keyboard"],
+  "warning": null
+}
+```
+
+If confidence is low, the parser preserves the original category and adds a
+warning instead of forcing a bad match.
 
 ## Connect Alibaba Cloud qwen3.7-max With LangChain Tongyi
 

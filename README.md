@@ -6,6 +6,8 @@ An intelligent procurement assistant that understands natural language purchase 
 
 **Current Stable Version:** v1.0.0
 
+**Active v2 Branch:** `feature/v2-enterprise-ux`
+
 ---
 
 ## Features
@@ -21,6 +23,8 @@ An intelligent procurement assistant that understands natural language purchase 
 - **Stripe Payment Integration** — Test mode and mock mode checkout
 - **Observability Dashboard** — Local trace logging with optional Langfuse adapter
 - **Evaluation Dashboard** — Business metrics, RAG metrics, and system health monitoring
+- **Procurement History MVP** — Save, restore, and delete generated procurement plans from the chat page
+- **Dynamic Category Normalization** — Reads catalog categories at runtime and normalizes multilingual requests before filtering
 - **Multi-language UI** — Built with Next.js + Ant Design + Recharts
 
 ## Architecture
@@ -122,6 +126,18 @@ Open **http://localhost:3000** and navigate to the Chat page.
 curl http://localhost:8000/health
 ```
 
+Useful v2 checks:
+
+```bash
+curl http://localhost:8000/api/history
+```
+
+In the Chat page, submit:
+
+> "我们要采购一批显示器给新办公室使用，预算5万元。"
+
+The parsed category should normalize to `Monitor`, and retrieved products should include Monitor catalog items.
+
 ### Test the Chat
 
 Submit a natural language procurement request:
@@ -162,6 +178,28 @@ python -m app.scripts.test_qwen_call
 - **375 products** across 15 procurement categories in `data/products.csv`
 - **Retrieval index** built by `ingest_products.py` into `data/retrieval_index.json`
 - **Mock evaluation logs** and **observability traces** in `data/`
+- **Procurement history** is stored locally in `data/procurement_history.json` and is intentionally ignored by Git
+
+## Procurement History
+
+The v2 branch adds a lightweight local history feature without changing the v1.0 procurement workflow.
+
+Backend API:
+
+- `GET /api/history` — list saved procurement history records
+- `GET /api/history/{id}` — fetch one saved history record
+- `POST /api/history` — save the current procurement request, parsed intent, selected plan, total cost, trace, and summary
+- `DELETE /api/history/{id}` — delete a saved history record
+
+Frontend behavior:
+
+- The Chat page can save the current generated procurement plan.
+- A saved history record can be restored into the current chat/procurement display.
+- History records can be deleted from the same panel.
+
+## Category Normalization
+
+The agent dynamically reads allowed categories from `data/products.csv` before category filtering. Normalization first checks exact and case-insensitive matches, then a small stable alias table, then conservative similarity or LLM-based selection constrained to the allowed catalog categories. Low-confidence categories are preserved with a warning instead of being forced into the wrong catalog category.
 
 ## Tests
 
@@ -172,6 +210,15 @@ pytest
 
 Covers intent parsing, hybrid search, budget rules, and order creation.
 
+Frontend production build:
+
+```bash
+cd frontend
+npm run build
+```
+
+Known tooling note: `npm run lint` currently uses `next lint`, which is no longer supported in the current Next.js 16 setup and reports `Invalid project directory ... frontend\lint`.
+
 ## Project Structure
 
 ```
@@ -179,7 +226,7 @@ ProcuraAI/
 ├── backend/            # FastAPI application
 │   ├── app/
 │   │   ├── agent/      # Intent parsing, plan generation, procurement agent
-│   │   ├── api/        # REST endpoints (chat, products, orders, payments)
+│   │   ├── api/        # REST endpoints (chat, products, orders, payments, history)
 │   │   ├── core/       # Config, database, logging
 │   │   ├── evaluation/ # Evaluation metrics & runners
 │   │   ├── models/     # SQLAlchemy ORM models
@@ -187,7 +234,7 @@ ProcuraAI/
 │   │   ├── rag/        # Hybrid search, vector store, retriever
 │   │   ├── schemas/    # Pydantic request/response schemas
 │   │   ├── scripts/    # Data generation & ingestion scripts
-│   │   └── services/   # Business logic (LLM, order, payment, product)
+│   │   └── services/   # Business logic (LLM, order, payment, product, history)
 │   ├── tests/          # Pytest suite
 │   └── main.py         # FastAPI entry point
 ├── frontend/           # Next.js application
@@ -211,10 +258,9 @@ ProcuraAI/
 ## Roadmap
 
 - [x] **v1.0.0** — Core procurement agent with RAG, chat, orders, and payments
-- [ ] **v1.1.0** — PostgreSQL production readiness, Docker optimization
-- [ ] **v1.2.0** — Real LLM RAG evaluation, advanced agent workflows
-- [ ] **v1.3.0** — Multi-tenant support, user authentication
-- [ ] **v2.0.0** — Production deployment with monitoring, CI/CD pipeline
+- [x] **v2.0 Phase 1** — Procurement History MVP and dynamic catalog category normalization
+- [ ] **v2.0 Phase 2** — Compare Plans and plan selection
+- [ ] **v2.0 Phase 3** — Quick optimization buttons, product detail modal, and Excel export
 
 ## License
 

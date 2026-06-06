@@ -97,11 +97,12 @@ def test_chat_response_includes_compare_plan_options():
 
     body = response.json()
     assert response.status_code == 200
-    assert body["selected_plan_id"] == "plan_b"
     assert [option["id"] for option in body["plan_options"]] == ["plan_a", "plan_b", "plan_c"]
     assert [option["strategy"] for option in body["plan_options"]] == [
         "cost_optimized",
         "balanced",
         "premium",
     ]
-    assert body["recommended_plan"] == body["plan_options"][1]["plan"]
+    selected_option = next(option for option in body["plan_options"] if option["id"] == body["selected_plan_id"])
+    assert body["recommended_plan"] == selected_option["plan"]
+    assert body["recommended_plan"]["budget_status"] == "within_budget"

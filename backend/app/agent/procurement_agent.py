@@ -50,6 +50,22 @@ def _combine_llm_error(*errors: str | None) -> str | None:
     return " | ".join(values) if values else None
 
 
+def select_default_plan_option(plan_options: list[dict[str, Any]]) -> dict[str, Any] | None:
+    if not plan_options:
+        return None
+    balanced = next((option for option in plan_options if option.get("id") == "plan_b"), None)
+    if balanced and balanced.get("plan", {}).get("budget_status") != "over_budget":
+        return balanced
+    within_budget = [
+        option
+        for option in plan_options
+        if option.get("plan", {}).get("budget_status") == "within_budget"
+    ]
+    if within_budget:
+        return sorted(within_budget, key=lambda option: float(option.get("plan", {}).get("total_amount", 0) or 0))[0]
+    return balanced or plan_options[0]
+
+
 def run_procurement_agent(
     message: str,
     session_id: str,
@@ -97,9 +113,9 @@ def run_procurement_agent(
             else []
         )
         if plan_options:
-            balanced = next((option for option in plan_options if option.get("id") == "plan_b"), None)
-            if balanced:
-                plan = balanced["plan"]
+            default_option = select_default_plan_option(plan_options)
+            if default_option:
+                plan = default_option["plan"]
         tool_calls.append({"name": "generate_procurement_plan", "status": "success"})
         fallback_answer = _answer_from_plan(plan, language)
         explanation = generate_plan_explanation(intent, retrieved_products, plan, fallback_answer)
@@ -162,7 +178,7 @@ def run_procurement_agent(
         "parsed_intent": intent,
         "recommended_plan": plan,
         "plan_options": plan_options,
-        "selected_plan_id": "plan_b" if plan_options else None,
+        "selected_plan_id": plan.get("plan_option_id") if plan_options else None,
         "answer": answer,
         "trace_id": trace_id,
         "retrieved_products": retrieved_products[:12],

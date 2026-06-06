@@ -1,4 +1,5 @@
 from app.agent.plan_variants import generate_plan_options
+from app.agent.procurement_agent import select_default_plan_option
 
 
 def test_generate_plan_options_returns_cost_balanced_and_premium_choices():
@@ -113,3 +114,27 @@ def test_generate_plan_options_omits_strategies_without_matching_products():
     options = generate_plan_options(products, intent)
 
     assert options == []
+
+
+def test_default_plan_selection_prefers_within_budget_option_over_balanced():
+    options = [
+        {"id": "plan_a", "plan": {"total_amount": 1680.2, "budget_status": "within_budget"}},
+        {"id": "plan_b", "plan": {"total_amount": 3827.8, "budget_status": "over_budget"}},
+        {"id": "plan_c", "plan": {"total_amount": 3895.0, "budget_status": "over_budget"}},
+    ]
+
+    selected = select_default_plan_option(options)
+
+    assert selected["id"] == "plan_a"
+
+
+def test_default_plan_selection_uses_balanced_when_it_is_within_budget():
+    options = [
+        {"id": "plan_a", "plan": {"total_amount": 1680.2, "budget_status": "within_budget"}},
+        {"id": "plan_b", "plan": {"total_amount": 2661.0, "budget_status": "within_budget"}},
+        {"id": "plan_c", "plan": {"total_amount": 3895.0, "budget_status": "over_budget"}},
+    ]
+
+    selected = select_default_plan_option(options)
+
+    assert selected["id"] == "plan_b"

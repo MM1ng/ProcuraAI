@@ -45,6 +45,26 @@ pytest
 The default path uses CSV and JSON fallback files so the demo works without
 Alibaba Cloud, OpenAI, Stripe, Langfuse, Ragas, or MLflow credentials.
 
+## Compare Plans Response
+
+`POST /api/chat` keeps the v1.0-compatible `recommended_plan` field and adds
+multi-plan options for v2:
+
+```json
+{
+  "recommended_plan": {},
+  "selected_plan_id": "plan_b",
+  "plan_options": [
+    {"id": "plan_a", "name": "Plan A", "strategy": "cost_optimized"},
+    {"id": "plan_b", "name": "Plan B", "strategy": "balanced"},
+    {"id": "plan_c", "name": "Plan C", "strategy": "premium"}
+  ]
+}
+```
+
+`plan_b` is selected by default and remains the returned `recommended_plan`.
+The frontend can switch to another option without calling a new endpoint.
+
 ## Procurement History API
 
 The v2 branch adds a lightweight local history store backed by

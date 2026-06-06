@@ -24,6 +24,8 @@ class ChatResponse(BaseModel):
     session_id: str
     parsed_intent: dict[str, Any]
     recommended_plan: dict[str, Any]
+    plan_options: list[dict[str, Any]] = Field(default_factory=list)
+    selected_plan_id: str | None = None
     answer: str
     trace_id: str
     retrieved_products: list[dict[str, Any]] = Field(default_factory=list)

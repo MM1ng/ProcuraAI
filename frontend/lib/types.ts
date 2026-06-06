@@ -44,12 +44,24 @@ export type ProcurementPlan = {
   constraint_satisfaction: string;
   recommendation_reason?: string;
   recommendation_summary?: string;
+  plan_option_id?: string;
+  plan_strategy?: string;
+};
+
+export type PlanOption = {
+  id: string;
+  name: string;
+  strategy: "cost_optimized" | "balanced" | "premium" | string;
+  description: string;
+  plan: ProcurementPlan;
 };
 
 export type ChatResponse = {
   session_id: string;
   parsed_intent: Record<string, unknown>;
   recommended_plan: ProcurementPlan;
+  plan_options: PlanOption[];
+  selected_plan_id?: string | null;
   answer: string;
   trace_id: string;
   retrieved_products: Product[];

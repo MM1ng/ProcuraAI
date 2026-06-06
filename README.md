@@ -24,6 +24,7 @@ An intelligent procurement assistant that understands natural language purchase 
 - **Observability Dashboard** — Local trace logging with optional Langfuse adapter
 - **Evaluation Dashboard** — Business metrics, RAG metrics, and system health monitoring
 - **Procurement History MVP** — Save, restore, and delete generated procurement plans from the chat page
+- **Compare Plans + Select Plan** — Generates Cost Optimized, Balanced, and Premium plan options with an explicit selected plan
 - **Dynamic Category Normalization** — Reads catalog categories at runtime and normalizes multilingual requests before filtering
 - **Multi-language UI** — Built with Next.js + Ant Design + Recharts
 
@@ -138,6 +139,14 @@ In the Chat page, submit:
 
 The parsed category should normalize to `Monitor`, and retrieved products should include Monitor catalog items.
 
+The chat response also includes `plan_options`:
+
+- `plan_a` — Cost Optimized
+- `plan_b` — Balanced, selected by default
+- `plan_c` — Premium
+
+The Chat page shows these options in a Compare Plans panel. Selecting a plan updates the current procurement plan, order creation target, and saved `currentPlan` state.
+
 ### Test the Chat
 
 Submit a natural language procurement request:
@@ -196,6 +205,21 @@ Frontend behavior:
 - The Chat page can save the current generated procurement plan.
 - A saved history record can be restored into the current chat/procurement display.
 - History records can be deleted from the same panel.
+
+## Compare Plans
+
+The v2 branch adds multi-plan generation while preserving the v1.0 `recommended_plan` contract. Backend responses still include `recommended_plan`, and additionally expose:
+
+- `plan_options`: list of selectable plan options
+- `selected_plan_id`: currently selected option, defaulting to `plan_b`
+
+Plan strategies:
+
+- **Plan A / Cost Optimized** — selects lower-cost eligible products by category
+- **Plan B / Balanced** — prioritizes delivery speed, rating, and price
+- **Plan C / Premium** — prioritizes rating and premium product signals
+
+The frontend Compare Plans panel lets the user select one option. Downstream actions such as Create Order and Save History use the selected plan.
 
 ## Category Normalization
 
@@ -259,7 +283,7 @@ ProcuraAI/
 
 - [x] **v1.0.0** — Core procurement agent with RAG, chat, orders, and payments
 - [x] **v2.0 Phase 1** — Procurement History MVP and dynamic catalog category normalization
-- [ ] **v2.0 Phase 2** — Compare Plans and plan selection
+- [x] **v2.0 Phase 2** — Compare Plans and plan selection
 - [ ] **v2.0 Phase 3** — Quick optimization buttons, product detail modal, and Excel export
 
 ## License

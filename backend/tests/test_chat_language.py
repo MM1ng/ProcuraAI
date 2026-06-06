@@ -85,3 +85,23 @@ def test_chat_response_and_trace_include_llm_metadata():
     assert trace["model_name"] == body["model_name"]
     assert trace["used_mock_llm"] == body["used_mock_llm"]
     assert trace["llm_error"] == body["llm_error"]
+
+
+def test_chat_response_includes_compare_plan_options():
+    client = TestClient(app)
+
+    response = client.post(
+        "/api/chat",
+        json={"message": CHAT_MESSAGE, "session_id": "compare-plans-response"},
+    )
+
+    body = response.json()
+    assert response.status_code == 200
+    assert body["selected_plan_id"] == "plan_b"
+    assert [option["id"] for option in body["plan_options"]] == ["plan_a", "plan_b", "plan_c"]
+    assert [option["strategy"] for option in body["plan_options"]] == [
+        "cost_optimized",
+        "balanced",
+        "premium",
+    ]
+    assert body["recommended_plan"] == body["plan_options"][1]["plan"]

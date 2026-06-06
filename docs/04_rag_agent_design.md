@@ -56,6 +56,7 @@ The workflow includes tool-style functions:
 - `check_inventory`
 - `calculate_budget`
 - `generate_procurement_plan`
+- `generate_plan_options`
 - `create_order`
 - `create_stripe_checkout`
 - `log_observability_event`
@@ -85,3 +86,22 @@ When `USE_MOCK_LLM=true`, or when `DASHSCOPE_API_KEY` is missing or Tongyi
 raises an error, the service falls back to mock-safe output. Intent parsing then
 uses the rule-based parser, and plan explanation uses the local template, so the
 demo remains reproducible.
+
+## Compare Plans
+
+The v2 plan comparison layer is additive. The original calculated
+`recommended_plan` remains available for backward compatibility, while the
+agent also returns `plan_options`:
+
+- `plan_a`: cost optimized
+- `plan_b`: balanced
+- `plan_c`: premium
+
+Each option uses the same retrieved product set and the same parsed intent. The
+strategy layer selects different eligible products per category, then reuses
+the deterministic procurement plan calculation so totals, budget status,
+inventory status, and constraint satisfaction are computed consistently.
+
+`plan_b` is selected by default. The frontend selection only changes the
+currently displayed plan and downstream actions; it does not mutate the
+catalog, retrieval results, or session parsing.

@@ -1,6 +1,6 @@
 "use client";
 
-import { App, Button, Card, Input, List, Popconfirm, Space, Tag, Typography } from "antd";
+import { App, Button, Card, Input, List, Popconfirm, Space, Statistic, Tag, Typography } from "antd";
 import {
   CreditCardOutlined,
   DeleteOutlined,
@@ -148,6 +148,8 @@ export default function ChatPanel() {
       session_id: "demo-session-001",
       parsed_intent: record.parsed_intent,
       recommended_plan: record.selected_plan || record.procurement_plan,
+      plan_options: [],
+      selected_plan_id: null,
       answer: record.reasoning_summary || "",
       trace_id: traceId,
       retrieved_products: [],
@@ -172,6 +174,27 @@ export default function ChatPanel() {
     await api.deleteHistory(historyId);
     setHistoryRecords((current) => current.filter((item) => item.id !== historyId));
     message.success("History deleted");
+  }
+
+  function selectPlan(optionId: string) {
+    if (!result?.plan_options?.length) return;
+    const option = result.plan_options.find((item) => item.id === optionId);
+    if (!option) return;
+    const nextResult = {
+      ...result,
+      recommended_plan: option.plan,
+      selected_plan_id: option.id
+    };
+    setResult(nextResult);
+    setOrder(null);
+    localStorage.setItem("currentPlan", JSON.stringify(option.plan));
+    message.success(`${option.name} selected`);
+  }
+
+  function strategyColor(strategy: string) {
+    if (strategy === "cost_optimized") return "green";
+    if (strategy === "premium") return "purple";
+    return "blue";
   }
 
   return (
@@ -321,6 +344,49 @@ export default function ChatPanel() {
             {result ? JSON.stringify(result.parsed_intent, null, 2) : "{}"}
           </Typography.Text>
         </Card>
+        {result?.plan_options?.length ? (
+          <Card title="Compare Plans">
+            <Space direction="vertical" size={12} style={{ width: "100%" }}>
+              {result.plan_options.map((option) => (
+                <Card
+                  key={option.id}
+                  size="small"
+                  type="inner"
+                  title={
+                    <Space wrap>
+                      <Typography.Text strong>{option.name}</Typography.Text>
+                      <Tag color={strategyColor(option.strategy)}>{option.description}</Tag>
+                    </Space>
+                  }
+                  extra={
+                    <Button
+                      type={result.selected_plan_id === option.id ? "primary" : "default"}
+                      size="small"
+                      onClick={() => selectPlan(option.id)}
+                    >
+                      {result.selected_plan_id === option.id ? "Selected" : "Select Plan"}
+                    </Button>
+                  }
+                >
+                  <Space size={18} wrap>
+                    <Statistic title="Total" value={option.plan.total_amount} precision={2} prefix="$" />
+                    <Statistic title="Items" value={option.plan.items.length} />
+                    <Statistic
+                      title="Avg Rating"
+                      value={
+                        option.plan.items.length
+                          ? option.plan.items.reduce((sum, item) => sum + (item.rating || 0), 0) /
+                            option.plan.items.length
+                          : 0
+                      }
+                      precision={1}
+                    />
+                  </Space>
+                </Card>
+              ))}
+            </Space>
+          </Card>
+        ) : null}
         <ProcurementPlanCard plan={result?.recommended_plan} />
       </Space>
     </div>

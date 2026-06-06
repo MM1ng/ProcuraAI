@@ -4,6 +4,7 @@ from typing import Any
 
 from app.agent.intent_parser import parse_purchase_request
 from app.agent.plan_generator import generate_plan_explanation, generate_procurement_plan
+from app.agent.plan_variants import generate_plan_options
 from app.agent.prompts import ERROR_MESSAGES, PLAN_RESPONSE_TEMPLATES
 from app.agent.session_state import get_session_state, save_session_state
 from app.observability.langfuse_client import LangfuseClient
@@ -90,6 +91,15 @@ def run_procurement_agent(
         )
 
         plan = generate_procurement_plan(retrieved_products, intent, previous_plan=previous_plan)
+        plan_options = (
+            generate_plan_options(retrieved_products, intent)
+            if intent.get("revision_intent") == "new_plan"
+            else []
+        )
+        if plan_options:
+            balanced = next((option for option in plan_options if option.get("id") == "plan_b"), None)
+            if balanced:
+                plan = balanced["plan"]
         tool_calls.append({"name": "generate_procurement_plan", "status": "success"})
         fallback_answer = _answer_from_plan(plan, language)
         explanation = generate_plan_explanation(intent, retrieved_products, plan, fallback_answer)
@@ -120,6 +130,7 @@ def run_procurement_agent(
         error = str(exc)
         llm_error = _combine_llm_error(llm_error, error)
         llm_timings = {}
+        plan_options = []
         tool_calls.append({"name": "agent_workflow", "status": "error", "error": error})
 
     event = {
@@ -150,6 +161,8 @@ def run_procurement_agent(
         "session_id": session_id,
         "parsed_intent": intent,
         "recommended_plan": plan,
+        "plan_options": plan_options,
+        "selected_plan_id": "plan_b" if plan_options else None,
         "answer": answer,
         "trace_id": trace_id,
         "retrieved_products": retrieved_products[:12],

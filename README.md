@@ -142,10 +142,10 @@ The parsed category should normalize to `Monitor`, and retrieved products should
 The chat response also includes `plan_options`:
 
 - `plan_a` — Cost Optimized
-- `plan_b` — Balanced, selected by default
+- `plan_b` — Balanced, preferred by default when it satisfies the budget
 - `plan_c` — Premium
 
-The Chat page shows these options in a Compare Plans panel. Selecting a plan updates the current procurement plan, order creation target, and saved `currentPlan` state.
+The Chat page shows these options in a Compare Plans panel. If the Balanced plan is over budget and another option is within budget, the backend selects the budget-safe option by default. Selecting a plan updates the current procurement plan, order creation target, and saved `currentPlan` state.
 
 ### Test the Chat
 
@@ -211,7 +211,7 @@ Frontend behavior:
 The v2 branch adds multi-plan generation while preserving the v1.0 `recommended_plan` contract. Backend responses still include `recommended_plan`, and additionally expose:
 
 - `plan_options`: list of selectable plan options
-- `selected_plan_id`: currently selected option, defaulting to `plan_b`
+- `selected_plan_id`: currently selected option, preferring `plan_b` only when it is budget-safe
 
 Plan strategies:
 
@@ -220,6 +220,12 @@ Plan strategies:
 - **Plan C / Premium** — prioritizes rating and premium product signals
 
 The frontend Compare Plans panel lets the user select one option. Downstream actions such as Create Order and Save History use the selected plan.
+
+Default selection rule:
+
+- Prefer **Plan B / Balanced** when it is within budget.
+- If Plan B is over budget and another plan is within budget, select the lowest-cost budget-safe option.
+- If all options exceed budget, keep Plan B as the default comparison baseline.
 
 ## Category Normalization
 

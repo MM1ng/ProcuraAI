@@ -102,6 +102,8 @@ strategy layer selects different eligible products per category, then reuses
 the deterministic procurement plan calculation so totals, budget status,
 inventory status, and constraint satisfaction are computed consistently.
 
-`plan_b` is selected by default. The frontend selection only changes the
-currently displayed plan and downstream actions; it does not mutate the
-catalog, retrieval results, or session parsing.
+`plan_b` is preferred by default when it is within budget. If it exceeds the
+user's budget and another option is budget-safe, the backend selects the
+lowest-cost within-budget option as the default `recommended_plan`. The
+frontend selection only changes the currently displayed plan and downstream
+actions; it does not mutate the catalog, retrieval results, or session parsing.

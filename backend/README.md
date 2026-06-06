@@ -53,7 +53,7 @@ multi-plan options for v2:
 ```json
 {
   "recommended_plan": {},
-  "selected_plan_id": "plan_b",
+  "selected_plan_id": "plan_a",
   "plan_options": [
     {"id": "plan_a", "name": "Plan A", "strategy": "cost_optimized"},
     {"id": "plan_b", "name": "Plan B", "strategy": "balanced"},
@@ -62,8 +62,10 @@ multi-plan options for v2:
 }
 ```
 
-`plan_b` is selected by default and remains the returned `recommended_plan`.
-The frontend can switch to another option without calling a new endpoint.
+`plan_b` is preferred when it is within budget. If it exceeds the user's budget
+and another option is budget-safe, the backend selects the lowest-cost
+within-budget option as `recommended_plan`. The frontend can switch to another
+option without calling a new endpoint.
 
 ## Procurement History API
 

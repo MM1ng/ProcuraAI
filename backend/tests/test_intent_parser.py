@@ -125,3 +125,43 @@ def test_parse_purchase_request_normalizes_plural_llm_categories(monkeypatch):
 
     assert intent["categories"] == ["Keyboard", "Headset"]
     assert intent["quantity_by_category"] == {"Keyboard": 5, "Headset": 5}
+
+
+def test_parse_purchase_request_adds_category_normalization_trace_for_chinese_monitor(monkeypatch):
+    def fake_safe_llm_invoke(prompt, purpose="general"):
+        return {
+            "content": """
+            {
+              "people_count": 1,
+              "budget": 50000,
+              "categories": ["显示器"],
+              "quantity_per_category": {"显示器": 1},
+              "preferences": [],
+              "constraints": [],
+              "min_rating": null,
+              "max_delivery_days": null,
+              "need_cheaper_plan": false,
+              "replacement_request": null,
+              "replacement_categories": [],
+              "replacement_brand": null
+            }
+            """,
+            "model_provider": "tongyi",
+            "model_name": "qwen3.7-max",
+            "used_mock_llm": False,
+            "error": None,
+            "fallback_reason": None,
+            "latency_ms": 1,
+        }
+
+    monkeypatch.setattr("app.agent.intent_parser.safe_llm_invoke", fake_safe_llm_invoke)
+
+    intent = parse_purchase_request("我们要采购一批显示器给新办公室使用，预算5万元")
+
+    assert intent["categories"] == ["Monitor"]
+    assert intent["quantity_by_category"] == {"Monitor": 1}
+    assert intent["category_normalization"][0]["original_category"] == "显示器"
+    assert intent["category_normalization"][0]["normalized_category"] == "Monitor"
+    assert intent["category_normalization"][0]["normalization_method"] == "alias"
+    assert "Monitor" in intent["category_normalization"][0]["allowed_categories"]
+    assert intent["category_normalization"][0]["warning"] is None

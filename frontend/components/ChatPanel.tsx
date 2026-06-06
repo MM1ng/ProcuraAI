@@ -1,11 +1,19 @@
 "use client";
 
-import { App, Button, Card, Input, Space, Tag, Typography } from "antd";
-import { CreditCardOutlined, SendOutlined, ShoppingCartOutlined, LoadingOutlined } from "@ant-design/icons";
+import { App, Button, Card, Input, List, Popconfirm, Space, Tag, Typography } from "antd";
+import {
+  CreditCardOutlined,
+  DeleteOutlined,
+  HistoryOutlined,
+  LoadingOutlined,
+  SaveOutlined,
+  SendOutlined,
+  ShoppingCartOutlined
+} from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import { useLanguage } from "@/lib/i18n";
-import type { ChatResponse, Order, PaymentStatus } from "@/lib/types";
+import type { ChatResponse, Order, PaymentStatus, ProcurementHistoryRecord } from "@/lib/types";
 import ChatMessage from "./ChatMessage";
 import OrderSummary from "./OrderSummary";
 import ProcurementPlanCard from "./ProcurementPlanCard";
@@ -25,10 +33,14 @@ export default function ChatPanel() {
   const [result, setResult] = useState<ChatResponse | null>(null);
   const [order, setOrder] = useState<Order | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus | null>(null);
+  const [historyRecords, setHistoryRecords] = useState<ProcurementHistoryRecord[]>([]);
+  const [lastRequest, setLastRequest] = useState("");
+  const [historyLoading, setHistoryLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     api.paymentStatus().then(setPaymentStatus).catch(() => setPaymentStatus(null));
+    refreshHistory();
   }, []);
 
   useEffect(() => {
@@ -67,6 +79,7 @@ export default function ChatPanel() {
     setLoading(true);
     const userMessage = messageText.trim();
     setInput("");
+    setLastRequest(userMessage);
     setChat((current) => [...current, { role: "user", content: userMessage }]);
     try {
       const response = await api.chat(userMessage, "demo-session-001", language);
@@ -91,6 +104,74 @@ export default function ChatPanel() {
   async function pay(targetOrder: Order) {
     const checkout = await api.checkout(targetOrder);
     window.location.href = checkout.checkout_url;
+  }
+
+  async function refreshHistory() {
+    setHistoryLoading(true);
+    try {
+      const response = await api.history();
+      setHistoryRecords(response.items);
+    } catch {
+      setHistoryRecords([]);
+    } finally {
+      setHistoryLoading(false);
+    }
+  }
+
+  async function saveHistory() {
+    if (!result?.recommended_plan) return;
+    const saved = await api.saveHistory({
+      original_request: lastRequest,
+      parsed_intent: result.parsed_intent,
+      procurement_plan: result.recommended_plan,
+      trace: {
+        trace_id: result.trace_id,
+        model_provider: result.model_provider,
+        model_name: result.model_name,
+        used_mock_llm: result.used_mock_llm
+      },
+      reasoning_summary: result.answer,
+      messages: [
+        { role: "user", content: lastRequest },
+        { role: "agent", content: result.answer }
+      ],
+      order_draft: order
+    });
+    setHistoryRecords((current) => [saved, ...current.filter((item) => item.id !== saved.id)]);
+    message.success("History saved");
+  }
+
+  async function restoreHistory(historyId: string) {
+    const record = await api.historyDetail(historyId);
+    const traceId = typeof record.trace?.trace_id === "string" ? record.trace.trace_id : record.id;
+    const restoredResult: ChatResponse = {
+      session_id: "demo-session-001",
+      parsed_intent: record.parsed_intent,
+      recommended_plan: record.selected_plan || record.procurement_plan,
+      answer: record.reasoning_summary || "",
+      trace_id: traceId,
+      retrieved_products: [],
+      model_provider: typeof record.trace?.model_provider === "string" ? record.trace.model_provider : "history",
+      model_name: typeof record.trace?.model_name === "string" ? record.trace.model_name : "restored",
+      used_mock_llm: Boolean(record.trace?.used_mock_llm),
+      used_previous_context: false,
+      previous_trace_id: null
+    };
+    setResult(restoredResult);
+    setOrder((record.order_draft as Order | null) || null);
+    setLastRequest(record.original_request);
+    setChat([
+      { role: "user", content: record.original_request || "Restored procurement request" },
+      { role: "agent", content: record.reasoning_summary || "Restored procurement plan" }
+    ]);
+    localStorage.setItem("currentPlan", JSON.stringify(restoredResult.recommended_plan));
+    message.success("History restored");
+  }
+
+  async function deleteHistory(historyId: string) {
+    await api.deleteHistory(historyId);
+    setHistoryRecords((current) => current.filter((item) => item.id !== historyId));
+    message.success("History deleted");
   }
 
   return (
@@ -162,6 +243,9 @@ export default function ChatPanel() {
               <Button icon={<ShoppingCartOutlined />} disabled={!result} onClick={createOrder}>
                 {t("chat.createOrder")}
               </Button>
+              <Button icon={<SaveOutlined />} disabled={!result || !lastRequest} onClick={saveHistory}>
+                Save History
+              </Button>
               <Button icon={<CreditCardOutlined />} disabled={!order} onClick={() => order && pay(order)}>
                 {t("chat.payWithStripe")}
               </Button>
@@ -174,6 +258,48 @@ export default function ChatPanel() {
           </Space>
         </Card>
         <OrderSummary order={order} onPay={pay} />
+        <Card
+          title={
+            <Space>
+              <HistoryOutlined />
+              Procurement History
+            </Space>
+          }
+          extra={
+            <Button size="small" onClick={refreshHistory} loading={historyLoading}>
+              Refresh
+            </Button>
+          }
+        >
+          <List
+            loading={historyLoading}
+            dataSource={historyRecords}
+            locale={{ emptyText: "No history" }}
+            renderItem={(item) => (
+              <List.Item
+                actions={[
+                  <Button key="restore" type="link" onClick={() => restoreHistory(item.id)}>
+                    Restore
+                  </Button>,
+                  <Popconfirm
+                    key="delete"
+                    title="Delete this history record?"
+                    okText="Delete"
+                    okButtonProps={{ danger: true }}
+                    onConfirm={() => deleteHistory(item.id)}
+                  >
+                    <Button type="text" danger icon={<DeleteOutlined />} aria-label="Delete history" />
+                  </Popconfirm>
+                ]}
+              >
+                <List.Item.Meta
+                  title={item.original_request || item.id}
+                  description={`${new Date(item.created_at).toLocaleString()} · $${item.total_cost.toFixed(2)}`}
+                />
+              </List.Item>
+            )}
+          />
+        </Card>
       </Space>
 
       <Space direction="vertical" size={16} style={{ width: "100%" }}>

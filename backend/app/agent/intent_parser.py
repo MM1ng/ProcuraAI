@@ -4,6 +4,7 @@ import json
 import re
 from typing import Any
 
+from app.agent.category_normalizer import normalize_categories, normalize_category as normalize_single_category
 from app.services.llm_service import safe_llm_invoke
 
 
@@ -161,28 +162,20 @@ def _normalize_category(value: Any) -> str | None:
     text = str(value or "").strip()
     if not text:
         return None
-    lowered = text.lower()
-    if lowered in CATEGORY_ALIASES:
-        return CATEGORY_ALIASES[lowered]
-    singular = lowered[:-1] if lowered.endswith("s") else lowered
-    if singular in CATEGORY_ALIASES:
-        return CATEGORY_ALIASES[singular]
-    for category in CATEGORIES:
-        if category.lower() == lowered:
-            return category
-        if category.lower() == singular:
-            return category
-    return text.title()
+    return normalize_single_category(text).normalized_category
 
 
 def _normalize_categories(values: Any) -> list[str]:
-    if not isinstance(values, list):
-        return []
-    categories: list[str] = []
-    for value in values:
-        category = _normalize_category(value)
-        if category and category not in categories:
-            categories.append(category)
+    categories, _trace = normalize_categories(values)
+    return _sort_categories(categories)
+
+
+def _normalize_categories_with_trace(values: Any) -> tuple[list[str], list[dict[str, Any]]]:
+    categories, trace = normalize_categories(values)
+    return _sort_categories(categories), trace
+
+
+def _sort_categories(categories: list[str]) -> list[str]:
     order = {category: index for index, category in enumerate(CATEGORIES)}
     return sorted(categories, key=lambda category: order.get(category, 999))
 
@@ -371,7 +364,8 @@ def _intent_from_llm_json(
     budget = _as_float_or_none(payload.get("budget"))
     if budget is None:
         budget = fallback.get("budget")
-    categories = _normalize_categories(payload.get("categories")) or fallback.get("categories", [])
+    categories, category_trace = _normalize_categories_with_trace(payload.get("categories"))
+    categories = categories or fallback.get("categories", [])
     quantity_by_category = _normalize_quantity_map(
         payload.get("quantity_per_category") or payload.get("quantity_by_category"),
         categories,
@@ -404,7 +398,7 @@ def _intent_from_llm_json(
         revision_intent = "replace_product"
 
     if revision_intent in {"cheaper", "replace_product"} and previous_intent and previous_intent.get("categories"):
-        categories = _normalize_categories([*previous_intent.get("categories", []), *categories])
+        categories, category_trace = _normalize_categories_with_trace([*previous_intent.get("categories", []), *categories])
 
     return {
         "people_count": people_count,
@@ -422,6 +416,7 @@ def _intent_from_llm_json(
         "replacement_brand": replacement_brand if revision_intent == "replace_product" else None,
         "revision_intent": revision_intent,
         "raw_message": message,
+        "category_normalization": category_trace,
     }
 
 

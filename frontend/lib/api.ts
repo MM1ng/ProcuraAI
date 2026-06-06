@@ -1,4 +1,4 @@
-import type { ChatResponse, Order, PaymentStatus, Product, ProcurementPlan } from "./types";
+import type { ChatResponse, Order, PaymentStatus, Product, ProcurementHistoryRecord, ProcurementPlan } from "./types";
 import type { LanguageCode } from "./i18n";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
@@ -34,6 +34,31 @@ export const api = {
     return request<ChatResponse>("/api/chat", {
       method: "POST",
       body: JSON.stringify({ message, session_id: sessionId, language })
+    });
+  },
+  history() {
+    return request<{ items: ProcurementHistoryRecord[]; total: number }>("/api/history");
+  },
+  historyDetail(historyId: string) {
+    return request<ProcurementHistoryRecord>(`/api/history/${historyId}`);
+  },
+  saveHistory(payload: {
+    original_request: string;
+    parsed_intent: Record<string, unknown>;
+    procurement_plan: ProcurementPlan;
+    trace: Record<string, unknown>;
+    reasoning_summary?: string;
+    messages?: Array<Record<string, unknown>>;
+    order_draft?: Record<string, unknown> | null;
+  }) {
+    return request<ProcurementHistoryRecord>("/api/history", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+  },
+  deleteHistory(historyId: string) {
+    return request<{ deleted: boolean; id: string }>(`/api/history/${historyId}`, {
+      method: "DELETE"
     });
   },
   products(params: Record<string, string | number | undefined> = {}) {

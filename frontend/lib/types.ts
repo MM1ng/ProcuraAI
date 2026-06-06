@@ -62,6 +62,21 @@ export type ChatResponse = {
   previous_trace_id?: string | null;
 };
 
+export type ProcurementHistoryRecord = {
+  id: string;
+  created_at: string;
+  original_request: string;
+  parsed_intent: Record<string, unknown>;
+  agent_understanding?: Record<string, unknown>;
+  selected_plan: ProcurementPlan;
+  procurement_plan?: ProcurementPlan;
+  total_cost: number;
+  trace: Record<string, unknown>;
+  reasoning_summary?: string;
+  messages?: Array<Record<string, unknown>>;
+  order_draft?: Record<string, unknown> | null;
+};
+
 export type PaymentStatus = {
   payment_provider: string;
   use_mock_payment: boolean;

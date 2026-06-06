@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import chat, evaluation, history, llm, observability, orders, payments, products
+from app.api import chat, evaluation, export, history, llm, observability, orders, payments, products
 from app.core.logging import configure_logging
 
 
@@ -31,6 +31,7 @@ app.include_router(payments.router)
 app.include_router(observability.router)
 app.include_router(evaluation.router)
 app.include_router(history.router)
+app.include_router(export.router)
 
 
 @app.on_event("startup")

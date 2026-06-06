@@ -25,6 +25,9 @@ An intelligent procurement assistant that understands natural language purchase 
 - **Evaluation Dashboard** — Business metrics, RAG metrics, and system health monitoring
 - **Procurement History MVP** — Save, restore, and delete generated procurement plans from the chat page
 - **Compare Plans + Select Plan** — Generates Cost Optimized, Balanced, and Premium plan options with an explicit selected plan
+- **Quick Optimization Buttons** — Revise the selected plan for lower cost, quality, delivery speed, Dell preference, or re-generation
+- **Product Detail Modal** — Inspect selected plan items with supplier, stock, delivery, description, and selection reason
+- **Excel Export** — Download the current selected plan as `procurement_plan.xlsx`
 - **Dynamic Category Normalization** — Reads catalog categories at runtime and normalizes multilingual requests before filtering
 - **Multi-language UI** — Built with Next.js + Ant Design + Recharts
 
@@ -227,6 +230,73 @@ Default selection rule:
 - If Plan B is over budget and another plan is within budget, select the lowest-cost budget-safe option.
 - If all options exceed budget, keep Plan B as the default comparison baseline.
 
+## Quick Optimization and Export
+
+The Chat page includes quick actions next to the current selected plan:
+
+- **Make Cheaper** — reuses the current parsed intent and selected plan as context, then prioritizes lower-cost eligible alternatives
+- **Improve Quality** — prioritizes higher-rated products
+- **Faster Delivery** — prioritizes shorter delivery windows
+- **Prefer Dell** — prefers Dell catalog items where matching products exist
+- **Re-generate** — regenerates a balanced plan from the current understanding
+
+The compatible backend API is:
+
+```http
+POST /api/chat/optimize
+```
+
+Request body:
+
+```json
+{
+  "action": "make_cheaper",
+  "session_id": "demo-session-001",
+  "language": "en",
+  "parsed_intent": {"categories": ["Laptop"], "people_count": 10},
+  "current_plan": {"items": [], "total_amount": 0}
+}
+```
+
+The response uses the same shape as `POST /api/chat`: `recommended_plan`,
+`plan_options`, `selected_plan_id`, `parsed_intent`, `answer`, trace metadata,
+and `retrieved_products`.
+
+Excel export uses a separate compatible endpoint:
+
+```http
+POST /api/export/excel
+```
+
+Request body:
+
+```json
+{
+  "plan": {
+    "items": [
+      {
+        "name": "Dell Dock",
+        "category": "Docking Station",
+        "brand": "Dell",
+        "supplier": "Contoso",
+        "quantity": 3,
+        "unit_price": 120,
+        "subtotal": 360,
+        "rating": 4.6,
+        "stock": 40,
+        "delivery_days": 2,
+        "reason": "Selected for Dell compatibility."
+      }
+    ],
+    "total_amount": 360
+  }
+}
+```
+
+It returns `procurement_plan.xlsx` with product, category, brand, supplier,
+quantity, unit price, subtotal, rating, stock, delivery days, selection reason,
+and total cost.
+
 ## Category Normalization
 
 The agent dynamically reads allowed categories from `data/products.csv` before category filtering. Normalization first checks exact and case-insensitive matches, then a small stable alias table, then conservative similarity or LLM-based selection constrained to the allowed catalog categories. Low-confidence categories are preserved with a warning instead of being forced into the wrong catalog category.
@@ -290,7 +360,7 @@ ProcuraAI/
 - [x] **v1.0.0** — Core procurement agent with RAG, chat, orders, and payments
 - [x] **v2.0 Phase 1** — Procurement History MVP and dynamic catalog category normalization
 - [x] **v2.0 Phase 2** — Compare Plans and plan selection
-- [ ] **v2.0 Phase 3** — Quick optimization buttons, product detail modal, and Excel export
+- [x] **v2.0 Phase 3** — Quick optimization buttons, product detail modal, Agent Understanding visualization, and Excel export
 
 ## License
 

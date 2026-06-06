@@ -27,7 +27,10 @@ export type PlanItem = {
   stock?: number;
   delivery_days?: number;
   reason?: string;
+  description?: string;
 };
+
+export type QuickOptimizationAction = "make_cheaper" | "improve_quality" | "faster_delivery" | "prefer_dell" | "regenerate";
 
 export type ProcurementPlan = {
   items: PlanItem[];

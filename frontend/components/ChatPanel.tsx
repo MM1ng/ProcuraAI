@@ -1,19 +1,22 @@
 "use client";
 
-import { App, Button, Card, Input, List, Popconfirm, Space, Statistic, Tag, Typography } from "antd";
+import { App, Button, Card, Collapse, Descriptions, Input, List, Popconfirm, Space, Statistic, Tag, Typography } from "antd";
 import {
   CreditCardOutlined,
   DeleteOutlined,
+  DownloadOutlined,
   HistoryOutlined,
   LoadingOutlined,
+  RedoOutlined,
   SaveOutlined,
   SendOutlined,
-  ShoppingCartOutlined
+  ShoppingCartOutlined,
+  ThunderboltOutlined
 } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import { useLanguage } from "@/lib/i18n";
-import type { ChatResponse, Order, PaymentStatus, ProcurementHistoryRecord } from "@/lib/types";
+import type { ChatResponse, Order, PaymentStatus, ProcurementHistoryRecord, QuickOptimizationAction } from "@/lib/types";
 import ChatMessage from "./ChatMessage";
 import OrderSummary from "./OrderSummary";
 import ProcurementPlanCard from "./ProcurementPlanCard";
@@ -22,6 +25,13 @@ type ChatLine = { role: "user" | "agent"; content: string; streaming?: boolean }
 
 const STREAM_CHUNK_SIZE = 3;
 const STREAM_INTERVAL_MS = 18;
+const quickActions: Array<{ action: QuickOptimizationAction; label: string }> = [
+  { action: "make_cheaper", label: "Make Cheaper" },
+  { action: "improve_quality", label: "Improve Quality" },
+  { action: "faster_delivery", label: "Faster Delivery" },
+  { action: "prefer_dell", label: "Prefer Dell" },
+  { action: "regenerate", label: "Re-generate" }
+];
 
 export default function ChatPanel() {
   const { language, t } = useLanguage();
@@ -36,6 +46,7 @@ export default function ChatPanel() {
   const [historyRecords, setHistoryRecords] = useState<ProcurementHistoryRecord[]>([]);
   const [lastRequest, setLastRequest] = useState("");
   const [historyLoading, setHistoryLoading] = useState(false);
+  const [optimizing, setOptimizing] = useState<QuickOptimizationAction | null>(null);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -99,6 +110,44 @@ export default function ChatPanel() {
     const created = await api.createOrder(result.recommended_plan);
     setOrder(created);
     message.success(t("chat.orderCreated", { orderId: created.order_id }));
+  }
+
+  async function optimize(action: QuickOptimizationAction) {
+    if (!result?.recommended_plan) return;
+    setOptimizing(action);
+    try {
+      const response = await api.optimizePlan({
+        action,
+        session_id: result.session_id,
+        language,
+        parsed_intent: result.parsed_intent,
+        current_plan: result.recommended_plan,
+        message: lastRequest
+      });
+      setResult(response);
+      setOrder(null);
+      localStorage.setItem("currentPlan", JSON.stringify(response.recommended_plan));
+      await streamAgentAnswer(response.answer);
+    } catch (error) {
+      message.error(error instanceof Error ? error.message : t("chat.requestFailed"));
+    } finally {
+      setOptimizing(null);
+    }
+  }
+
+  async function exportExcel() {
+    if (!result?.recommended_plan) return;
+    try {
+      const blob = await api.exportExcel(result.recommended_plan);
+      const url = window.URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "procurement_plan.xlsx";
+      anchor.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      message.error(error instanceof Error ? error.message : "Export failed");
+    }
   }
 
   async function pay(targetOrder: Order) {
@@ -195,6 +244,13 @@ export default function ChatPanel() {
     if (strategy === "cost_optimized") return "green";
     if (strategy === "premium") return "purple";
     return "blue";
+  }
+
+  function valueFor(key: string) {
+    const value = result?.parsed_intent?.[key];
+    if (Array.isArray(value)) return value.join(", ");
+    if (value === undefined || value === null || value === "") return "-";
+    return String(value);
   }
 
   return (
@@ -340,9 +396,34 @@ export default function ChatPanel() {
               {result.llm_error ? <Tag color="red">{result.llm_error}</Tag> : null}
             </Space>
           ) : null}
-          <Typography.Text code style={{ whiteSpace: "pre-wrap" }}>
-            {result ? JSON.stringify(result.parsed_intent, null, 2) : "{}"}
-          </Typography.Text>
+          {result ? (
+            <Space direction="vertical" size={12} style={{ width: "100%" }}>
+              <Descriptions column={1} size="small" bordered>
+                <Descriptions.Item label="Team Size">{valueFor("people_count")}</Descriptions.Item>
+                <Descriptions.Item label="Categories">{valueFor("categories")}</Descriptions.Item>
+                <Descriptions.Item label="Budget">{valueFor("budget")}</Descriptions.Item>
+                <Descriptions.Item label="Rating">{valueFor("min_rating")}</Descriptions.Item>
+                <Descriptions.Item label="Delivery">{valueFor("max_delivery_days")}</Descriptions.Item>
+                <Descriptions.Item label="Intent">{valueFor("revision_intent")}</Descriptions.Item>
+              </Descriptions>
+              <Collapse
+                size="small"
+                items={[
+                  {
+                    key: "raw-json",
+                    label: "Raw JSON",
+                    children: (
+                      <Typography.Text code style={{ whiteSpace: "pre-wrap" }}>
+                        {JSON.stringify(result.parsed_intent, null, 2)}
+                      </Typography.Text>
+                    )
+                  }
+                ]}
+              />
+            </Space>
+          ) : (
+            <Typography.Text code>{"{}"}</Typography.Text>
+          )}
         </Card>
         {result?.plan_options?.length ? (
           <Card title="Compare Plans">
@@ -387,7 +468,31 @@ export default function ChatPanel() {
             </Space>
           </Card>
         ) : null}
-        <ProcurementPlanCard plan={result?.recommended_plan} />
+        {result?.recommended_plan ? (
+          <Card title="Quick Optimization" size="small">
+            <Space wrap>
+              {quickActions.map((item) => (
+                <Button
+                  key={item.action}
+                  icon={item.action === "regenerate" ? <RedoOutlined /> : <ThunderboltOutlined />}
+                  loading={optimizing === item.action}
+                  disabled={Boolean(optimizing)}
+                  onClick={() => optimize(item.action)}
+                >
+                  {item.label}
+                </Button>
+              ))}
+              <Button icon={<DownloadOutlined />} onClick={exportExcel}>
+                Export Excel
+              </Button>
+            </Space>
+          </Card>
+        ) : null}
+        <ProcurementPlanCard
+          plan={result?.recommended_plan}
+          products={result?.retrieved_products || []}
+          onExportExcel={result?.recommended_plan ? exportExcel : undefined}
+        />
       </Space>
     </div>
   );

@@ -41,6 +41,8 @@ pytest
 - `GET /api/history/{id}`
 - `POST /api/history`
 - `DELETE /api/history/{id}`
+- `POST /api/chat/optimize`
+- `POST /api/export/excel`
 
 The default path uses CSV and JSON fallback files so the demo works without
 Alibaba Cloud, OpenAI, Stripe, Langfuse, Ragas, or MLflow credentials.
@@ -66,6 +68,52 @@ multi-plan options for v2:
 and another option is budget-safe, the backend selects the lowest-cost
 within-budget option as `recommended_plan`. The frontend can switch to another
 option without calling a new endpoint.
+
+## Quick Optimization API
+
+`POST /api/chat/optimize` preserves the `ChatResponse` contract while revising
+the current selected plan from the latest parsed intent and plan context.
+
+Supported `action` values:
+
+- `make_cheaper`
+- `improve_quality`
+- `faster_delivery`
+- `prefer_dell`
+- `regenerate`
+
+Example:
+
+```powershell
+Invoke-RestMethod http://localhost:8000/api/chat/optimize `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body '{
+    "action": "prefer_dell",
+    "session_id": "demo-session-001",
+    "language": "en",
+    "parsed_intent": {"categories": ["Docking Station"], "people_count": 5},
+    "current_plan": {"items": [], "total_amount": 0}
+  }'
+```
+
+The response includes updated `recommended_plan`, `plan_options`, and
+`selected_plan_id`.
+
+## Excel Export API
+
+`POST /api/export/excel` returns an `.xlsx` file for the selected plan.
+
+```powershell
+Invoke-WebRequest http://localhost:8000/api/export/excel `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body '{"plan":{"items":[],"total_amount":0}}' `
+  -OutFile procurement_plan.xlsx
+```
+
+The workbook includes product, category, brand, supplier, quantity, unit price,
+subtotal, rating, stock, delivery days, selection reason, and total cost.
 
 ## Procurement History API
 

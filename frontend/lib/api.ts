@@ -1,4 +1,12 @@
-import type { ChatResponse, Order, PaymentStatus, Product, ProcurementHistoryRecord, ProcurementPlan } from "./types";
+import type {
+  ChatResponse,
+  Order,
+  PaymentStatus,
+  Product,
+  ProcurementHistoryRecord,
+  ProcurementPlan,
+  QuickOptimizationAction
+} from "./types";
 import type { LanguageCode } from "./i18n";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
@@ -35,6 +43,30 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ message, session_id: sessionId, language })
     });
+  },
+  optimizePlan(payload: {
+    action: QuickOptimizationAction;
+    session_id: string;
+    language: LanguageCode;
+    parsed_intent: Record<string, unknown>;
+    current_plan: ProcurementPlan;
+    message?: string;
+  }) {
+    return request<ChatResponse>("/api/chat/optimize", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+  },
+  async exportExcel(plan: ProcurementPlan) {
+    const response = await fetch(`${API_BASE}/api/export/excel`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plan })
+    });
+    if (!response.ok) {
+      throw new Error(`${response.status} ${response.statusText}`);
+    }
+    return response.blob();
   },
   history() {
     return request<{ items: ProcurementHistoryRecord[]; total: number }>("/api/history");

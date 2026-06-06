@@ -1,11 +1,12 @@
 "use client";
 
-import { CheckCircleOutlined, CopyOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { App, Button, Card, Empty, Progress, Space, Table, Tag, Typography } from "antd";
+import { CheckCircleOutlined, CopyOutlined, ExclamationCircleOutlined, FileExcelOutlined } from "@ant-design/icons";
+import { App, Button, Card, Descriptions, Empty, Modal, Progress, Space, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { useMemo, useState } from "react";
 import { currency } from "@/lib/format";
 import { useLanguage } from "@/lib/i18n";
-import type { PlanItem, ProcurementPlan } from "@/lib/types";
+import type { PlanItem, ProcurementPlan, Product } from "@/lib/types";
 
 const statusColor: Record<string, string> = {
   within_budget: "green",
@@ -51,9 +52,32 @@ function buildPlanMarkdown(plan: ProcurementPlan): string {
   return lines.join("\n");
 }
 
-export default function ProcurementPlanCard({ plan }: { plan?: ProcurementPlan | null }) {
+function enrichItem(item: PlanItem, products: Product[]): PlanItem {
+  const product = products.find((candidate) => candidate.product_id === item.product_id);
+  return {
+    ...item,
+    description: item.description || product?.description || "",
+    brand: item.brand || product?.brand,
+    supplier: item.supplier || product?.supplier,
+    rating: item.rating ?? product?.rating,
+    stock: item.stock ?? product?.stock,
+    delivery_days: item.delivery_days ?? product?.delivery_days
+  };
+}
+
+export default function ProcurementPlanCard({
+  plan,
+  products = [],
+  onExportExcel
+}: {
+  plan?: ProcurementPlan | null;
+  products?: Product[];
+  onExportExcel?: () => void;
+}) {
   const { t, translateCategory, translateStatus } = useLanguage();
   const { message } = App.useApp();
+  const [detailItem, setDetailItem] = useState<PlanItem | null>(null);
+  const enrichedItems = useMemo(() => plan?.items.map((item) => enrichItem(item, products)) || [], [plan, products]);
 
   if (!plan) {
     return <Empty description={t("plan.empty")} />;
@@ -70,7 +94,16 @@ export default function ProcurementPlanCard({ plan }: { plan?: ProcurementPlan |
 
   const budgetUsage = plan.budget ? Math.min(100, Math.round((plan.total_amount / plan.budget) * 100)) : 0;
   const columns: ColumnsType<PlanItem> = [
-    { title: t("plan.product"), dataIndex: "name", key: "name" },
+    {
+      title: t("plan.product"),
+      dataIndex: "name",
+      key: "name",
+      render: (value: string, item) => (
+        <Button type="link" size="small" onClick={() => setDetailItem(item)}>
+          {value}
+        </Button>
+      )
+    },
     {
       title: t("plan.category"),
       dataIndex: "category",
@@ -110,6 +143,11 @@ export default function ProcurementPlanCard({ plan }: { plan?: ProcurementPlan |
           >
             {t("chat.copyPlan")}
           </Button>
+          {onExportExcel ? (
+            <Button type="text" size="small" icon={<FileExcelOutlined />} onClick={onExportExcel}>
+              Export Excel
+            </Button>
+          ) : null}
           <Typography.Text strong>{currency(plan.total_amount)}</Typography.Text>
         </Space>
       }
@@ -161,10 +199,32 @@ export default function ProcurementPlanCard({ plan }: { plan?: ProcurementPlan |
           size="small"
           pagination={false}
           columns={columns}
-          dataSource={plan.items}
+          dataSource={enrichedItems}
           scroll={{ x: 760 }}
+          onRow={(item) => ({ onDoubleClick: () => setDetailItem(item) })}
         />
       </Space>
+      <Modal
+        title={detailItem?.name || "Product Detail"}
+        open={Boolean(detailItem)}
+        onCancel={() => setDetailItem(null)}
+        footer={null}
+      >
+        {detailItem ? (
+          <Descriptions column={1} size="small" bordered>
+            <Descriptions.Item label="Name">{detailItem.name}</Descriptions.Item>
+            <Descriptions.Item label="Category">{translateCategory(detailItem.category)}</Descriptions.Item>
+            <Descriptions.Item label="Brand">{detailItem.brand || "-"}</Descriptions.Item>
+            <Descriptions.Item label="Supplier">{detailItem.supplier || "-"}</Descriptions.Item>
+            <Descriptions.Item label="Price">{currency(detailItem.unit_price)}</Descriptions.Item>
+            <Descriptions.Item label="Rating">{detailItem.rating ?? "-"}</Descriptions.Item>
+            <Descriptions.Item label="Stock">{detailItem.stock ?? "-"}</Descriptions.Item>
+            <Descriptions.Item label="Delivery Days">{detailItem.delivery_days ?? "-"}</Descriptions.Item>
+            <Descriptions.Item label="Description">{detailItem.description || "-"}</Descriptions.Item>
+            <Descriptions.Item label="Why Selected">{detailItem.reason || "-"}</Descriptions.Item>
+          </Descriptions>
+        ) : null}
+      </Modal>
     </Card>
   );
 }

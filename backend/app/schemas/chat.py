@@ -20,6 +20,15 @@ class ProcurementPlanRequest(BaseModel):
     language: Literal["en", "zh", "fr"] = "en"
 
 
+class QuickOptimizationRequest(BaseModel):
+    action: Literal["make_cheaper", "improve_quality", "faster_delivery", "prefer_dell", "regenerate"]
+    session_id: str = "demo-session-001"
+    language: Literal["en", "zh", "fr"] = "en"
+    parsed_intent: dict[str, Any]
+    current_plan: dict[str, Any]
+    message: str | None = None
+
+
 class ChatResponse(BaseModel):
     session_id: str
     parsed_intent: dict[str, Any]

@@ -9,8 +9,10 @@ from app.agent.prompts import ERROR_MESSAGES, PLAN_RESPONSE_TEMPLATES
 from app.agent.session_state import get_session_state, save_session_state
 from app.observability.langfuse_client import LangfuseClient
 from app.observability.local_tracer import elapsed_ms, log_observability_event, new_trace_id, now_ms
-from app.rag.retriever import retrieve_products
+from app.rag.retriever import RetrievalResult, retrieve_products, retrieve_products_with_evidence
 from app.services.llm_service import settings
+
+_ORIGINAL_RETRIEVE_PRODUCTS = retrieve_products
 
 
 def _language(language: str) -> str:
@@ -48,6 +50,26 @@ def _answer_from_plan(plan: dict[str, Any], language: str) -> str:
 def _combine_llm_error(*errors: str | None) -> str | None:
     values = [error for error in errors if error]
     return " | ".join(values) if values else None
+
+
+def _empty_retrieval_evidence() -> dict[str, Any]:
+    return {
+        "products": [],
+        "policies": [],
+        "suppliers": [],
+        "constraints": {},
+        "constraints_relaxed": False,
+        "retrieval_mode": "not_available",
+    }
+
+
+def _retrieve_products_for_agent(message: str, intent: dict[str, Any], top_k: int) -> RetrievalResult:
+    if retrieve_products is not _ORIGINAL_RETRIEVE_PRODUCTS:
+        return RetrievalResult(
+            products=retrieve_products(message, intent, top_k=top_k),
+            evidence=_empty_retrieval_evidence(),
+        )
+    return retrieve_products_with_evidence(message, intent, top_k=top_k)
 
 
 def select_default_plan_option(plan_options: list[dict[str, Any]]) -> dict[str, Any] | None:
@@ -97,7 +119,9 @@ def run_procurement_agent(
         used_mock_llm = bool(intent.get("used_mock_llm"))
         llm_error = intent.get("llm_error")
 
-        retrieved_products = retrieve_products(message, intent, top_k=30)
+        retrieval_result = _retrieve_products_for_agent(message, intent, top_k=30)
+        retrieved_products = retrieval_result.products
+        retrieval_evidence = retrieval_result.evidence
         tool_calls.append(
             {
                 "name": "search_products",
@@ -134,6 +158,7 @@ def run_procurement_agent(
     except Exception as exc:
         intent = previous_intent or {}
         retrieved_products = []
+        retrieval_evidence = _empty_retrieval_evidence()
         plan = {
             "items": [],
             "selected_items": [],
@@ -156,6 +181,7 @@ def run_procurement_agent(
         "user_query": message,
         "parsed_intent": intent,
         "retrieved_products": retrieved_products[:8],
+        "retrieval_evidence": retrieval_evidence,
         "selected_products": plan.get("items", []),
         "final_answer": answer,
         "model_provider": model_provider,
@@ -182,6 +208,7 @@ def run_procurement_agent(
         "answer": answer,
         "trace_id": trace_id,
         "retrieved_products": retrieved_products[:12],
+        "retrieval_evidence": retrieval_evidence,
         "model_provider": model_provider,
         "model_name": model_name,
         "used_mock_llm": used_mock_llm,

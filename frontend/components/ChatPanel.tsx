@@ -16,7 +16,14 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import { useLanguage } from "@/lib/i18n";
-import type { ChatResponse, Order, PaymentStatus, ProcurementHistoryRecord, QuickOptimizationAction } from "@/lib/types";
+import type {
+  ChatResponse,
+  Order,
+  PaymentStatus,
+  ProcurementHistoryRecord,
+  QuickOptimizationAction,
+  RetrievalEvidence
+} from "@/lib/types";
 import ChatMessage from "./ChatMessage";
 import OrderSummary from "./OrderSummary";
 import ProcurementPlanCard from "./ProcurementPlanCard";
@@ -32,6 +39,91 @@ const quickActions: Array<{ action: QuickOptimizationAction; label: string }> = 
   { action: "prefer_dell", label: "Prefer Dell" },
   { action: "regenerate", label: "Re-generate" }
 ];
+
+function evidenceText(value: unknown) {
+  if (Array.isArray(value)) return value.join(", ");
+  if (value === undefined || value === null || value === "") return "-";
+  return String(value);
+}
+
+function evidenceScore(value: unknown) {
+  const score = Number(value || 0);
+  return Number.isFinite(score) ? score.toFixed(2) : "-";
+}
+
+function RetrievalEvidencePanel({ evidence }: { evidence?: RetrievalEvidence }) {
+  if (!evidence) return null;
+  const products = evidence.products || [];
+  const policies = evidence.policies || [];
+  const suppliers = evidence.suppliers || [];
+  const constraints = evidence.constraints || {};
+  const hasEvidence = products.length || policies.length || suppliers.length;
+  if (!hasEvidence) return null;
+
+  return (
+    <Card title="Retrieval Evidence" size="small">
+      <Space direction="vertical" size={10} style={{ width: "100%" }}>
+        <Space wrap>
+          <Tag color="blue">Mode: {evidence.retrieval_mode || "unknown"}</Tag>
+          {evidence.constraints_relaxed ? <Tag color="orange">Constraints relaxed</Tag> : null}
+          {Object.entries(constraints).map(([key, value]) => (
+            value === undefined || value === null || value === "" ? null : (
+              <Tag key={key}>
+                {key}: {evidenceText(value)}
+              </Tag>
+            )
+          ))}
+        </Space>
+        <Collapse
+          size="small"
+          items={[
+            {
+              key: "products",
+              label: `Product vector Top-K (${products.length})`,
+              children: (
+                <Space direction="vertical" size={8} style={{ width: "100%" }}>
+                  {products.map((item, index) => (
+                    <Typography.Text key={`${item.product_id}-${index}`}>
+                      {index + 1}. {evidenceText(item.name)} · {evidenceText(item.category)} · score{" "}
+                      {evidenceScore(item.score)} · {evidenceText(item.reason)}
+                    </Typography.Text>
+                  ))}
+                </Space>
+              )
+            },
+            {
+              key: "policies",
+              label: `Procurement policies (${policies.length})`,
+              children: (
+                <Space direction="vertical" size={8} style={{ width: "100%" }}>
+                  {policies.map((item, index) => (
+                    <Typography.Text key={`${item.id}-${index}`}>
+                      {evidenceText(item.title)} · score {evidenceScore(item.score)}
+                    </Typography.Text>
+                  ))}
+                </Space>
+              )
+            },
+            {
+              key: "suppliers",
+              label: `Supplier knowledge (${suppliers.length})`,
+              children: (
+                <Space direction="vertical" size={8} style={{ width: "100%" }}>
+                  {suppliers.map((item, index) => (
+                    <Typography.Text key={`${item.id}-${index}`}>
+                      {evidenceText(item.supplier || item.title)} · risk {evidenceText(item.risk_level)} · score{" "}
+                      {evidenceScore(item.score)}
+                    </Typography.Text>
+                  ))}
+                </Space>
+              )
+            }
+          ]}
+        />
+      </Space>
+    </Card>
+  );
+}
 
 export default function ChatPanel() {
   const { language, t } = useLanguage();
@@ -425,6 +517,7 @@ export default function ChatPanel() {
             <Typography.Text code>{"{}"}</Typography.Text>
           )}
         </Card>
+        <RetrievalEvidencePanel evidence={result?.retrieval_evidence} />
         {result?.plan_options?.length ? (
           <Card title="Compare Plans">
             <Space direction="vertical" size={12} style={{ width: "100%" }}>

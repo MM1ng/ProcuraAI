@@ -14,6 +14,7 @@ An intelligent procurement assistant that understands natural language purchase 
 
 - **Intelligent Procurement Recommendation** — Parses natural language purchase requests and recommends optimal products
 - **Agentic RAG** — Hybrid search combining vector retrieval with structured filtering (category, price, rating, stock, delivery)
+- **Vector Knowledge Retrieval** — Local Chroma collections for products, procurement policies, and supplier profiles
 - **Multi-turn Memory** — Maintains session context across conversation turns for coherent multi-step procurement
 - **Qwen3.7-Max & Qwen-Max Support** — Seamless integration with Alibaba Cloud Tongyi LLMs via LangChain
 - **Mock LLM Fallback** — Works out-of-the-box without any API keys using deterministic rule-based fallback
@@ -62,7 +63,7 @@ An intelligent procurement assistant that understands natural language purchase 
 | Frontend | Next.js 16, TypeScript, Ant Design, Recharts |
 | Backend | FastAPI, Python 3.12+, SQLAlchemy, Pydantic |
 | Agent | LangChain, Custom Intent Parser, Plan Generator |
-| RAG | Hybrid Search (BM25 + Structured Filters) |
+| RAG | Local Chroma, deterministic hash embeddings, hybrid vector + structured filters |
 | Database | SQLite (dev), PostgreSQL-ready models |
 | Payment | Stripe SDK + Mock Mode |
 | Observability | Local JSON traces, Langfuse adapter |
@@ -188,9 +189,34 @@ python -m app.scripts.test_qwen_call
 ## Data
 
 - **375 products** across 15 procurement categories in `data/products.csv`
-- **Retrieval index** built by `ingest_products.py` into `data/retrieval_index.json`
+- **Vector retrieval store** built by `ingest_products.py` into ignored local Chroma files under `data/chroma/`
+- **JSON fallback index** built by `ingest_products.py` into ignored `data/retrieval_index.json`
+- **Policy and supplier knowledge** in `data/procurement_policies.json` and `data/suppliers.json`
 - **Mock evaluation logs** and **observability traces** in `data/`
 - **Procurement history** is stored locally in `data/procurement_history.json` and is intentionally ignored by Git
+
+## Vector RAG
+
+The v2 RAG layer stores product descriptions, procurement policy snippets, and
+supplier profiles in local Chroma collections. Embeddings are deterministic
+384-dimension hash vectors, so local demos and tests do not require external
+embedding APIs.
+
+Retrieval flow:
+
+- recall product candidates from the `products` Chroma collection
+- apply structured filters from parsed intent, including category, brand,
+  rating, stock, and delivery days
+- rank by vector score first, then business signals such as rating, delivery,
+  and price
+- retrieve matching policy and supplier snippets for explainability
+- fall back to `data/retrieval_index.json` or CSV search if Chroma is empty or
+  unavailable
+
+`POST /api/chat` remains backward compatible and adds optional
+`retrieval_evidence`, including product vector Top-K summaries, applied
+constraints, policy snippets, and supplier snippets. The Chat page shows this
+in a compact Retrieval Evidence panel.
 
 ## Procurement History
 

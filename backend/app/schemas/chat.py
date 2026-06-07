@@ -38,6 +38,7 @@ class ChatResponse(BaseModel):
     answer: str
     trace_id: str
     retrieved_products: list[dict[str, Any]] = Field(default_factory=list)
+    retrieval_evidence: dict[str, Any] = Field(default_factory=dict)
     model_provider: str
     model_name: str
     used_mock_llm: bool

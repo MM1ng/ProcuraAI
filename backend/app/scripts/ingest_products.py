@@ -5,7 +5,7 @@ from app.rag.ingest import ingest_products
 
 def main() -> None:
     count = ingest_products()
-    print(f"Ingested {count} products into the local retrieval index")
+    print(f"Ingested {count} products into the JSON fallback index and local Chroma collections")
 
 
 if __name__ == "__main__":

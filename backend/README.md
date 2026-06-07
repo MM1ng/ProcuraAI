@@ -47,6 +47,19 @@ pytest
 The default path uses CSV and JSON fallback files so the demo works without
 Alibaba Cloud, OpenAI, Stripe, Langfuse, Ragas, or MLflow credentials.
 
+## Vector RAG Ingest
+
+`python -m app.scripts.ingest_products` builds both retrieval layers:
+
+- local Chroma collections under `data/chroma/` for products, procurement
+  policies, and supplier profiles
+- ignored JSON fallback index at `data/retrieval_index.json`
+
+The Chroma collections use deterministic local hash embeddings, so no embedding
+API key is required. `POST /api/chat` adds optional `retrieval_evidence` while
+preserving the existing `recommended_plan`, `plan_options`, and
+`selected_plan_id` response fields.
+
 ## Compare Plans Response
 
 `POST /api/chat` keeps the v1.0-compatible `recommended_plan` field and adds

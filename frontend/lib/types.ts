@@ -59,6 +59,15 @@ export type PlanOption = {
   plan: ProcurementPlan;
 };
 
+export type RetrievalEvidence = {
+  products?: Array<Record<string, unknown>>;
+  policies?: Array<Record<string, unknown>>;
+  suppliers?: Array<Record<string, unknown>>;
+  constraints?: Record<string, unknown>;
+  constraints_relaxed?: boolean;
+  retrieval_mode?: string;
+};
+
 export type ChatResponse = {
   session_id: string;
   parsed_intent: Record<string, unknown>;
@@ -68,6 +77,7 @@ export type ChatResponse = {
   answer: string;
   trace_id: string;
   retrieved_products: Product[];
+  retrieval_evidence?: RetrievalEvidence;
   model_provider: string;
   model_name: string;
   used_mock_llm: boolean;

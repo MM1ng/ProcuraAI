@@ -73,6 +73,7 @@ temp/
 # --- Runtime / Generated Files ---
 data/retrieval_index.json
 data/procurement_history.json
+data/chroma/
 
 # --- Screenshots / Demo Assets ---
 *.png

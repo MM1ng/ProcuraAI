@@ -4,17 +4,47 @@
 
 Each product is converted into a retrieval text that combines product name,
 brand, category, supplier, description, tags, price, rating, stock, delivery
-days, and compliance level. The local ingest script writes this context to
-`data/retrieval_index.json`.
+days, and compliance level. The local ingest script writes this context to the
+ignored JSON fallback index at `data/retrieval_index.json` and to the local
+Chroma `products` collection under `data/chroma/`.
+
+Procurement policies and supplier profiles are loaded from:
+
+- `data/procurement_policies.json`
+- `data/suppliers.json`
+
+They are ingested into separate Chroma collections named
+`procurement_policies` and `suppliers`.
+
+## Embeddings And Vector Store
+
+The current vector path uses deterministic local hash embeddings with 384
+dimensions and L2 normalization. This avoids external embedding API keys while
+keeping tests stable and reproducible.
+
+Chroma is used as the local vector database. If Chroma is unavailable, empty, or
+throws during query, retrieval falls back to the local JSON/CSV search path.
 
 ## Hybrid Retrieval
 
 Retrieval combines:
 
-- Text matching over product context.
+- Vector recall over product context.
 - Category filtering from parsed and normalized intent.
 - Structured constraints for price, rating, stock, and delivery days.
-- Ranking by text score, rating, delivery speed, and price.
+- Ranking by vector score, rating, delivery speed, and price.
+
+If all vector-recalled products are removed by structured filters, the retriever
+returns the best vector candidates with `constraints_relaxed=true` in retrieval
+evidence so the UI can explain the relaxation.
+
+`POST /api/chat` includes optional `retrieval_evidence`:
+
+- `products`: product vector Top-K summary with score, reason, and matched fields
+- `policies`: matching procurement policy snippets
+- `suppliers`: matching supplier profile snippets
+- `constraints`: structured filters applied during retrieval
+- `constraints_relaxed`: whether no candidate survived strict filtering
 
 ## Dynamic Category Normalization
 

@@ -81,7 +81,7 @@ def quick_optimize(request: QuickOptimizationRequest) -> ChatResponse:
         if dell_products:
             candidate_products = dell_products
 
-    plan_options = generate_plan_options(candidate_products, intent)
+    plan_options = generate_plan_options(retrieved_products, intent)
     selected_option = _option_for_action(request.action, plan_options)
     if selected_option:
         plan = selected_option["plan"]
@@ -99,7 +99,7 @@ def quick_optimize(request: QuickOptimizationRequest) -> ChatResponse:
         plan["previous_total_amount"] = previous_total
         plan["savings_amount"] = round(previous_total - float(plan.get("total_amount", 0) or 0), 2)
 
-    if plan_options and not any(option.get("id") == plan.get("plan_option_id") for option in plan_options):
+    if not any(option.get("id") == plan.get("plan_option_id") for option in plan_options):
         plan_options = [
             {
                 "id": str(plan.get("plan_option_id")),

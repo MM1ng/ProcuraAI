@@ -15,6 +15,7 @@ import {
 } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
+import { currency } from "@/lib/format";
 import { useLanguage } from "@/lib/i18n";
 import type {
   ChatResponse,
@@ -49,6 +50,12 @@ function evidenceText(value: unknown) {
 function evidenceScore(value: unknown) {
   const score = Number(value || 0);
   return Number.isFinite(score) ? score.toFixed(2) : "-";
+}
+
+function isPlanSelectable(plan?: { selectable?: boolean; budget_status?: string; over_budget?: boolean } | null) {
+  if (!plan) return false;
+  if (plan.selectable === false) return false;
+  return plan.budget_status !== "over_budget" && plan.over_budget !== true;
 }
 
 function RetrievalEvidencePanel({ evidence }: { evidence?: RetrievalEvidence }) {
@@ -139,6 +146,7 @@ export default function ChatPanel() {
   const [lastRequest, setLastRequest] = useState("");
   const [historyLoading, setHistoryLoading] = useState(false);
   const [optimizing, setOptimizing] = useState<QuickOptimizationAction | null>(null);
+  const [checkingOut, setCheckingOut] = useState<string | null>(null);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -197,11 +205,20 @@ export default function ChatPanel() {
     }
   }
 
-  async function createOrder() {
-    if (!result?.recommended_plan) return;
-    const created = await api.createOrder(result.recommended_plan);
+  function planIdFor(plan?: { plan_option_id?: string; plan_id?: string } | null) {
+    return plan?.plan_option_id || plan?.plan_id || "";
+  }
+
+  async function createOrder(plan = result?.recommended_plan) {
+    if (!plan) return null;
+    if (!isPlanSelectable(plan)) {
+      message.warning("Over-budget plans require approval before order creation.");
+      return null;
+    }
+    const created = await api.createOrder(plan);
     setOrder(created);
     message.success(t("chat.orderCreated", { orderId: created.order_id }));
+    return created;
   }
 
   async function optimize(action: QuickOptimizationAction) {
@@ -242,9 +259,40 @@ export default function ChatPanel() {
     }
   }
 
-  async function pay(targetOrder: Order) {
-    const checkout = await api.checkout(targetOrder);
-    window.location.href = checkout.checkout_url;
+  async function ensureOrderForPlan(plan: NonNullable<ChatResponse["recommended_plan"]>) {
+    const planId = planIdFor(plan);
+    if (order && order.plan_id === planId) return order;
+    return createOrder(plan);
+  }
+
+  async function pay(targetOrder: Order, planId = planIdFor(result?.recommended_plan)) {
+    if (result?.recommended_plan && !isPlanSelectable(result.recommended_plan)) {
+      message.warning("Over-budget plans cannot be paid directly.");
+      return;
+    }
+    if (!planId) {
+      message.error("Missing selected plan id.");
+      return;
+    }
+    try {
+      setCheckingOut(planId);
+      const checkout = await api.checkout(targetOrder, planId);
+      window.location.href = checkout.checkout_url;
+    } catch (error) {
+      message.error(error instanceof Error ? error.message : "Checkout failed");
+    } finally {
+      setCheckingOut(null);
+    }
+  }
+
+  async function payForPlan(plan: NonNullable<ChatResponse["recommended_plan"]>) {
+    if (!isPlanSelectable(plan)) {
+      message.warning("Over-budget plans cannot be paid directly.");
+      return;
+    }
+    const nextOrder = await ensureOrderForPlan(plan);
+    if (!nextOrder) return;
+    await pay(nextOrder, planIdFor(plan));
   }
 
   async function refreshHistory() {
@@ -261,25 +309,29 @@ export default function ChatPanel() {
 
   async function saveHistory() {
     if (!result?.recommended_plan) return;
-    const saved = await api.saveHistory({
-      original_request: lastRequest,
-      parsed_intent: result.parsed_intent,
-      procurement_plan: result.recommended_plan,
-      trace: {
-        trace_id: result.trace_id,
-        model_provider: result.model_provider,
-        model_name: result.model_name,
-        used_mock_llm: result.used_mock_llm
-      },
-      reasoning_summary: result.answer,
-      messages: [
-        { role: "user", content: lastRequest },
-        { role: "agent", content: result.answer }
-      ],
-      order_draft: order
-    });
-    setHistoryRecords((current) => [saved, ...current.filter((item) => item.id !== saved.id)]);
-    message.success("History saved");
+    try {
+      const saved = await api.saveHistory({
+        original_request: lastRequest,
+        parsed_intent: result.parsed_intent,
+        procurement_plan: result.recommended_plan,
+        trace: {
+          trace_id: result.trace_id,
+          model_provider: result.model_provider,
+          model_name: result.model_name,
+          used_mock_llm: result.used_mock_llm
+        },
+        reasoning_summary: result.answer,
+        messages: [
+          { role: "user", content: lastRequest },
+          { role: "agent", content: result.answer }
+        ],
+        order_draft: order
+      });
+      setHistoryRecords((current) => [saved, ...current.filter((item) => item.id !== saved.id)]);
+      message.success("History saved");
+    } catch (error) {
+      message.error(error instanceof Error ? error.message : "Failed to save history");
+    }
   }
 
   async function restoreHistory(historyId: string) {
@@ -321,6 +373,10 @@ export default function ChatPanel() {
     if (!result?.plan_options?.length) return;
     const option = result.plan_options.find((item) => item.id === optionId);
     if (!option) return;
+    if (!isPlanSelectable(option.plan)) {
+      message.warning(`${option.name} is over budget and requires approval.`);
+      return;
+    }
     const nextResult = {
       ...result,
       recommended_plan: option.plan,
@@ -344,6 +400,19 @@ export default function ChatPanel() {
     if (value === undefined || value === null || value === "") return "-";
     return String(value);
   }
+
+  function parsedValueFor(key: string) {
+    const value = result?.parsed_intent?.[key];
+    if (key === "min_rating" && value !== undefined && value !== null && value !== "") {
+      return `>= ${value}`;
+    }
+    if (key === "max_delivery_days" && value !== undefined && value !== null && value !== "") {
+      return `Fast preferred / <= ${value} days`;
+    }
+    return valueFor(key);
+  }
+
+  const currentPlanSelectable = isPlanSelectable(result?.recommended_plan);
 
   return (
     <div className="two-column">
@@ -411,13 +480,13 @@ export default function ChatPanel() {
               />
             </div>
             <Space wrap>
-              <Button icon={<ShoppingCartOutlined />} disabled={!result} onClick={createOrder}>
+              <Button icon={<ShoppingCartOutlined />} disabled={!result || !currentPlanSelectable} onClick={() => createOrder()}>
                 {t("chat.createOrder")}
               </Button>
               <Button icon={<SaveOutlined />} disabled={!result || !lastRequest} onClick={saveHistory}>
                 Save History
               </Button>
-              <Button icon={<CreditCardOutlined />} disabled={!order} onClick={() => order && pay(order)}>
+              <Button icon={<CreditCardOutlined />} disabled={!order || !currentPlanSelectable} onClick={() => order && pay(order)}>
                 {t("chat.payWithStripe")}
               </Button>
               {paymentStatus ? (
@@ -428,7 +497,7 @@ export default function ChatPanel() {
             </Space>
           </Space>
         </Card>
-        <OrderSummary order={order} onPay={pay} />
+        <OrderSummary order={order} onPay={currentPlanSelectable ? pay : undefined} />
         <Card
           title={
             <Space>
@@ -445,7 +514,7 @@ export default function ChatPanel() {
           <List
             loading={historyLoading}
             dataSource={historyRecords}
-            locale={{ emptyText: "No history" }}
+            locale={{ emptyText: result ? "No saved history yet. Click Save History to keep this plan." : "No saved history yet." }}
             renderItem={(item) => (
               <List.Item
                 actions={[
@@ -494,8 +563,8 @@ export default function ChatPanel() {
                 <Descriptions.Item label="Team Size">{valueFor("people_count")}</Descriptions.Item>
                 <Descriptions.Item label="Categories">{valueFor("categories")}</Descriptions.Item>
                 <Descriptions.Item label="Budget">{valueFor("budget")}</Descriptions.Item>
-                <Descriptions.Item label="Rating">{valueFor("min_rating")}</Descriptions.Item>
-                <Descriptions.Item label="Delivery">{valueFor("max_delivery_days")}</Descriptions.Item>
+                <Descriptions.Item label="Rating">{parsedValueFor("min_rating")}</Descriptions.Item>
+                <Descriptions.Item label="Delivery">{parsedValueFor("max_delivery_days")}</Descriptions.Item>
                 <Descriptions.Item label="Intent">{valueFor("revision_intent")}</Descriptions.Item>
               </Descriptions>
               <Collapse
@@ -521,43 +590,62 @@ export default function ChatPanel() {
         {result?.plan_options?.length ? (
           <Card title="Compare Plans">
             <Space direction="vertical" size={12} style={{ width: "100%" }}>
-              {result.plan_options.map((option) => (
-                <Card
-                  key={option.id}
-                  size="small"
-                  type="inner"
-                  title={
-                    <Space wrap>
-                      <Typography.Text strong>{option.name}</Typography.Text>
-                      <Tag color={strategyColor(option.strategy)}>{option.description}</Tag>
+              {result.plan_options.map((option) => {
+                const selectable = isPlanSelectable(option.plan);
+                const selected = result.selected_plan_id === option.id;
+                return (
+                  <Card
+                    key={option.id}
+                    size="small"
+                    type="inner"
+                    title={
+                      <Space wrap>
+                        <Typography.Text strong>{option.name}</Typography.Text>
+                        <Tag color={strategyColor(option.strategy)}>{option.description}</Tag>
+                        <Tag color={selectable ? "green" : "red"}>
+                          {selectable ? "Within Budget" : "Over Budget"}
+                        </Tag>
+                      </Space>
+                    }
+                    extra={
+                      <Space>
+                        <Button
+                          type={selected ? "primary" : "default"}
+                          size="small"
+                          disabled={!selectable}
+                          onClick={() => selectPlan(option.id)}
+                        >
+                          {selected ? "Selected" : selectable ? "Select Plan" : "Over Budget"}
+                        </Button>
+                        {selected && selectable ? (
+                          <Button
+                            type="primary"
+                            size="small"
+                            icon={<CreditCardOutlined />}
+                            loading={checkingOut === planIdFor(option.plan)}
+                            onClick={() => payForPlan(option.plan)}
+                          >
+                            Pay with Stripe
+                          </Button>
+                        ) : null}
+                      </Space>
+                    }
+                  >
+                    <Space size={18} wrap>
+                      <Statistic title="Total" value={option.plan.total_amount} precision={2} prefix="$" />
+                      {!selectable ? (
+                        <Statistic title="Over Budget" value={option.plan.budget_gap || 0} precision={2} prefix="+$" />
+                      ) : null}
+                      <Statistic title="Items" value={option.plan.items.length} />
+                      <Statistic title="Avg Rating" value={option.plan.avg_rating ?? 0} precision={1} />
+                      <Typography.Text type={selectable ? "success" : "danger"}>
+                        Status:{" "}
+                        {selectable ? "Within Budget" : `Need Approval (${currency(option.plan.budget_gap || 0)})`}
+                      </Typography.Text>
                     </Space>
-                  }
-                  extra={
-                    <Button
-                      type={result.selected_plan_id === option.id ? "primary" : "default"}
-                      size="small"
-                      onClick={() => selectPlan(option.id)}
-                    >
-                      {result.selected_plan_id === option.id ? "Selected" : "Select Plan"}
-                    </Button>
-                  }
-                >
-                  <Space size={18} wrap>
-                    <Statistic title="Total" value={option.plan.total_amount} precision={2} prefix="$" />
-                    <Statistic title="Items" value={option.plan.items.length} />
-                    <Statistic
-                      title="Avg Rating"
-                      value={
-                        option.plan.items.length
-                          ? option.plan.items.reduce((sum, item) => sum + (item.rating || 0), 0) /
-                            option.plan.items.length
-                          : 0
-                      }
-                      precision={1}
-                    />
-                  </Space>
-                </Card>
-              ))}
+                  </Card>
+                );
+              })}
             </Space>
           </Card>
         ) : null}

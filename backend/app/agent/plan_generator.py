@@ -8,10 +8,39 @@ from typing import Any
 from app.services.llm_service import safe_llm_invoke
 
 
+MAX_PLAN_EXPLANATION_CHARS = 800
+
+
 def calculate_budget_status(total_amount: float, budget: float | None) -> str:
     if budget is None:
         return "no_budget_provided"
     return "within_budget" if total_amount <= budget else "over_budget"
+
+
+def calculate_avg_rating(items: list[dict[str, Any]]) -> float:
+    if not items:
+        return 0
+    return round(sum(float(item.get("rating", 0) or 0) for item in items) / len(items), 1)
+
+
+def validate_plan_budget(plan: dict[str, Any], budget: float | None) -> dict[str, Any]:
+    total = round(
+        sum(
+            float(item.get("unit_price", 0) or 0) * int(item.get("quantity", 0) or 0)
+            for item in plan.get("items", [])
+        ),
+        2,
+    )
+    over_budget = bool(budget is not None and total > float(budget))
+    plan["total"] = total
+    plan["total_amount"] = total
+    plan["budget"] = budget
+    plan["over_budget"] = over_budget
+    plan["budget_gap"] = round(total - float(budget), 2) if over_budget and budget is not None else 0
+    plan["selectable"] = not over_budget
+    plan["budget_status"] = calculate_budget_status(total, budget)
+    plan["status"] = "over_budget" if over_budget else plan["budget_status"]
+    return plan
 
 
 def _product_score(product: dict[str, Any]) -> tuple[float, int, float]:
@@ -360,10 +389,11 @@ def generate_procurement_plan(
         previous_total_amount = round(float(previous_plan.get("total_amount") or 0), 2)
         savings_amount = round(previous_total_amount - total_amount, 2)
 
-    return {
+    plan = {
         "items": items,
         "selected_items": items,
         "total_amount": total_amount,
+        "total": total_amount,
         "previous_total_amount": previous_total_amount,
         "savings_amount": savings_amount,
         **revision_metadata,
@@ -380,8 +410,10 @@ def generate_procurement_plan(
             f"Recommended {len(items)} product lines for {people_count} people. "
             f"Total amount is ${total_amount:.2f}."
         ),
-        "status": revision_metadata.get("status", "ok"),
+        "status": revision_metadata.get("status", budget_status),
+        "avg_rating": calculate_avg_rating(items),
     }
+    return validate_plan_budget(plan, intent.get("budget"))
 
 
 def _json_for_prompt(value: Any) -> str:
@@ -427,7 +459,7 @@ def generate_plan_explanation(
     prompt = build_plan_explanation_prompt(parsed_intent, retrieved_products, calculated_plan)
     result = safe_llm_invoke(prompt, purpose="plan_explanation")
     content = str(result.get("content") or "").strip()
-    if result.get("used_mock_llm") or not content:
+    if result.get("used_mock_llm") or not content or len(content) > MAX_PLAN_EXPLANATION_CHARS:
         content = fallback_answer
 
     return {

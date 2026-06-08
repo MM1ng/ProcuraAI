@@ -1,10 +1,16 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, HTTPException, Request
 
 from app.core.config import get_settings
-from app.schemas.payment import CheckoutSessionRequest, CheckoutSessionResponse
+from app.schemas.payment import (
+    CheckoutSessionRequest,
+    CheckoutSessionResponse,
+    StripeCheckoutRequest,
+    StripeCheckoutResponse,
+)
 from app.services.payment_service import create_checkout
+from app.services.stripe_payment_service import create_procurement_checkout_session, handle_stripe_webhook
 
 
 router = APIRouter(prefix="/api/payments", tags=["payments"])
@@ -30,6 +36,25 @@ def create_checkout_session(request: CheckoutSessionRequest) -> CheckoutSessionR
         cancel_url=request.cancel_url,
     )
     return CheckoutSessionResponse(**session)
+
+
+@router.post("/stripe/checkout", response_model=StripeCheckoutResponse)
+def create_stripe_checkout(request: StripeCheckoutRequest) -> StripeCheckoutResponse:
+    try:
+        session = create_procurement_checkout_session(plan_id=request.plan_id, order_id=request.order_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return StripeCheckoutResponse(**session)
+
+
+@router.post("/stripe/webhook")
+async def stripe_signed_webhook(request: Request) -> dict:
+    payload = await request.body()
+    signature = request.headers.get("stripe-signature")
+    try:
+        return handle_stripe_webhook(payload, signature)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @router.post("/webhook")

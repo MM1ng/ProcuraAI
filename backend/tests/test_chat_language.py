@@ -37,6 +37,48 @@ def test_chat_returns_chinese_answer_when_language_is_zh():
     assert "预算状态" in body["answer"]
 
 
+def test_chat_chinese_answer_translates_internal_status_values():
+    client = TestClient(app)
+
+    response = client.post(
+        "/api/chat",
+        json={
+            "message": "请为远程团队10人推荐办公设备。需要摄像头、耳机和扩展坞。",
+            "session_id": "language-zh-no-budget-status",
+            "language": "zh",
+        },
+    )
+
+    body = response.json()
+    assert response.status_code == 200
+    assert "预算状态：未提供预算" in body["answer"]
+    assert "库存状态：有效" in body["answer"]
+    assert "约束状态：已满足" in body["answer"]
+    assert "no_budget_provided" not in body["answer"]
+    assert "valid" not in body["answer"]
+    assert "satisfied" not in body["answer"]
+
+
+def test_chat_chinese_answer_includes_recommended_item_details():
+    client = TestClient(app)
+
+    response = client.post(
+        "/api/chat",
+        json={
+            "message": "请为远程团队10人推荐办公设备。需要摄像头、耳机和扩展坞。",
+            "session_id": "language-zh-item-details",
+            "language": "zh",
+        },
+    )
+
+    body = response.json()
+    assert response.status_code == 200
+    assert "推荐明细：" in body["answer"]
+    for item in body["recommended_plan"]["items"]:
+        assert item["name"] in body["answer"]
+        assert f"数量 {item['quantity']}" in body["answer"]
+
+
 def test_chat_returns_french_answer_when_language_is_fr():
     client = TestClient(app)
 
@@ -106,3 +148,33 @@ def test_chat_response_includes_compare_plan_options():
     selected_option = next(option for option in body["plan_options"] if option["id"] == body["selected_plan_id"])
     assert body["recommended_plan"] == selected_option["plan"]
     assert body["recommended_plan"]["budget_status"] == "within_budget"
+
+
+def test_followup_no_budget_clears_previous_budget_for_compare_plans():
+    client = TestClient(app)
+    session_id = "compare-plans-no-budget-followup"
+    client.post(
+        "/api/chat",
+        json={"message": CHAT_MESSAGE, "session_id": session_id, "language": "zh"},
+    )
+
+    response = client.post(
+        "/api/chat",
+        json={
+            "message": "请重新生成一个无预算限制的方案。",
+            "session_id": session_id,
+            "language": "zh",
+        },
+    )
+
+    body = response.json()
+    assert response.status_code == 200
+    assert body["parsed_intent"]["budget"] is None
+    assert body["recommended_plan"]["budget_status"] == "no_budget_provided"
+    assert body["selected_plan_id"] == "plan_b"
+    assert [option["plan"]["budget_status"] for option in body["plan_options"]] == [
+        "no_budget_provided",
+        "no_budget_provided",
+        "no_budget_provided",
+    ]
+    assert all(option["plan"]["selectable"] is True for option in body["plan_options"])

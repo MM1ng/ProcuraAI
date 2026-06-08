@@ -13,5 +13,15 @@ class CheckoutSessionRequest(BaseModel):
 class CheckoutSessionResponse(BaseModel):
     checkout_url: str
     session_id: str
-    provider: str
-    status: str
+    provider: str | None = None
+    status: str | None = None
+
+
+class StripeCheckoutRequest(BaseModel):
+    plan_id: str
+    order_id: str
+
+
+class StripeCheckoutResponse(BaseModel):
+    checkout_url: str
+    session_id: str

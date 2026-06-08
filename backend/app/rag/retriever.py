@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from app.rag.hybrid_search import filter_products_by_constraints, search_products
+from app.rag.knowledge_base import load_procurement_policies, load_supplier_profiles
 from app.rag.vector_store import (
     CHROMA_DIR,
     POLICY_COLLECTION,
@@ -154,6 +155,44 @@ def _knowledge_evidence(collection: str, query: str, top_k: int, persist_dir: Pa
     return evidence
 
 
+def _token_score(query: str, text: str) -> float:
+    query_tokens = {token for token in query.lower().replace("_", " ").split() if len(token) > 2}
+    text_tokens = {token for token in text.lower().replace("_", " ").split() if len(token) > 2}
+    if not query_tokens:
+        return 0.01
+    overlap = len(query_tokens & text_tokens)
+    return round(overlap / len(query_tokens), 6)
+
+
+def _local_knowledge_evidence(rows: list[dict[str, Any]], query: str, top_k: int) -> list[dict[str, Any]]:
+    evidence: list[dict[str, Any]] = []
+    for row in rows:
+        text = str(row.get("text") or row.get("content") or "")
+        evidence.append(
+            {
+                "id": row.get("id"),
+                "title": row.get("title", row.get("supplier", "")),
+                "supplier": row.get("supplier", ""),
+                "category": row.get("category", ""),
+                "risk_level": row.get("risk_level", ""),
+                "text": text,
+                "score": _token_score(query, f"{row.get('title', '')} {row.get('supplier', '')} {text}"),
+            }
+        )
+    return sorted(evidence, key=lambda item: -float(item.get("score", 0) or 0))[:top_k]
+
+
+def _knowledge_evidence_with_fallback(collection: str, query: str, top_k: int, persist_dir: Path | str) -> list[dict[str, Any]]:
+    vector_rows = _knowledge_evidence(collection, query, top_k, persist_dir)
+    if vector_rows:
+        return vector_rows
+    if collection == POLICY_COLLECTION:
+        return _local_knowledge_evidence(load_procurement_policies(), query, top_k)
+    if collection == SUPPLIER_COLLECTION:
+        return _local_knowledge_evidence(load_supplier_profiles(), query, top_k)
+    return []
+
+
 def _fallback_products(query: str, intent: dict[str, Any], top_k: int) -> list[dict[str, Any]]:
     index = load_local_index()
     products = [row["metadata"] for row in index] if index else load_products_from_csv()
@@ -220,11 +259,12 @@ def retrieve_products_with_evidence(
             products=products,
             evidence={
                 "products": _product_evidence(products),
-                "policies": [],
-                "suppliers": [],
+                "policies": _knowledge_evidence_with_fallback(POLICY_COLLECTION, vector_query, 5, persist_dir),
+                "suppliers": _knowledge_evidence_with_fallback(SUPPLIER_COLLECTION, vector_query, 5, persist_dir),
                 "constraints": constraints,
                 "constraints_relaxed": False,
-                "retrieval_mode": "fallback_text",
+                "retrieval_mode": "hybrid_vector_filter",
+                "retrieval_fallback": "text_products",
             },
         )
 
@@ -252,11 +292,11 @@ def retrieve_products_with_evidence(
     )[:top_k]
     evidence = {
         "products": _product_evidence(ranked),
-        "policies": _knowledge_evidence(POLICY_COLLECTION, vector_query, 5, persist_dir),
-        "suppliers": _knowledge_evidence(SUPPLIER_COLLECTION, vector_query, 5, persist_dir),
+        "policies": _knowledge_evidence_with_fallback(POLICY_COLLECTION, vector_query, 5, persist_dir),
+        "suppliers": _knowledge_evidence_with_fallback(SUPPLIER_COLLECTION, vector_query, 5, persist_dir),
         "constraints": constraints,
         "constraints_relaxed": constraints_relaxed,
-        "retrieval_mode": "vector_hybrid",
+        "retrieval_mode": "hybrid_vector_filter",
     }
     return RetrievalResult(products=ranked, evidence=evidence)
 

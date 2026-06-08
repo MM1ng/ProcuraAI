@@ -32,7 +32,14 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
 
   if (!response.ok) {
-    throw new Error(`${response.status} ${response.statusText}`);
+    let detail = `${response.status} ${response.statusText}`;
+    try {
+      const body = await response.json();
+      if (body?.detail) detail = String(body.detail);
+    } catch {
+      // Keep the HTTP status text when the backend does not return JSON.
+    }
+    throw new Error(detail);
   }
   return response.json() as Promise<T>;
 }
@@ -109,16 +116,14 @@ export const api = {
   orders() {
     return request<{ items: Order[]; total: number }>("/api/orders");
   },
-  checkout(order: Order) {
-    return request<{ checkout_url: string; session_id: string; provider: string; status: string }>(
-      "/api/payments/create-checkout-session",
+  checkout(order: Order, planId: string) {
+    return request<{ checkout_url: string; session_id: string }>(
+      "/api/payments/stripe/checkout",
       {
         method: "POST",
         body: JSON.stringify({
           order_id: order.order_id,
-          amount: order.total_amount,
-          success_url: `${window.location.origin}/payment/success?order_id=${order.order_id}`,
-          cancel_url: `${window.location.origin}/payment/cancel?order_id=${order.order_id}`
+          plan_id: planId
         })
       }
     );

@@ -1,5 +1,6 @@
 from types import SimpleNamespace
 
+import app.agent.plan_generator as plan_generator
 from app.services import llm_service
 
 
@@ -103,3 +104,23 @@ def test_safe_llm_invoke_falls_back_to_mock_on_tongyi_error(monkeypatch):
     assert result["used_mock_llm"] is True
     assert result["error"] == "dashscope timeout"
     assert result["fallback_reason"] == "dashscope timeout"
+
+
+def test_generate_plan_explanation_uses_fallback_when_llm_answer_is_too_long(monkeypatch):
+    monkeypatch.setattr(
+        plan_generator,
+        "safe_llm_invoke",
+        lambda *_args, **_kwargs: {
+            "content": "x" * 1400,
+            "model_provider": "tongyi",
+            "model_name": "qwen",
+            "used_mock_llm": False,
+            "error": None,
+            "latency_ms": 1,
+            "fallback_reason": None,
+        },
+    )
+
+    result = plan_generator.generate_plan_explanation({}, [], {"items": []}, "short fallback")
+
+    assert result["content"] == "short fallback"

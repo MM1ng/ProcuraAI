@@ -41,13 +41,17 @@ def create_order_from_plan(plan: dict[str, Any], user_id: str = "demo-user") -> 
         )
 
     total_amount = round(float(plan.get("total_amount", sum(item["subtotal"] for item in order_items)) or 0), 2)
+    plan_id = str(plan.get("plan_option_id") or plan.get("plan_id") or "")
     return {
         "order_id": f"ORD-{uuid.uuid4().hex[:10].upper()}",
         "user_id": user_id,
+        "plan_id": plan_id,
+        "procurement_plan": plan,
         "order_items": order_items,
         "total_amount": total_amount,
         "status": "pending_payment",
         "stripe_session_id": None,
+        "processed_payment_event_ids": [],
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
 
@@ -68,3 +72,46 @@ def get_order(order_id: str) -> dict[str, Any] | None:
         if order.get("order_id") == order_id:
             return order
     return None
+
+
+def get_order_by_stripe_session_id(session_id: str) -> dict[str, Any] | None:
+    for order in _read_orders():
+        if order.get("stripe_session_id") == session_id:
+            return order
+    return None
+
+
+def update_order(order_id: str, updates: dict[str, Any]) -> dict[str, Any] | None:
+    orders = _read_orders()
+    updated: dict[str, Any] | None = None
+    for order in orders:
+        if order.get("order_id") == order_id:
+            order.update(updates)
+            updated = order
+            break
+    if updated is None:
+        return None
+    _write_orders(orders)
+    return updated
+
+
+def mark_payment_event_processed(order_id: str, event_id: str | None, status: str) -> dict[str, Any] | None:
+    orders = _read_orders()
+    updated: dict[str, Any] | None = None
+    for order in orders:
+        if order.get("order_id") != order_id:
+            continue
+        processed = list(order.get("processed_payment_event_ids") or [])
+        if event_id and event_id in processed:
+            updated = order
+            break
+        order["status"] = status
+        if event_id:
+            processed.append(event_id)
+        order["processed_payment_event_ids"] = processed
+        updated = order
+        break
+    if updated is None:
+        return None
+    _write_orders(orders)
+    return updated

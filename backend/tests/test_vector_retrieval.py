@@ -158,6 +158,29 @@ def test_retrieve_products_falls_back_to_local_index_when_vector_store_unavailab
     assert products[0]["retrieval_reason"] == "fallback_text_structured_filter"
 
 
+def test_retrieve_products_with_evidence_adds_local_knowledge_when_vector_products_fallback(monkeypatch):
+    monkeypatch.setattr(retriever, "query_vector_collection", lambda *args, **kwargs: [])
+    monkeypatch.setattr(
+        retriever,
+        "load_local_index",
+        lambda: [{"metadata": product, "text": build_product_document(product)} for product in PRODUCTS],
+    )
+    monkeypatch.setattr(retriever, "load_procurement_policies", lambda: POLICIES)
+    monkeypatch.setattr(retriever, "load_supplier_profiles", lambda: SUPPLIERS)
+
+    result = retriever.retrieve_products_with_evidence(
+        "Need monitors quickly from an approved supplier",
+        {"categories": ["Monitor"], "people_count": 10, "max_delivery_days": 5},
+        top_k=5,
+    )
+
+    assert [item["product_id"] for item in result.products] == ["monitor-dell"]
+    assert result.evidence["retrieval_mode"] == "hybrid_vector_filter"
+    assert result.evidence["products"][0]["product_id"] == "monitor-dell"
+    assert result.evidence["policies"][0]["id"] == "policy-approved-suppliers"
+    assert result.evidence["suppliers"][0]["id"] == "supplier-contoso"
+
+
 def test_chat_response_includes_retrieval_evidence(monkeypatch):
     monkeypatch.setattr(
         procurement_agent,

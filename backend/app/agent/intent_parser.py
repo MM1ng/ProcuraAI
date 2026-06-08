@@ -40,8 +40,10 @@ CATEGORY_ALIASES = {
     "monitor": "Monitor",
     "screen": "Monitor",
     "keyboard": "Keyboard",
+    "键盘": "Keyboard",
     "mouse": "Mouse",
     "mice": "Mouse",
+    "鼠标": "Mouse",
     "headset": "Headset",
     "headphone": "Headset",
     "耳机": "Headset",
@@ -69,6 +71,7 @@ CATEGORY_ALIASES = {
 def _extract_people_count(text: str) -> int:
     patterns = [
         r"(\d+)\s+(?:interns?|people|employees?|users?|staff|members?|teammates?)",
+        r"(\d+)\s*名?\s*(?:实习生|员工|用户|人员|人)",
         r"(?:team|group|department)\s+of\s+(\d+)",
         r"for\s+(\d+)",
     ]
@@ -82,6 +85,7 @@ def _extract_people_count(text: str) -> int:
 def _extract_budget(text: str) -> float | None:
     patterns = [
         r"(?:budget|under|below|less than|within|maximum|max)\D{0,20}\$?\s*([0-9][0-9,]*(?:\.[0-9]+)?)",
+        r"预算\D{0,20}([0-9][0-9,]*(?:\.[0-9]+)?)\s*(?:美元|美金|usd|USD)?\s*(?:以内|以下|内)?",
         r"\$([0-9][0-9,]*(?:\.[0-9]+)?)",
     ]
     for pattern in patterns:
@@ -89,6 +93,19 @@ def _extract_budget(text: str) -> float | None:
         if match:
             return float(match.group(1).replace(",", ""))
     return None
+
+
+def _explicitly_removes_budget(text: str) -> bool:
+    return bool(
+        re.search(
+            r"\b(?:no|without|unlimited|unrestricted)\s+budget\b|"
+            r"\bbudget\s+(?:unlimited|unrestricted|not\s+limited|does\s+not\s+matter)\b|"
+            r"(?:无|沒|没|没有|不设|不限|不限制|无需|不用)\s*预算|"
+            r"预算\s*(?:不限|不限制|不设限|无上限|没有限制)",
+            text,
+            flags=re.IGNORECASE,
+        )
+    )
 
 
 def _extract_categories(text: str) -> list[str]:
@@ -133,7 +150,7 @@ def _extract_min_rating(text: str) -> float | None:
     match = re.search(r"(?:rating|rated|score)\s*(?:above|over|at least|>=?)\s*([0-9](?:\.[0-9])?)", text, re.I)
     if match:
         return float(match.group(1))
-    if re.search(r"high rating|highly rated|good rating|top rated", text, re.I):
+    if re.search(r"high rating|highly rated|good rating|top rated|高评分|评分高|质量好", text, re.I):
         return 4.2
     return None
 
@@ -142,7 +159,7 @@ def _extract_delivery_days(text: str) -> int | None:
     match = re.search(r"(?:within|under|less than|<=?)\s*(\d+)\s*days?", text, re.I)
     if match:
         return int(match.group(1))
-    if re.search(r"fast delivery|quick delivery|urgent|deliver fast|short delivery", text, re.I):
+    if re.search(r"fast delivery|quick delivery|urgent|deliver fast|short delivery|快速配送|尽快到货|配送快", text, re.I):
         return 5
     return None
 
@@ -291,7 +308,9 @@ def _parse_purchase_request_rules(message: str, previous_intent: dict[str, Any] 
     extracted_people_count = _extract_people_count(text)
     people_count = extracted_people_count if extracted_people_count != 1 else previous_intent.get("people_count", 1)
     budget = _extract_budget(text)
-    if budget is None:
+    if _explicitly_removes_budget(text):
+        budget = None
+    elif budget is None:
         budget = previous_intent.get("budget")
     extracted_categories = _extract_categories(text)
     categories = extracted_categories or list(previous_intent.get("categories", []))
@@ -308,10 +327,14 @@ def _parse_purchase_request_rules(message: str, previous_intent: dict[str, Any] 
     if any(word in lowered for word in ["cheaper", "lower cost", "less expensive", "reduce cost"]):
         revision_intent = "cheaper"
         preferences.append("lower cost")
-    if any(word in lowered for word in ["faster", "fast delivery", "quick delivery", "within"]):
+    if any(word in lowered for word in ["faster", "fast delivery", "quick delivery", "within"]) or any(
+        word in text for word in ["快速配送", "尽快到货", "配送快"]
+    ):
         if "fast delivery" not in preferences:
             preferences.append("fast delivery")
-    if min_rating is not None or "rating" in lowered or "rated" in lowered:
+    if min_rating is not None or "rating" in lowered or "rated" in lowered or any(
+        word in text for word in ["高评分", "评分高", "质量好"]
+    ):
         if "high rating" not in preferences:
             preferences.append("high rating")
     if any(word in lowered for word in ["replace", "swap", "换成", "替换"]):
@@ -362,7 +385,9 @@ def _intent_from_llm_json(
     fallback = _parse_purchase_request_rules(message, previous_intent)
     people_count = _as_int_or_none(payload.get("people_count")) or fallback.get("people_count")
     budget = _as_float_or_none(payload.get("budget"))
-    if budget is None:
+    if _explicitly_removes_budget(message):
+        budget = None
+    elif budget is None:
         budget = fallback.get("budget")
     categories, category_trace = _normalize_categories_with_trace(payload.get("categories"))
     categories = categories or fallback.get("categories", [])

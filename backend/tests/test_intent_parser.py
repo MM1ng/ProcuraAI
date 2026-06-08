@@ -20,6 +20,20 @@ def test_parse_purchase_request_extracts_intern_equipment_constraints():
     assert intent["max_delivery_days"] <= 5
 
 
+def test_parse_purchase_request_extracts_chinese_rating_and_delivery_preferences():
+    intent = parse_purchase_request(
+        "我们需要为20名实习生购买设备，预算在3000美元以内，每人需要键盘、鼠标和耳机。偏好高评分和快速配送。"
+    )
+
+    assert intent["people_count"] == 20
+    assert intent["budget"] == 3000
+    assert intent["categories"] == ["Keyboard", "Mouse", "Headset"]
+    assert "high rating" in intent["preferences"]
+    assert "fast delivery" in intent["preferences"]
+    assert intent["min_rating"] == 4.2
+    assert intent["max_delivery_days"] == 5
+
+
 def test_parse_purchase_request_supports_followup_cheaper_revisions():
     intent = parse_purchase_request(
         "Make this procurement plan cheaper but keep rating above 4.2."
@@ -28,6 +42,20 @@ def test_parse_purchase_request_supports_followup_cheaper_revisions():
     assert intent["revision_intent"] == "cheaper"
     assert intent["min_rating"] == 4.2
     assert intent["preferences"] == ["lower cost", "high rating"]
+
+
+def test_parse_purchase_request_clears_previous_budget_when_user_says_no_budget():
+    previous_intent = {
+        "people_count": 10,
+        "budget": 3000,
+        "categories": ["Headset", "Webcam", "Docking Station"],
+        "quantity_by_category": {"Headset": 10, "Webcam": 10, "Docking Station": 10},
+    }
+
+    intent = parse_purchase_request("请重新生成一个无预算限制的方案。", previous_intent)
+
+    assert intent["budget"] is None
+    assert "within budget" not in intent["constraints"]
 
 
 def test_parse_purchase_request_uses_qwen_json_when_available(monkeypatch):

@@ -34,17 +34,141 @@ def _reason_from_item(item: dict[str, Any], language: str) -> str:
     return item.get("reason", "")
 
 
-def _answer_from_plan(plan: dict[str, Any], language: str) -> str:
+STATUS_LABELS = {
+    "en": {
+        "within_budget": "within budget",
+        "no_budget_provided": "no budget provided",
+        "over_budget": "over budget",
+        "valid": "valid",
+        "insufficient_stock": "insufficient stock",
+        "satisfied": "satisfied",
+        "needs_review": "needs review",
+    },
+    "zh": {
+        "within_budget": "预算内",
+        "no_budget_provided": "未提供预算",
+        "over_budget": "超预算",
+        "valid": "有效",
+        "insufficient_stock": "库存不足",
+        "satisfied": "已满足",
+        "needs_review": "需审查",
+    },
+    "fr": {
+        "within_budget": "dans le budget",
+        "no_budget_provided": "budget non fourni",
+        "over_budget": "hors budget",
+        "valid": "valide",
+        "insufficient_stock": "stock insuffisant",
+        "satisfied": "satisfait",
+        "needs_review": "à vérifier",
+    },
+}
+
+
+def _status_label(status: Any, language: str) -> str:
+    value = str(status or "")
+    return STATUS_LABELS.get(language, STATUS_LABELS["en"]).get(value, value)
+
+
+def _format_currency(value: Any) -> str:
+    return f"${float(value or 0):.2f}"
+
+
+def _item_detail_lines(items: list[dict[str, Any]], language: str) -> list[str]:
+    if not items:
+        return []
+
+    lines: list[str] = []
+    if language == "zh":
+        lines.append("推荐明细：")
+        for item in items:
+            subtotal = float(item.get("unit_price", 0) or 0) * int(item.get("quantity", 0) or 0)
+            lines.append(
+                f"- {item.get('name')}（{item.get('category')}）：数量 {item.get('quantity')}，"
+                f"单价 {_format_currency(item.get('unit_price'))}，小计 {_format_currency(subtotal)}，"
+                f"配送 {item.get('delivery_days')} 天，评分 {item.get('rating')}。"
+            )
+        return lines
+
+    if language == "fr":
+        lines.append("Détails recommandés :")
+        for item in items:
+            subtotal = float(item.get("unit_price", 0) or 0) * int(item.get("quantity", 0) or 0)
+            lines.append(
+                f"- {item.get('name')} ({item.get('category')}) : quantité {item.get('quantity')}, "
+                f"prix unitaire {_format_currency(item.get('unit_price'))}, sous-total {_format_currency(subtotal)}, "
+                f"livraison {item.get('delivery_days')} jours, note {item.get('rating')}."
+            )
+        return lines
+
+    lines.append("Recommended details:")
+    for item in items:
+        subtotal = float(item.get("unit_price", 0) or 0) * int(item.get("quantity", 0) or 0)
+        lines.append(
+            f"- {item.get('name')} ({item.get('category')}): quantity {item.get('quantity')}, "
+            f"unit price {_format_currency(item.get('unit_price'))}, subtotal {_format_currency(subtotal)}, "
+            f"delivery {item.get('delivery_days')} days, rating {item.get('rating')}."
+        )
+    return lines
+
+
+def _answer_from_plan(
+    plan: dict[str, Any],
+    language: str,
+    intent: dict[str, Any] | None = None,
+    plan_options: list[dict[str, Any]] | None = None,
+) -> str:
     language = _language(language)
     answer = PLAN_RESPONSE_TEMPLATES[language].format(
         item_count=len(plan.get("items", [])),
         total_amount=float(plan.get("total_amount", 0) or 0),
-        budget_status=plan.get("budget_status"),
-        inventory_status=plan.get("inventory_status"),
-        constraint_satisfaction=plan.get("constraint_satisfaction"),
+        budget_status=_status_label(plan.get("budget_status"), language),
+        inventory_status=_status_label(plan.get("inventory_status"), language),
+        constraint_satisfaction=_status_label(plan.get("constraint_satisfaction"), language),
     )
-    reasons = " ".join(_reason_from_item(item, language) for item in plan.get("items", []))
-    return f"{answer} {reasons}".strip()
+    notes: list[str] = _item_detail_lines(plan.get("items", []), language)
+    plan_options = plan_options or []
+    if plan_options:
+        executable = [option.get("name") for option in plan_options if option.get("plan", {}).get("selectable") is not False]
+        blocked = [option.get("name") for option in plan_options if option.get("plan", {}).get("selectable") is False]
+        if blocked:
+            if language == "zh":
+                notes.append(
+                    f"共生成 {len(plan_options)} 个候选方案，仅 {', '.join(executable)} 满足预算约束；"
+                    f"{', '.join(blocked)} 因超预算仅供参考。"
+                )
+            elif language == "fr":
+                notes.append(
+                    f"{len(plan_options)} options ont été générées ; seules {', '.join(executable)} respectent le budget. "
+                    f"{', '.join(blocked)} restent des références non sélectionnables."
+                )
+            else:
+                notes.append(
+                    f"Generated {len(plan_options)} candidate plans; only {', '.join(executable)} "
+                    f"meets the budget constraint. {', '.join(blocked)} are reference-only."
+                )
+
+    max_delivery_days = (intent or {}).get("max_delivery_days")
+    if max_delivery_days is not None:
+        slow_items = [
+            item for item in plan.get("items", []) if int(item.get("delivery_days", 999) or 999) > int(max_delivery_days)
+        ]
+        if slow_items:
+            slow_names = ", ".join(str(item.get("name")) for item in slow_items)
+            if language == "zh":
+                notes.append(f"{slow_names} 超过 {max_delivery_days} 天快速配送偏好，如需更快到货请切换快速配送备选方案。")
+            elif language == "fr":
+                notes.append(
+                    f"{slow_names} dépasse la préférence de livraison de {max_delivery_days} jours ; "
+                    "utilisez une option livraison rapide si cette contrainte est stricte."
+                )
+            else:
+                notes.append(
+                    f"{slow_names} exceeds the {max_delivery_days}-day fast-delivery preference; "
+                    "switch to a faster delivery option if that timing is strict."
+                )
+
+    return " ".join([answer, *notes]).strip()
 
 
 def _combine_llm_error(*errors: str | None) -> str | None:
@@ -141,7 +265,7 @@ def run_procurement_agent(
             if default_option:
                 plan = default_option["plan"]
         tool_calls.append({"name": "generate_procurement_plan", "status": "success"})
-        fallback_answer = _answer_from_plan(plan, language)
+        fallback_answer = _answer_from_plan(plan, language, intent=intent, plan_options=plan_options)
         explanation = generate_plan_explanation(intent, retrieved_products, plan, fallback_answer)
         tool_calls.append({"name": "generate_plan_explanation", "status": "success"})
         answer = explanation["content"]

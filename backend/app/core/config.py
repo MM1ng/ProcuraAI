@@ -58,6 +58,8 @@ class Settings:
     qwen_enable_thinking: bool = _bool_env("QWEN_ENABLE_THINKING", False)
     stripe_secret_key: str = os.getenv("STRIPE_SECRET_KEY", "")
     stripe_webhook_secret: str = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+    stripe_success_url: str = os.getenv("STRIPE_SUCCESS_URL", "")
+    stripe_cancel_url: str = os.getenv("STRIPE_CANCEL_URL", "")
     langfuse_public_key: str = os.getenv("LANGFUSE_PUBLIC_KEY", "")
     langfuse_secret_key: str = os.getenv("LANGFUSE_SECRET_KEY", "")
     langfuse_host: str = os.getenv("LANGFUSE_HOST", "https://cloud.langfuse.com")

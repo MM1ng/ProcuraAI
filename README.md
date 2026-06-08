@@ -171,6 +171,22 @@ ProcuraAI runs **without any external API keys** in mock mode:
 
 Set `USE_MOCK_LLM=true` and `USE_MOCK_PAYMENT=true` in `.env`.
 
+## Stripe AI Tooling Integration
+
+ProcuraAI uses Stripe Checkout as the production payment path. Stripe MCP and
+Skills were used to accelerate implementation and validation of Checkout
+Session creation, webhook handling, and test payment flows.
+
+Payment is exposed to the agent as a controlled AI tool, not as direct model
+access to Stripe charges. The tool can only request Checkout Session creation
+for a selected procurement plan and order. The backend then reloads server-side
+order and plan data, recalculates totals from plan items, and enforces payment
+guardrails before calling Stripe.
+
+Only selected plans that are within budget and selectable can create Stripe
+Checkout Sessions. Plans marked `over_budget=true` or `selectable=false` are
+blocked by the backend even if the frontend or an agent requests payment.
+
 ## Connect Qwen LLM
 
 To use qwen3.7-max via Alibaba Cloud Bailian:

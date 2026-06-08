@@ -8,6 +8,7 @@ from app.observability.local_tracer import log_observability_event
 from app.rag.hybrid_search import filter_products_by_constraints, search_products
 from app.services.order_service import create_order_from_plan
 from app.services.payment_service import create_checkout
+from app.tools.stripe_ai_tools import create_checkout_for_selected_plan
 
 
 def parse_purchase_request_tool(message: str, previous_intent: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -59,6 +60,7 @@ __all__ = [
     "create_order",
     "create_order_from_plan",
     "create_stripe_checkout",
+    "create_checkout_for_selected_plan",
     "create_checkout",
     "log_observability_event",
     "evaluate_response_mock",

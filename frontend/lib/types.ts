@@ -36,12 +36,18 @@ export type ProcurementPlan = {
   items: PlanItem[];
   selected_items?: PlanItem[];
   total_amount: number;
+  total?: number;
   previous_total_amount?: number | null;
   savings_amount?: number | null;
   revision_type?: string;
   revision_note?: string;
   replacement_categories?: string[];
   budget?: number;
+  over_budget?: boolean;
+  budget_gap?: number;
+  selectable?: boolean;
+  status?: string;
+  avg_rating?: number;
   budget_status: string;
   inventory_status: string;
   constraint_satisfaction: string;
@@ -111,9 +117,12 @@ export type PaymentStatus = {
 export type Order = {
   order_id: string;
   user_id: string;
+  plan_id?: string | null;
+  procurement_plan?: ProcurementPlan | null;
   order_items: PlanItem[];
   total_amount: number;
   status: string;
   stripe_session_id?: string | null;
+  processed_payment_event_ids?: string[];
   created_at: string;
 };

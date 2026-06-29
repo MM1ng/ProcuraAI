@@ -74,7 +74,7 @@ export default function ChatPanel() {
     if (bs === "no_budget_provided" || p.budget === undefined || p.budget === null) return t("plan.noBudget");
     if (bs === "within_budget") return t("plan.withinBudget");
     if (bs === "over_budget") return t("plan.overBudget");
-    return bs;
+    return bs || "";
   }
   const chatEnd = useRef<HTMLDivElement | null>(null);
 
@@ -235,7 +235,7 @@ export default function ChatPanel() {
               <Space>
                 <ShoppingCartOutlined style={{fontSize: 20, color: "#52c41a"}} />
                 <div>
-                  <div style={{fontWeight: 600}}>{t("chat.orderCreated", {orderId: result.order_id})}</div>
+                  <div style={{fontWeight: 600}}>{t("chat.orderCreated", {orderId: result.order_id || "-"})}</div>
                   <div>{t("chat.redirectingToPayment")}</div>
                 </div>
                 <Button type="primary" icon={<CreditCardOutlined />}

@@ -83,7 +83,7 @@ function LocalizedAppShell({ children }: { children: ReactNode }) {
   }
 
   // If not authenticated and not on login page, show a minimal header with login button
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !currentUser) {
     return (
       <ConfigProvider
         theme={{
@@ -131,6 +131,8 @@ function LocalizedAppShell({ children }: { children: ReactNode }) {
     );
   }
 
+  const authenticatedUser = currentUser;
+
   return (
     <ConfigProvider
       theme={{
@@ -176,8 +178,8 @@ function LocalizedAppShell({ children }: { children: ReactNode }) {
                 E-commerce Assistant
               </Typography.Title>
               <Space>
-                <Tag color={currentUser.role === "admin" ? "purple" : "blue"} icon={<UserOutlined />}>
-                  {currentUser.username} ({currentUser.role === "admin" ? "Admin" : "User"})
+                <Tag color={authenticatedUser.role === "admin" ? "purple" : "blue"} icon={<UserOutlined />}>
+                  {authenticatedUser.username} ({authenticatedUser.role === "admin" ? "Admin" : "User"})
                 </Tag>
                 <Select
                   aria-label={t("language.label")}

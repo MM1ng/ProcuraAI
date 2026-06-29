@@ -3,9 +3,13 @@
 import { Descriptions, Modal, Tag } from "antd";
 import { currency } from "@/lib/format";
 import { useLanguage } from "@/lib/i18n";
-import type { Product } from "@/lib/types";
+import type { PlanItem, Product } from "@/lib/types";
 
-type DetailSource = Product & { unit_price?: number; quantity?: number; reason?: string };
+type DetailSource = (Partial<Product> & Partial<PlanItem>) & {
+  product_id?: string;
+  name?: string;
+  category?: string;
+};
 
 export default function ProductDetailModal({
   open, item, onClose,

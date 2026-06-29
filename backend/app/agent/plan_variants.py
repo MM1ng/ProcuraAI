@@ -32,7 +32,20 @@ def _eligible_candidates(candidates: list[dict[str, Any]], intent: dict[str, Any
         and (min_rating is None or float(product.get("rating", 0) or 0) >= float(min_rating))
         and (max_delivery_days is None or int(product.get("delivery_days", 999) or 999) <= int(max_delivery_days))
     ]
-    return eligible or candidates
+    eligible = eligible or candidates
+    # Prefer exact product name match from raw_message
+    raw_msg = str(intent.get("raw_message", "") or "").lower()
+    preferred_brand = str(intent.get("preferred_brand", "") or "").lower()
+    # If user specified a product name, try to find exact name match
+    if raw_msg and preferred_brand:
+        for p in eligible:
+            pname = str(p.get("name", "") or "").lower()
+            # Check if product name appears in the raw message (e.g., "Pro Mouse 122" in "Logitech Pro Mouse 122")
+            # Extract product-specific part (remove brand from name for matching)
+            name_minus_brand = pname.replace(preferred_brand, "").strip()
+            if name_minus_brand and name_minus_brand in raw_msg:
+                return [p]  # Prefer exact match
+    return eligible
 
 
 def _cost_optimized(candidates: list[dict[str, Any]]) -> dict[str, Any]:
@@ -112,6 +125,15 @@ def _build_option(
 
 
 def generate_plan_options(products: list[dict[str, Any]], intent: dict[str, Any]) -> list[dict[str, Any]]:
+    # Filter by preferred_brand for new orders
+    preferred_brand = str(intent.get("preferred_brand") or "").strip()
+    if preferred_brand:
+        branded = [
+            p for p in products
+            if str(p.get("brand", "")).lower() == preferred_brand.lower()
+        ]
+        if branded:
+            products = branded
     definitions: list[tuple[str, str, str, str, PlanSelector]] = [
         ("plan_a", "Plan A", "cost_optimized", "Cost Optimized", _cost_optimized),
         ("plan_b", "Plan B", "balanced", "Balanced", _balanced),

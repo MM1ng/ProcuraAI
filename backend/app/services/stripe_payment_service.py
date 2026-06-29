@@ -3,6 +3,7 @@ from __future__ import annotations
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Any
 import uuid
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from app.core.config import get_settings
 from app.services.order_service import get_order, get_order_by_stripe_session_id, mark_payment_event_processed, update_order
@@ -89,6 +90,14 @@ def _line_item(item: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _url_with_params(url: str, params: dict[str, str]) -> str:
+    parts = urlsplit(url)
+    query = dict(parse_qsl(parts.query, keep_blank_values=True))
+    query.update(params)
+    encoded_query = urlencode(query).replace("%7B", "{").replace("%7D", "}")
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, encoded_query, parts.fragment))
+
+
 def create_procurement_checkout_session(plan_id: str, order_id: str) -> dict[str, str]:
     order, plan = _load_payable_plan(plan_id, order_id)
     settings = get_settings()
@@ -99,14 +108,15 @@ def create_procurement_checkout_session(plan_id: str, order_id: str) -> dict[str
         "total_amount": f"{total_amount:.2f}",
         "source": "procuraai",
     }
-    success_url = settings.stripe_success_url or f"{settings.frontend_base_url}/payment/success?order_id={order_id}"
+    success_base_url = settings.stripe_success_url or f"{settings.frontend_base_url}/payment/success"
+    success_url = _url_with_params(success_base_url, {"order_id": order_id})
     cancel_url = settings.stripe_cancel_url or f"{settings.frontend_base_url}/payment/cancel?order_id={order_id}"
 
     if settings.use_mock_payment or not settings.stripe_secret_key:
         session_id = f"mock_{uuid.uuid4().hex[:16]}"
         update_order(order_id, {"stripe_session_id": session_id, "total_amount": float(total_amount)})
         return {
-            "checkout_url": f"{success_url}?mock=true&session_id={session_id}",
+            "checkout_url": _url_with_params(success_url, {"mock": "true", "session_id": session_id}),
             "session_id": session_id,
         }
 
@@ -117,7 +127,7 @@ def create_procurement_checkout_session(plan_id: str, order_id: str) -> dict[str
     stripe.api_key = settings.stripe_secret_key
     session = stripe.checkout.Session.create(
         mode="payment",
-        success_url=success_url,
+        success_url=_url_with_params(success_url, {"session_id": "{CHECKOUT_SESSION_ID}"}),
         cancel_url=cancel_url,
         line_items=[_line_item(item) for item in plan.get("items", []) or []],
         metadata=metadata,

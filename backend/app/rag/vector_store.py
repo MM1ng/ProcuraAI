@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from app.core.config import DATA_DIR
-from app.rag.embeddings import embed_text
+from app.rag.embeddings import embed_text, embed_texts
 
 
 INDEX_FILE = DATA_DIR / "retrieval_index.json"
@@ -81,7 +81,7 @@ def _add_documents(collection: Any, rows: list[dict[str, Any]], kind: str) -> No
     ids = [str(row["id"]) for row in rows]
     documents = [str(row["document"]) for row in rows]
     metadatas = [_metadata(dict(row["metadata"]), kind) for row in rows]
-    embeddings = [embed_text(document) for document in documents]
+    embeddings = embed_texts(documents, text_type="document")
     collection.add(ids=ids, documents=documents, metadatas=metadatas, embeddings=embeddings)
 
 
@@ -159,7 +159,7 @@ def query_vector_collection(
         if collection.count() == 0:
             return []
         result = collection.query(
-            query_embeddings=[embed_text(query)],
+            query_embeddings=[embed_text(query, text_type="query")],
             n_results=top_k,
             include=["documents", "metadatas", "distances"],
         )

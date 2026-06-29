@@ -23,7 +23,7 @@ Dashboard metrics include total conversations, average latency, tool call
 success rate, retrieval success rate, payment success rate, error rate, recent
 traces, latency trend, and tool call distribution.
 
-For qwen3.7-max runs, `used_mock_llm=false` indicates a real Tongyi call returned
+For qwen-turbo runs, `used_mock_llm=false` indicates a real Tongyi call returned
 successfully. If `used_mock_llm=true`, the trace explains the fallback reason in
 `llm_error`, such as missing `DASHSCOPE_API_KEY`, `USE_MOCK_LLM=true`, or a
 Tongyi runtime error. The existing `latency_ms` field captures total agent

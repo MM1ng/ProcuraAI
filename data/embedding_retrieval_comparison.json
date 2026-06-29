@@ -1,0 +1,1002 @@
+{
+  "top_k": 5,
+  "run_id": "20260621-034451",
+  "embedding_model": "text-embedding-v4",
+  "embedding_dimension": 1024,
+  "modes": [
+    "pure_vector",
+    "hybrid"
+  ],
+  "providers": {
+    "hash": {
+      "pure_vector": {
+        "summary": {
+          "provider": "hash",
+          "cases": 6,
+          "hit_rate_at_5": 1.0,
+          "mean_reciprocal_rank": 1.0,
+          "mean_category_coverage": 0.6944,
+          "average_latency_ms": 706.48
+        },
+        "rows": [
+          {
+            "query": "We need keyboards, mice and headsets for 20 interns under $3000.",
+            "expected_categories": [
+              "Keyboard",
+              "Mouse",
+              "Headset"
+            ],
+            "retrieved_categories": [
+              "Headset",
+              "Headset",
+              "Headset",
+              "Headset",
+              "Headset"
+            ],
+            "top_product_ids": [
+              "P-0104",
+              "P-0102",
+              "P-0107",
+              "P-0103",
+              "P-0108"
+            ],
+            "top_product_names": [
+              "Poly Pro Headset 103",
+              "Jabra Secure Headset 101",
+              "Anker Essential Headset 106",
+              "Logitech Essential Headset 102",
+              "Poly Plus Headset 107"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 0.3333,
+            "unique_categories_returned": [
+              "Headset"
+            ],
+            "missing_categories": [
+              "Keyboard",
+              "Mouse"
+            ],
+            "latency_ms": 830.22
+          },
+          {
+            "query": "Recommend webcams, headsets and docking stations for a remote team of 10 people.",
+            "expected_categories": [
+              "Webcam",
+              "Headset",
+              "Docking Station"
+            ],
+            "retrieved_categories": [
+              "Webcam",
+              "Webcam",
+              "Webcam",
+              "Webcam",
+              "Docking Station"
+            ],
+            "top_product_ids": [
+              "P-0128",
+              "P-0133",
+              "P-0131",
+              "P-0126",
+              "P-0176"
+            ],
+            "top_product_names": [
+              "Razer Team Webcam 102",
+              "Razer Team Webcam 107",
+              "Logitech Essential Webcam 105",
+              "Logitech Plus Webcam 100",
+              "HP Team Docking Station 100"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 0.6667,
+            "unique_categories_returned": [
+              "Docking Station",
+              "Webcam"
+            ],
+            "missing_categories": [
+              "Headset"
+            ],
+            "latency_ms": 881.94
+          },
+          {
+            "query": "Find high rating monitors and keyboards with delivery within 5 days.",
+            "expected_categories": [
+              "Monitor",
+              "Keyboard"
+            ],
+            "retrieved_categories": [
+              "Monitor",
+              "Monitor",
+              "Monitor",
+              "Keyboard",
+              "Monitor"
+            ],
+            "top_product_ids": [
+              "P-0032",
+              "P-0033",
+              "P-0027",
+              "P-0052",
+              "P-0031"
+            ],
+            "top_product_names": [
+              "Samsung Secure Monitor 106",
+              "Samsung Team Monitor 107",
+              "Dell Secure Monitor 101",
+              "HP Essential Keyboard 101",
+              "ViewSonic Secure Monitor 105"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Keyboard",
+              "Monitor"
+            ],
+            "missing_categories": [],
+            "latency_ms": 569.78
+          },
+          {
+            "query": "Find fast delivery office chairs and standing desks for a new office.",
+            "expected_categories": [
+              "Office Chair",
+              "Standing Desk"
+            ],
+            "retrieved_categories": [
+              "Standing Desk",
+              "Standing Desk",
+              "Standing Desk",
+              "Office Chair",
+              "Office Chair"
+            ],
+            "top_product_ids": [
+              "P-0358",
+              "P-0352",
+              "P-0353",
+              "P-0151",
+              "P-0156"
+            ],
+            "top_product_names": [
+              "Vari Essential Standing Desk 107",
+              "Uplift Ultra Standing Desk 101",
+              "Vari Secure Standing Desk 102",
+              "Steelcase Ergo Office Chair 100",
+              "Branch Essential Office Chair 105"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Office Chair",
+              "Standing Desk"
+            ],
+            "missing_categories": [],
+            "latency_ms": 516.57
+          },
+          {
+            "query": "Need external SSDs and routers for the IT team.",
+            "expected_categories": [
+              "External SSD",
+              "Router"
+            ],
+            "retrieved_categories": [
+              "External SSD",
+              "External SSD",
+              "External SSD",
+              "External SSD",
+              "External SSD"
+            ],
+            "top_product_ids": [
+              "P-0278",
+              "P-0280",
+              "P-0281",
+              "P-0283",
+              "P-0277"
+            ],
+            "top_product_names": [
+              "SanDisk Team External SSD 102",
+              "Crucial Fleet External SSD 104",
+              "Kingston Secure External SSD 105",
+              "WD Fleet External SSD 107",
+              "Kingston Fleet External SSD 101"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 0.5,
+            "unique_categories_returned": [
+              "External SSD"
+            ],
+            "missing_categories": [
+              "Router"
+            ],
+            "latency_ms": 525.4
+          },
+          {
+            "query": "采购摄像头、耳机和扩展坞，给10名远程员工使用。",
+            "expected_categories": [
+              "Webcam",
+              "Headset",
+              "Docking Station"
+            ],
+            "retrieved_categories": [
+              "Headset",
+              "Headset",
+              "Headset",
+              "Headset",
+              "Docking Station"
+            ],
+            "top_product_ids": [
+              "P-0104",
+              "P-0106",
+              "P-0108",
+              "P-0103",
+              "P-0179"
+            ],
+            "top_product_names": [
+              "Poly Pro Headset 103",
+              "Sony Pro Headset 105",
+              "Poly Plus Headset 107",
+              "Logitech Essential Headset 102",
+              "Dell Pro Docking Station 103"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 0.6667,
+            "unique_categories_returned": [
+              "Docking Station",
+              "Headset"
+            ],
+            "missing_categories": [
+              "Webcam"
+            ],
+            "latency_ms": 914.96
+          }
+        ]
+      },
+      "hybrid": {
+        "summary": {
+          "provider": "hash",
+          "cases": 6,
+          "hit_rate_at_5": 1.0,
+          "mean_reciprocal_rank": 1.0,
+          "mean_category_coverage": 1.0,
+          "average_latency_ms": 1570.17
+        },
+        "rows": [
+          {
+            "query": "We need keyboards, mice and headsets for 20 interns under $3000.",
+            "expected_categories": [
+              "Keyboard",
+              "Mouse",
+              "Headset"
+            ],
+            "retrieved_categories": [
+              "Keyboard",
+              "Mouse",
+              "Headset",
+              "Keyboard",
+              "Keyboard"
+            ],
+            "top_product_ids": [
+              "P-0055",
+              "P-0076",
+              "P-0104",
+              "P-0063",
+              "P-0074"
+            ],
+            "top_product_names": [
+              "HP Essential Keyboard 104",
+              "Logitech Ergo Mouse 100",
+              "Poly Pro Headset 103",
+              "Keychron Pro Keyboard 112",
+              "Logitech Team Keyboard 123"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Headset",
+              "Keyboard",
+              "Mouse"
+            ],
+            "missing_categories": [],
+            "latency_ms": 1346.9
+          },
+          {
+            "query": "Recommend webcams, headsets and docking stations for a remote team of 10 people.",
+            "expected_categories": [
+              "Webcam",
+              "Headset",
+              "Docking Station"
+            ],
+            "retrieved_categories": [
+              "Webcam",
+              "Headset",
+              "Docking Station",
+              "Docking Station",
+              "Webcam"
+            ],
+            "top_product_ids": [
+              "P-0128",
+              "P-0103",
+              "P-0193",
+              "P-0197",
+              "P-0126"
+            ],
+            "top_product_names": [
+              "Razer Team Webcam 102",
+              "Logitech Essential Headset 102",
+              "Anker Team Docking Station 117",
+              "HP Team Docking Station 121",
+              "Logitech Plus Webcam 100"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Docking Station",
+              "Headset",
+              "Webcam"
+            ],
+            "missing_categories": [],
+            "latency_ms": 1385.14
+          },
+          {
+            "query": "Find high rating monitors and keyboards with delivery within 5 days.",
+            "expected_categories": [
+              "Monitor",
+              "Keyboard"
+            ],
+            "retrieved_categories": [
+              "Monitor",
+              "Keyboard",
+              "Monitor",
+              "Keyboard"
+            ],
+            "top_product_ids": [
+              "P-0027",
+              "P-0055",
+              "P-0031",
+              "P-0052"
+            ],
+            "top_product_names": [
+              "Dell Secure Monitor 101",
+              "HP Essential Keyboard 104",
+              "ViewSonic Secure Monitor 105",
+              "HP Essential Keyboard 101"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Keyboard",
+              "Monitor"
+            ],
+            "missing_categories": [],
+            "latency_ms": 1006.24
+          },
+          {
+            "query": "Find fast delivery office chairs and standing desks for a new office.",
+            "expected_categories": [
+              "Office Chair",
+              "Standing Desk"
+            ],
+            "retrieved_categories": [
+              "Office Chair",
+              "Standing Desk",
+              "Office Chair",
+              "Office Chair",
+              "Office Chair"
+            ],
+            "top_product_ids": [
+              "P-0159",
+              "P-0355",
+              "P-0156",
+              "P-0171",
+              "P-0153"
+            ],
+            "top_product_names": [
+              "Branch Pro Office Chair 108",
+              "Branch Fleet Standing Desk 104",
+              "Branch Essential Office Chair 105",
+              "FlexiSpot Secure Office Chair 120",
+              "Steelcase Ultra Office Chair 102"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Office Chair",
+              "Standing Desk"
+            ],
+            "missing_categories": [],
+            "latency_ms": 1205.03
+          },
+          {
+            "query": "Need external SSDs and routers for the IT team.",
+            "expected_categories": [
+              "External SSD",
+              "Router"
+            ],
+            "retrieved_categories": [
+              "External SSD",
+              "Router",
+              "External SSD",
+              "External SSD",
+              "External SSD"
+            ],
+            "top_product_ids": [
+              "P-0277",
+              "P-0253",
+              "P-0278",
+              "P-0281",
+              "P-0279"
+            ],
+            "top_product_names": [
+              "Kingston Fleet External SSD 101",
+              "Cisco Pro Router 102",
+              "SanDisk Team External SSD 102",
+              "Kingston Secure External SSD 105",
+              "Crucial Essential External SSD 103"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "External SSD",
+              "Router"
+            ],
+            "missing_categories": [],
+            "latency_ms": 997.26
+          },
+          {
+            "query": "采购摄像头、耳机和扩展坞，给10名远程员工使用。",
+            "expected_categories": [
+              "Webcam",
+              "Headset",
+              "Docking Station"
+            ],
+            "retrieved_categories": [
+              "Webcam",
+              "Headset",
+              "Docking Station",
+              "Docking Station",
+              "Docking Station"
+            ],
+            "top_product_ids": [
+              "P-0126",
+              "P-0104",
+              "P-0178",
+              "P-0179",
+              "P-0180"
+            ],
+            "top_product_names": [
+              "Logitech Plus Webcam 100",
+              "Poly Pro Headset 103",
+              "HP Fleet Docking Station 102",
+              "Dell Pro Docking Station 103",
+              "Lenovo Ergo Docking Station 104"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Docking Station",
+              "Headset",
+              "Webcam"
+            ],
+            "missing_categories": [],
+            "latency_ms": 3480.45
+          }
+        ]
+      }
+    },
+    "tongyi": {
+      "pure_vector": {
+        "summary": {
+          "provider": "tongyi",
+          "cases": 6,
+          "hit_rate_at_5": 1.0,
+          "mean_reciprocal_rank": 1.0,
+          "mean_category_coverage": 0.6944,
+          "average_latency_ms": 653.89
+        },
+        "rows": [
+          {
+            "query": "We need keyboards, mice and headsets for 20 interns under $3000.",
+            "expected_categories": [
+              "Keyboard",
+              "Mouse",
+              "Headset"
+            ],
+            "retrieved_categories": [
+              "Headset",
+              "Headset",
+              "Headset",
+              "Headset",
+              "Headset"
+            ],
+            "top_product_ids": [
+              "P-0104",
+              "P-0102",
+              "P-0107",
+              "P-0103",
+              "P-0108"
+            ],
+            "top_product_names": [
+              "Poly Pro Headset 103",
+              "Jabra Secure Headset 101",
+              "Anker Essential Headset 106",
+              "Logitech Essential Headset 102",
+              "Poly Plus Headset 107"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 0.3333,
+            "unique_categories_returned": [
+              "Headset"
+            ],
+            "missing_categories": [
+              "Keyboard",
+              "Mouse"
+            ],
+            "latency_ms": 768.79
+          },
+          {
+            "query": "Recommend webcams, headsets and docking stations for a remote team of 10 people.",
+            "expected_categories": [
+              "Webcam",
+              "Headset",
+              "Docking Station"
+            ],
+            "retrieved_categories": [
+              "Webcam",
+              "Webcam",
+              "Webcam",
+              "Webcam",
+              "Docking Station"
+            ],
+            "top_product_ids": [
+              "P-0128",
+              "P-0133",
+              "P-0131",
+              "P-0126",
+              "P-0176"
+            ],
+            "top_product_names": [
+              "Razer Team Webcam 102",
+              "Razer Team Webcam 107",
+              "Logitech Essential Webcam 105",
+              "Logitech Plus Webcam 100",
+              "HP Team Docking Station 100"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 0.6667,
+            "unique_categories_returned": [
+              "Docking Station",
+              "Webcam"
+            ],
+            "missing_categories": [
+              "Headset"
+            ],
+            "latency_ms": 809.29
+          },
+          {
+            "query": "Find high rating monitors and keyboards with delivery within 5 days.",
+            "expected_categories": [
+              "Monitor",
+              "Keyboard"
+            ],
+            "retrieved_categories": [
+              "Monitor",
+              "Monitor",
+              "Monitor",
+              "Keyboard",
+              "Monitor"
+            ],
+            "top_product_ids": [
+              "P-0032",
+              "P-0033",
+              "P-0027",
+              "P-0052",
+              "P-0031"
+            ],
+            "top_product_names": [
+              "Samsung Secure Monitor 106",
+              "Samsung Team Monitor 107",
+              "Dell Secure Monitor 101",
+              "HP Essential Keyboard 101",
+              "ViewSonic Secure Monitor 105"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Keyboard",
+              "Monitor"
+            ],
+            "missing_categories": [],
+            "latency_ms": 506.72
+          },
+          {
+            "query": "Find fast delivery office chairs and standing desks for a new office.",
+            "expected_categories": [
+              "Office Chair",
+              "Standing Desk"
+            ],
+            "retrieved_categories": [
+              "Standing Desk",
+              "Standing Desk",
+              "Standing Desk",
+              "Office Chair",
+              "Office Chair"
+            ],
+            "top_product_ids": [
+              "P-0358",
+              "P-0352",
+              "P-0353",
+              "P-0151",
+              "P-0156"
+            ],
+            "top_product_names": [
+              "Vari Essential Standing Desk 107",
+              "Uplift Ultra Standing Desk 101",
+              "Vari Secure Standing Desk 102",
+              "Steelcase Ergo Office Chair 100",
+              "Branch Essential Office Chair 105"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Office Chair",
+              "Standing Desk"
+            ],
+            "missing_categories": [],
+            "latency_ms": 511.74
+          },
+          {
+            "query": "Need external SSDs and routers for the IT team.",
+            "expected_categories": [
+              "External SSD",
+              "Router"
+            ],
+            "retrieved_categories": [
+              "External SSD",
+              "External SSD",
+              "External SSD",
+              "External SSD",
+              "External SSD"
+            ],
+            "top_product_ids": [
+              "P-0278",
+              "P-0280",
+              "P-0281",
+              "P-0283",
+              "P-0277"
+            ],
+            "top_product_names": [
+              "SanDisk Team External SSD 102",
+              "Crucial Fleet External SSD 104",
+              "Kingston Secure External SSD 105",
+              "WD Fleet External SSD 107",
+              "Kingston Fleet External SSD 101"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 0.5,
+            "unique_categories_returned": [
+              "External SSD"
+            ],
+            "missing_categories": [
+              "Router"
+            ],
+            "latency_ms": 557.81
+          },
+          {
+            "query": "采购摄像头、耳机和扩展坞，给10名远程员工使用。",
+            "expected_categories": [
+              "Webcam",
+              "Headset",
+              "Docking Station"
+            ],
+            "retrieved_categories": [
+              "Headset",
+              "Headset",
+              "Headset",
+              "Headset",
+              "Docking Station"
+            ],
+            "top_product_ids": [
+              "P-0104",
+              "P-0106",
+              "P-0108",
+              "P-0103",
+              "P-0179"
+            ],
+            "top_product_names": [
+              "Poly Pro Headset 103",
+              "Sony Pro Headset 105",
+              "Poly Plus Headset 107",
+              "Logitech Essential Headset 102",
+              "Dell Pro Docking Station 103"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 0.6667,
+            "unique_categories_returned": [
+              "Docking Station",
+              "Headset"
+            ],
+            "missing_categories": [
+              "Webcam"
+            ],
+            "latency_ms": 768.97
+          }
+        ]
+      },
+      "hybrid": {
+        "summary": {
+          "provider": "tongyi",
+          "cases": 6,
+          "hit_rate_at_5": 1.0,
+          "mean_reciprocal_rank": 1.0,
+          "mean_category_coverage": 1.0,
+          "average_latency_ms": 1507.63
+        },
+        "rows": [
+          {
+            "query": "We need keyboards, mice and headsets for 20 interns under $3000.",
+            "expected_categories": [
+              "Keyboard",
+              "Mouse",
+              "Headset"
+            ],
+            "retrieved_categories": [
+              "Keyboard",
+              "Mouse",
+              "Headset",
+              "Keyboard",
+              "Keyboard"
+            ],
+            "top_product_ids": [
+              "P-0055",
+              "P-0076",
+              "P-0104",
+              "P-0063",
+              "P-0074"
+            ],
+            "top_product_names": [
+              "HP Essential Keyboard 104",
+              "Logitech Ergo Mouse 100",
+              "Poly Pro Headset 103",
+              "Keychron Pro Keyboard 112",
+              "Logitech Team Keyboard 123"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Headset",
+              "Keyboard",
+              "Mouse"
+            ],
+            "missing_categories": [],
+            "latency_ms": 1329.69
+          },
+          {
+            "query": "Recommend webcams, headsets and docking stations for a remote team of 10 people.",
+            "expected_categories": [
+              "Webcam",
+              "Headset",
+              "Docking Station"
+            ],
+            "retrieved_categories": [
+              "Webcam",
+              "Headset",
+              "Docking Station",
+              "Docking Station",
+              "Webcam"
+            ],
+            "top_product_ids": [
+              "P-0128",
+              "P-0103",
+              "P-0193",
+              "P-0197",
+              "P-0126"
+            ],
+            "top_product_names": [
+              "Razer Team Webcam 102",
+              "Logitech Essential Headset 102",
+              "Anker Team Docking Station 117",
+              "HP Team Docking Station 121",
+              "Logitech Plus Webcam 100"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Docking Station",
+              "Headset",
+              "Webcam"
+            ],
+            "missing_categories": [],
+            "latency_ms": 1293.62
+          },
+          {
+            "query": "Find high rating monitors and keyboards with delivery within 5 days.",
+            "expected_categories": [
+              "Monitor",
+              "Keyboard"
+            ],
+            "retrieved_categories": [
+              "Monitor",
+              "Keyboard",
+              "Monitor",
+              "Keyboard"
+            ],
+            "top_product_ids": [
+              "P-0027",
+              "P-0055",
+              "P-0031",
+              "P-0052"
+            ],
+            "top_product_names": [
+              "Dell Secure Monitor 101",
+              "HP Essential Keyboard 104",
+              "ViewSonic Secure Monitor 105",
+              "HP Essential Keyboard 101"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Keyboard",
+              "Monitor"
+            ],
+            "missing_categories": [],
+            "latency_ms": 998.27
+          },
+          {
+            "query": "Find fast delivery office chairs and standing desks for a new office.",
+            "expected_categories": [
+              "Office Chair",
+              "Standing Desk"
+            ],
+            "retrieved_categories": [
+              "Office Chair",
+              "Standing Desk",
+              "Office Chair",
+              "Office Chair",
+              "Office Chair"
+            ],
+            "top_product_ids": [
+              "P-0159",
+              "P-0355",
+              "P-0156",
+              "P-0171",
+              "P-0153"
+            ],
+            "top_product_names": [
+              "Branch Pro Office Chair 108",
+              "Branch Fleet Standing Desk 104",
+              "Branch Essential Office Chair 105",
+              "FlexiSpot Secure Office Chair 120",
+              "Steelcase Ultra Office Chair 102"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Office Chair",
+              "Standing Desk"
+            ],
+            "missing_categories": [],
+            "latency_ms": 987.28
+          },
+          {
+            "query": "Need external SSDs and routers for the IT team.",
+            "expected_categories": [
+              "External SSD",
+              "Router"
+            ],
+            "retrieved_categories": [
+              "External SSD",
+              "Router",
+              "External SSD",
+              "External SSD",
+              "External SSD"
+            ],
+            "top_product_ids": [
+              "P-0277",
+              "P-0253",
+              "P-0278",
+              "P-0281",
+              "P-0279"
+            ],
+            "top_product_names": [
+              "Kingston Fleet External SSD 101",
+              "Cisco Pro Router 102",
+              "SanDisk Team External SSD 102",
+              "Kingston Secure External SSD 105",
+              "Crucial Essential External SSD 103"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "External SSD",
+              "Router"
+            ],
+            "missing_categories": [],
+            "latency_ms": 1018.29
+          },
+          {
+            "query": "采购摄像头、耳机和扩展坞，给10名远程员工使用。",
+            "expected_categories": [
+              "Webcam",
+              "Headset",
+              "Docking Station"
+            ],
+            "retrieved_categories": [
+              "Webcam",
+              "Headset",
+              "Docking Station",
+              "Docking Station",
+              "Docking Station"
+            ],
+            "top_product_ids": [
+              "P-0126",
+              "P-0104",
+              "P-0178",
+              "P-0179",
+              "P-0180"
+            ],
+            "top_product_names": [
+              "Logitech Plus Webcam 100",
+              "Poly Pro Headset 103",
+              "HP Fleet Docking Station 102",
+              "Dell Pro Docking Station 103",
+              "Lenovo Ergo Docking Station 104"
+            ],
+            "hit_at_5": true,
+            "first_relevant_rank": 1,
+            "mrr": 1.0,
+            "category_coverage": 1.0,
+            "unique_categories_returned": [
+              "Docking Station",
+              "Headset",
+              "Webcam"
+            ],
+            "missing_categories": [],
+            "latency_ms": 3418.65
+          }
+        ]
+      }
+    }
+  }
+}

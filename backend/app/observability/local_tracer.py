@@ -28,7 +28,8 @@ def elapsed_ms(start_ms: float) -> float:
 def _read_traces() -> list[dict[str, Any]]:
     if not TRACE_FILE.exists():
         return []
-    return json.loads(TRACE_FILE.read_text(encoding="utf-8"))
+    content = TRACE_FILE.read_text(encoding="utf-8").strip()
+    return json.loads(content) if content else []
 
 
 def log_observability_event(event: dict[str, Any]) -> dict[str, Any]:

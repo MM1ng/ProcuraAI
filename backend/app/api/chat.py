@@ -1,30 +1,52 @@
 from __future__ import annotations
 
-from fastapi import APIRouter
+import json
+
+from fastapi import APIRouter, Request
+from fastapi.responses import StreamingResponse
 
 from typing import Any
 
+from app.agent.plan_generator import build_plan_explanation_prompt
 from app.agent.plan_generator import generate_procurement_plan
 from app.agent.plan_variants import generate_plan_options
 from app.agent.procurement_agent import run_procurement_agent
 from app.observability.local_tracer import new_trace_id
 from app.rag.retriever import retrieve_products
 from app.schemas.chat import ChatRequest, ChatResponse, ProcurementPlanRequest, QuickOptimizationRequest
-from app.services.llm_service import settings
+from app.services.llm_service import safe_llm_stream, settings
 
 
 router = APIRouter(prefix="/api", tags=["agent"])
 
 
 @router.post("/chat", response_model=ChatResponse)
-def chat(request: ChatRequest) -> ChatResponse:
+def chat(request: ChatRequest, raw_request: Request) -> ChatResponse | StreamingResponse:
+    wants_stream = "text/event-stream" in raw_request.headers.get("accept", "")
     result = run_procurement_agent(
         request.message,
         request.session_id,
         previous_intent=request.previous_intent,
         previous_plan=request.previous_plan,
         language=request.language,
+        skip_plan_explanation=wants_stream,
     )
+    if wants_stream and result.get("type") in ("product_results", "recommendation_plan"):
+        prompt = build_plan_explanation_prompt(
+            dict(result.get("parsed_intent") or {}),
+            list(result.get("retrieved_products") or []),
+            dict(result.get("recommended_plan") or {}),
+            request.language,
+        )
+
+        async def event_stream():
+            async for chunk in safe_llm_stream(prompt, purpose="plan_explanation", language=request.language):
+                payload = {"delta": chunk.get("delta", "")}
+                if chunk.get("finish_reason"):
+                    payload["finish_reason"] = chunk["finish_reason"]
+                yield f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
+
+        return StreamingResponse(event_stream(), media_type="text/event-stream")
     return ChatResponse.model_validate(result)
 
 
@@ -48,7 +70,17 @@ def _option_for_action(action: str, plan_options: list[dict[str, Any]]) -> dict[
     return next((option for option in plan_options if option.get("strategy") == strategy), None)
 
 
-def _answer_for_optimization(action: str, plan: dict[str, Any]) -> str:
+def _answer_for_optimization(action: str, plan: dict[str, Any], language: str = "en") -> str:
+    if language == "zh":
+        label_by_action = {
+            "make_cheaper": "已尝试替换价格更低的同类产品以降低当前方案总金额。",
+            "improve_quality": "已优先选择评分更高的产品以提升质量。",
+            "faster_delivery": "已优化方案以实现更快配送。",
+            "prefer_dell": "已使用Dell产品重新生成采购方案。",
+            "regenerate": "已根据当前需求重新生成采购方案。",
+        }
+        label = label_by_action.get(action, "已更新采购方案")
+        return f"{label} 总金额：${float(plan.get('total_amount', 0) or 0):.2f}"
     label_by_action = {
         "make_cheaper": "Made the current plan cheaper where matching alternatives were available.",
         "improve_quality": "Improved quality by prioritizing higher-rated products.",
@@ -112,7 +144,7 @@ def quick_optimize(request: QuickOptimizationRequest) -> ChatResponse:
         ]
 
     trace_id = new_trace_id()
-    answer = _answer_for_optimization(request.action, plan)
+    answer = _answer_for_optimization(request.action, plan, request.language)
     plan["recommendation_reason"] = answer
     plan["recommendation_summary"] = answer
     return ChatResponse.model_validate(

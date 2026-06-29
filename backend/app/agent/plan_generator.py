@@ -203,6 +203,15 @@ def _select_followup_by_category(
     previous_plan: dict[str, Any] | None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     revision_intent = str(intent.get("revision_intent") or "new_plan")
+    # Apply preferred_brand filter for new orders (e.g., "\u4e0b\u5355Logitech\u9f20\u6807")
+    preferred_brand = str(intent.get("preferred_brand") or "").strip()
+    if preferred_brand and revision_intent not in {"cheaper", "replace_product"}:
+        branded = [
+            p for p in products
+            if str(p.get("brand", "")).lower() == preferred_brand.lower()
+        ]
+        if branded:
+            products = branded
     if revision_intent not in {"cheaper", "replace_product"} or not previous_plan:
         selected = (
             _select_budget_aware_by_category(products, categories, quantity_by_category, intent)
@@ -420,34 +429,82 @@ def _json_for_prompt(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, indent=2, default=str)
 
 
+def _products_with_source_ids(products: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    source_products: list[dict[str, Any]] = []
+    for index, product in enumerate(products, start=1):
+        source_products.append(
+            {
+                "source_id": f"来源{index}",
+                "product_id": product.get("product_id"),
+                "name": product.get("name"),
+                "category": product.get("category"),
+                "brand": product.get("brand"),
+                "supplier": product.get("supplier"),
+                "price": product.get("price"),
+                "rating": product.get("rating"),
+                "stock": product.get("stock"),
+                "delivery_days": product.get("delivery_days"),
+                "description": product.get("description"),
+                "retrieval_score": product.get("retrieval_score"),
+                "retrieval_channels": product.get("retrieval_channels"),
+            }
+        )
+    return source_products
+
+
 def build_plan_explanation_prompt(
     parsed_intent: dict[str, Any],
     retrieved_products: list[dict[str, Any]],
     calculated_plan: dict[str, Any],
+    language: str = "en",
 ) -> str:
-    return f"""
-You are an enterprise procurement assistant.
-You must explain the procurement plan based only on the provided product data and calculated plan.
-Do not invent products, prices, stock, suppliers, delivery days, ratings, or discounts.
-
-User intent:
-{_json_for_prompt(parsed_intent)}
-
-Retrieved products:
-{_json_for_prompt(retrieved_products)}
-
-Calculated procurement plan:
-{_json_for_prompt(calculated_plan)}
-
-Write a concise recommendation explanation for a business user.
-Include:
-1. selected items
-2. total amount
-3. budget status
-4. inventory status
-5. why this plan is recommended
-6. any risk or limitation
-""".strip()
+    sourced_products = _products_with_source_ids(retrieved_products)
+    prompt_en = (
+        "You are an enterprise procurement assistant.\n"
+        "You must explain the procurement plan based only on the provided product data and calculated plan.\n"
+        "Do not invent products, prices, stock, suppliers, delivery days, ratings, or discounts.\n\n"
+        "If the provided materials do not contain enough information to answer the user's question, "
+        "say that the existing materials cannot answer it. Do not use outside knowledge.\n"
+        "Every factual claim about a product, price, stock, supplier, delivery time, or rating must cite "
+        "the matching source marker in the form [来源N].\n\n"
+        "User intent:\n"
+        f"{_json_for_prompt(parsed_intent)}\n\n"
+        "Retrieved products with source markers:\n"
+        f"{_json_for_prompt(sourced_products)}\n\n"
+        "Calculated procurement plan:\n"
+        f"{_json_for_prompt(calculated_plan)}\n\n"
+        "Write a concise recommendation explanation for a business user.\n"
+        "Include:\n"
+        "1. selected items\n"
+        "2. total amount\n"
+        "3. budget status\n"
+        "4. inventory status\n"
+        "5. why this plan is recommended\n"
+        "6. any risk or limitation\n"
+    )
+    prompt_zh = (
+        "\u4f60\u662f\u4e00\u4f4d\u4f01\u4e1a\u91c7\u8d2d\u52a9\u624b\u3002\n"
+        "\u8bf7\u4e25\u683c\u6839\u636e\u63d0\u4f9b\u7684\u4ea7\u54c1\u6570\u636e\u548c\u8ba1\u7b97\u540e\u7684\u91c7\u8d2d\u65b9\u6848\u6765\u89e3\u91ca\u63a8\u8350\u7406\u7531\u3002\n"
+        "\u4e0d\u8981\u7f16\u9020\u4ea7\u54c1\u3001\u4ef7\u683c\u3001\u5e93\u5b58\u3001\u4f9b\u5e94\u5546\u3001\u914d\u9001\u5929\u6570\u3001\u8bc4\u5206\u6216\u6298\u6263\u3002\n\n"
+        "\u5982\u679c\u53c2\u8003\u8d44\u6599\u4e0d\u8db3\u4ee5\u56de\u7b54\u7528\u6237\u95ee\u9898\uff0c\u8bf7\u76f4\u63a5\u8bf4\u300c\u6839\u636e\u73b0\u6709\u8d44\u6599\u65e0\u6cd5\u56de\u7b54\u300d\uff0c\u4e0d\u8981\u4f7f\u7528\u5916\u90e8\u77e5\u8bc6\u8865\u5168\u3002\n"
+        "\u6bcf\u4e2a\u4e8b\u5b9e\u9648\u8ff0\uff0c\u5c24\u5176\u662f\u5546\u54c1\u3001\u4ef7\u683c\u3001\u5e93\u5b58\u3001\u4f9b\u5e94\u5546\u3001\u914d\u9001\u5929\u6570\u548c\u8bc4\u5206\uff0c\u90fd\u5fc5\u987b\u7528 [\u6765\u6e90N] \u6807\u6ce8\u6765\u6e90\u3002\n\n"
+        "\u7528\u6237\u610f\u56fe\uff1a\n"
+        f"{_json_for_prompt(parsed_intent)}\n\n"
+        "\u5e26\u6765\u6e90\u7f16\u53f7\u7684\u68c0\u7d22\u4ea7\u54c1\uff1a\n"
+        f"{_json_for_prompt(sourced_products)}\n\n"
+        "\u8ba1\u7b97\u540e\u7684\u91c7\u8d2d\u65b9\u6848\uff1a\n"
+        f"{_json_for_prompt(calculated_plan)}\n\n"
+        "\u8bf7\u7528\u4e2d\u6587\u4e3a\u4e1a\u52a1\u7528\u6237\u64b0\u5199\u4e00\u4efd\u7b80\u6d01\u7684\u63a8\u8350\u65b9\u6848\u8bf4\u660e\u3002\n"
+        "\u5185\u5bb9\u5305\u62ec\uff1a\n"
+        "1. \u9009\u5b9a\u5546\u54c1\n"
+        "2. \u603b\u91d1\u989d\n"
+        "3. \u9884\u7b97\u72b6\u6001\n"
+        "4. \u5e93\u5b58\u72b6\u6001\n"
+        "5. \u63a8\u8350\u7406\u7531\n"
+        "6. \u4efb\u4f55\u98ce\u9669\u6216\u9650\u5236\n\n"
+        "\u6ce8\u610f\uff1a\u4ea7\u54c1\u540d\u79f0\u3001\u54c1\u724c\u3001\u4f9b\u5e94\u5546\u53ef\u4ee5\u4fdd\u7559\u539f\u59cb\u82f1\u6587\uff0c\u4f46\u6240\u6709\u6807\u9898\u548c\u8bf4\u660e\u5fc5\u987b\u4f7f\u7528\u4e2d\u6587\u3002\n"
+    )
+    return prompt_zh if language == "zh" else prompt_en
 
 
 def generate_plan_explanation(
@@ -455,8 +512,9 @@ def generate_plan_explanation(
     retrieved_products: list[dict[str, Any]],
     calculated_plan: dict[str, Any],
     fallback_answer: str,
+    language: str = "en",
 ) -> dict[str, Any]:
-    prompt = build_plan_explanation_prompt(parsed_intent, retrieved_products, calculated_plan)
+    prompt = build_plan_explanation_prompt(parsed_intent, retrieved_products, calculated_plan, language)
     result = safe_llm_invoke(prompt, purpose="plan_explanation")
     content = str(result.get("content") or "").strip()
     if result.get("used_mock_llm") or not content or len(content) > MAX_PLAN_EXPLANATION_CHARS:
@@ -471,3 +529,4 @@ def generate_plan_explanation(
         "llm_latency_ms": result.get("latency_ms"),
         "llm_fallback_reason": result.get("fallback_reason"),
     }
+

@@ -81,9 +81,39 @@ def test_budget_plan_can_create_stripe_checkout_session(tmp_path, monkeypatch):
     assert FakeCheckoutSession.last_kwargs["metadata"]["plan_id"] == "plan_a"
     assert FakeCheckoutSession.last_kwargs["metadata"]["total_amount"] == "50.50"
     assert FakeCheckoutSession.last_kwargs["metadata"]["source"] == "procuraai"
+    assert FakeCheckoutSession.last_kwargs["success_url"] == (
+        f"http://localhost:3000/payment/success?order_id={order['order_id']}"
+        "&session_id={CHECKOUT_SESSION_ID}"
+    )
     assert FakeCheckoutSession.last_kwargs["line_items"][0]["price_data"]["unit_amount"] == 2525
     assert FakeCheckoutSession.last_kwargs["line_items"][0]["quantity"] == 2
     assert order_service.get_order(order["order_id"])["stripe_session_id"] == "cs_test_123"
+
+
+def test_mock_checkout_success_url_preserves_order_id_and_mock_params(tmp_path, monkeypatch):
+    order = _save_order(tmp_path, monkeypatch)
+    settings = _stripe_settings()
+    settings.use_mock_payment = True
+    monkeypatch.setattr(stripe_payment_service, "get_settings", lambda: settings)
+
+    session = stripe_payment_service.create_procurement_checkout_session("plan_a", order["order_id"])
+
+    assert session["checkout_url"].startswith(
+        f"http://localhost:3000/payment/success?order_id={order['order_id']}&mock=true&session_id=mock_"
+    )
+
+
+def test_confirm_payment_marks_order_paid_by_order_id(tmp_path, monkeypatch):
+    order = _save_order(tmp_path, monkeypatch)
+
+    response = TestClient(app).post(
+        "/api/payments/confirm",
+        json={"order_id": order["order_id"]},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "paid"
+    assert order_service.get_order(order["order_id"])["status"] == "paid"
 
 
 def test_no_budget_plan_can_create_stripe_checkout_session(tmp_path, monkeypatch):

@@ -1,680 +1,293 @@
 "use client";
 
 import { App, Button, Card, Collapse, Descriptions, Input, List, Popconfirm, Space, Statistic, Tag, Typography } from "antd";
-import {
-  CreditCardOutlined,
-  DeleteOutlined,
-  DownloadOutlined,
-  HistoryOutlined,
-  LoadingOutlined,
-  RedoOutlined,
-  SaveOutlined,
-  SendOutlined,
-  ShoppingCartOutlined,
-  ThunderboltOutlined
-} from "@ant-design/icons";
+import { CreditCardOutlined, DeleteOutlined, DownloadOutlined, HistoryOutlined, LoadingOutlined, RedoOutlined, SaveOutlined, SendOutlined, ShoppingCartOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import { currency } from "@/lib/format";
 import { useLanguage } from "@/lib/i18n";
-import type {
-  ChatResponse,
-  Order,
-  PaymentStatus,
-  ProcurementHistoryRecord,
-  QuickOptimizationAction,
-  RetrievalEvidence
-} from "@/lib/types";
+import type { CartItem, ChatResponse, Order, PaymentStatus, ProcurementHistoryRecord, QuickOptimizationAction, RetrievalEvidence, Product } from "@/lib/types";
 import ChatMessage from "./ChatMessage";
 import OrderSummary from "./OrderSummary";
 import ProcurementPlanCard from "./ProcurementPlanCard";
+import ProductResultCards from "./ProductResultCards";
+import CartDrawer from "./CartDrawer";
 
-type ChatLine = { role: "user" | "agent"; content: string; streaming?: boolean };
-
-const STREAM_CHUNK_SIZE = 3;
-const STREAM_INTERVAL_MS = 18;
+type ChatLine = { role: "user" | "agent"; content: string; streaming?: boolean; retrievalEvidence?: RetrievalEvidence };
+const STREAM_CHUNK = 3;
+const STREAM_MS = 18;
 const quickActions: Array<{ action: QuickOptimizationAction; label: string }> = [
-  { action: "make_cheaper", label: "Make Cheaper" },
-  { action: "improve_quality", label: "Improve Quality" },
-  { action: "faster_delivery", label: "Faster Delivery" },
-  { action: "prefer_dell", label: "Prefer Dell" },
-  { action: "regenerate", label: "Re-generate" }
+  { action: "make_cheaper", label: "Make Cheaper" }, { action: "improve_quality", label: "Improve Quality" },
+  { action: "faster_delivery", label: "Faster Delivery" }, { action: "prefer_dell", label: "Prefer Dell" },
+  { action: "regenerate", label: "Re-generate" },
 ];
-
-function evidenceText(value: unknown) {
-  if (Array.isArray(value)) return value.join(", ");
-  if (value === undefined || value === null || value === "") return "-";
-  return String(value);
-}
-
-function evidenceScore(value: unknown) {
-  const score = Number(value || 0);
-  return Number.isFinite(score) ? score.toFixed(2) : "-";
-}
-
-function isPlanSelectable(plan?: { selectable?: boolean; budget_status?: string; over_budget?: boolean } | null) {
-  if (!plan) return false;
-  if (plan.selectable === false) return false;
-  return plan.budget_status !== "over_budget" && plan.over_budget !== true;
-}
 
 function RetrievalEvidencePanel({ evidence }: { evidence?: RetrievalEvidence }) {
   if (!evidence) return null;
-  const products = evidence.products || [];
-  const policies = evidence.policies || [];
-  const suppliers = evidence.suppliers || [];
-  const constraints = evidence.constraints || {};
-  const hasEvidence = products.length || policies.length || suppliers.length;
-  if (!hasEvidence) return null;
-
+  const prods = evidence.products || [];
+  const has = prods.length || (evidence.policies || []).length || (evidence.suppliers || []).length;
+  if (!has) return null;
   return (
     <Card title="Retrieval Evidence" size="small">
       <Space direction="vertical" size={10} style={{ width: "100%" }}>
         <Space wrap>
           <Tag color="blue">Mode: {evidence.retrieval_mode || "unknown"}</Tag>
           {evidence.constraints_relaxed ? <Tag color="orange">Constraints relaxed</Tag> : null}
-          {Object.entries(constraints).map(([key, value]) => (
-            value === undefined || value === null || value === "" ? null : (
-              <Tag key={key}>
-                {key}: {evidenceText(value)}
-              </Tag>
-            )
-          ))}
         </Space>
-        <Collapse
-          size="small"
-          items={[
-            {
-              key: "products",
-              label: `Product vector Top-K (${products.length})`,
-              children: (
-                <Space direction="vertical" size={8} style={{ width: "100%" }}>
-                  {products.map((item, index) => (
-                    <Typography.Text key={`${item.product_id}-${index}`}>
-                      {index + 1}. {evidenceText(item.name)} · {evidenceText(item.category)} · score{" "}
-                      {evidenceScore(item.score)} · {evidenceText(item.reason)}
-                    </Typography.Text>
-                  ))}
-                </Space>
-              )
-            },
-            {
-              key: "policies",
-              label: `Procurement policies (${policies.length})`,
-              children: (
-                <Space direction="vertical" size={8} style={{ width: "100%" }}>
-                  {policies.map((item, index) => (
-                    <Typography.Text key={`${item.id}-${index}`}>
-                      {evidenceText(item.title)} · score {evidenceScore(item.score)}
-                    </Typography.Text>
-                  ))}
-                </Space>
-              )
-            },
-            {
-              key: "suppliers",
-              label: `Supplier knowledge (${suppliers.length})`,
-              children: (
-                <Space direction="vertical" size={8} style={{ width: "100%" }}>
-                  {suppliers.map((item, index) => (
-                    <Typography.Text key={`${item.id}-${index}`}>
-                      {evidenceText(item.supplier || item.title)} · risk {evidenceText(item.risk_level)} · score{" "}
-                      {evidenceScore(item.score)}
-                    </Typography.Text>
-                  ))}
-                </Space>
-              )
-            }
-          ]}
-        />
+        <Collapse size="small" items={[{ key: "products", label: `Product Top-K (${prods.length})`, children: prods.map((item, i) => <Typography.Text key={i}>{i + 1}. {String(item.name)} · {String(item.category)}</Typography.Text>) }]} />
       </Space>
     </Card>
   );
 }
 
+function isPlanSelectable(p?: { selectable?: boolean; budget_status?: string; over_budget?: boolean } | null) {
+  if (!p) return false;
+  if (p.selectable === false) return false;
+  return p.budget_status !== "over_budget" && p.over_budget !== true;
+}
+
+
+
 export default function ChatPanel() {
   const { language, t } = useLanguage();
   const { message } = App.useApp();
-  const examples = [t("chat.example1"), t("chat.example2"), t("chat.example3"), t("chat.example4")];
-  const [input, setInput] = useState(t("chat.example1"));
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [chat, setChat] = useState<ChatLine[]>([]);
   const [result, setResult] = useState<ChatResponse | null>(null);
   const [order, setOrder] = useState<Order | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus | null>(null);
-  const [historyRecords, setHistoryRecords] = useState<ProcurementHistoryRecord[]>([]);
-  const [lastRequest, setLastRequest] = useState("");
-  const [historyLoading, setHistoryLoading] = useState(false);
-  const [optimizing, setOptimizing] = useState<QuickOptimizationAction | null>(null);
-  const [checkingOut, setCheckingOut] = useState<string | null>(null);
-  const chatEndRef = useRef<HTMLDivElement | null>(null);
+  const [hist, setHist] = useState<ProcurementHistoryRecord[]>([]);
+  const [lastReq, setLastReq] = useState("");
+  const [histLoading, setHistLoading] = useState(false);
+  const [opt, setOpt] = useState<QuickOptimizationAction | null>(null);
+  const [co, setCo] = useState<string | null>(null);
+  function getBudgetSourceLabel() {
+    const source = result?.parsed_intent?.["budget_source"];
+    if (source === "explicit") return t("chat.budgetExplicit");
+    if (source === "inherited") return t("chat.budgetInherited");
+    return t("chat.budgetNone");
+  }
+  function budgetStatusLabel(p?: { budget_status?: string; budget?: number | null } | null): string {
+    if (!p) return "";
+    const bs = p.budget_status;
+    if (bs === "no_budget_provided" || p.budget === undefined || p.budget === null) return t("plan.noBudget");
+    if (bs === "within_budget") return t("plan.withinBudget");
+    if (bs === "over_budget") return t("plan.overBudget");
+    return bs;
+  }
+  const chatEnd = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    api.paymentStatus().then(setPaymentStatus).catch(() => setPaymentStatus(null));
-    refreshHistory();
-  }, []);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
 
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [chat, loading]);
+  useEffect(() => { api.paymentStatus().then(setPaymentStatus).catch(() => setPaymentStatus(null)); refreshHist(); }, []);
+  useEffect(() => { chatEnd.current?.scrollIntoView({ behavior: "smooth", block: "end" }); }, [chat, loading]);
 
-  function streamAgentAnswer(content: string) {
-    return new Promise<void>((resolve) => {
-      let index = 0;
-      setChat((current) => [...current, { role: "agent", content: "", streaming: true }]);
-      const timer = window.setInterval(() => {
-        index = Math.min(content.length, index + STREAM_CHUNK_SIZE);
-        const visibleContent = content.slice(0, index);
-        setChat((current) => {
-          const next = [...current];
-          const last = next[next.length - 1];
-          if (last?.role === "agent") {
-            next[next.length - 1] = {
-              ...last,
-              content: visibleContent,
-              streaming: index < content.length
-            };
-          }
-          return next;
-        });
-        if (index >= content.length) {
-          window.clearInterval(timer);
-          resolve();
-        }
-      }, STREAM_INTERVAL_MS);
+  function stream(content: string, retrievalEvidence?: RetrievalEvidence) {
+    return new Promise<void>(resolve => {
+      let i = 0;
+      setChat(c => [...c, { role: "agent", content: "", streaming: true, retrievalEvidence }]);
+      const t = window.setInterval(() => {
+        i = Math.min(content.length, i + STREAM_CHUNK);
+        const v = content.slice(0, i);
+        setChat(c => { const n = [...c]; const l = n[n.length - 1]; if (l?.role === "agent") n[n.length - 1] = { ...l, content: v, streaming: i < content.length }; return n; });
+        if (i >= content.length) { window.clearInterval(t); resolve(); }
+      }, STREAM_MS);
     });
   }
 
-  async function submit(messageText = input) {
-    if (!messageText.trim()) return;
+  async function submit(msg = input) {
+    if (!msg.trim()) return;
     setLoading(true);
-    const userMessage = messageText.trim();
-    setInput("");
-    setLastRequest(userMessage);
-    setChat((current) => [...current, { role: "user", content: userMessage }]);
+    const um = msg.trim(); setInput(""); setLastReq(um);
+    setChat(c => [...c, { role: "user", content: um }]);
     try {
-      const response = await api.chat(userMessage, "demo-session-001", language);
-      setResult(response);
-      localStorage.setItem("currentPlan", JSON.stringify(response.recommended_plan));
-      await streamAgentAnswer(response.answer);
-    } catch (error) {
-      setInput(userMessage);
-      message.error(error instanceof Error ? error.message : t("chat.requestFailed"));
-    } finally {
-      setLoading(false);
-    }
+      const r = await api.chat(um, "demo-session-001", language);
+      setResult(r);
+      localStorage.setItem("currentPlan", JSON.stringify(r.recommended_plan));
+      await stream(r.answer, r.retrieval_evidence);
+      if (r.checkout_url) {
+        setTimeout(() => { window.location.href = r.checkout_url!; }, 1500);
+      }
+    } catch (e) { setInput(um); message.error(e instanceof Error ? e.message : t("chat.requestFailed")); }
+    finally { setLoading(false); }
   }
 
-  function planIdFor(plan?: { plan_option_id?: string; plan_id?: string } | null) {
-    return plan?.plan_option_id || plan?.plan_id || "";
-  }
+  function pid(p?: { plan_option_id?: string; plan_id?: string } | null) { return p?.plan_option_id || p?.plan_id || ""; }
 
   async function createOrder(plan = result?.recommended_plan) {
     if (!plan) return null;
-    if (!isPlanSelectable(plan)) {
-      message.warning("Over-budget plans require approval before order creation.");
-      return null;
-    }
-    const created = await api.createOrder(plan);
-    setOrder(created);
-    message.success(t("chat.orderCreated", { orderId: created.order_id }));
-    return created;
+    if (!isPlanSelectable(plan)) { message.warning("Over-budget plans require approval."); return null; }
+    setCreating(true);
+    try { const o = await api.createOrder(plan); setOrder(o); message.success(t("chat.orderCreated", { orderId: o.order_id })); return o; }
+    catch (e) { message.error(e instanceof Error ? e.message : "Failed"); return null; }
+    finally { setCreating(false); }
   }
 
-  async function optimize(action: QuickOptimizationAction) {
+  async function optimize(a: QuickOptimizationAction) {
     if (!result?.recommended_plan) return;
-    setOptimizing(action);
+    setOpt(a);
     try {
-      const response = await api.optimizePlan({
-        action,
-        session_id: result.session_id,
-        language,
-        parsed_intent: result.parsed_intent,
-        current_plan: result.recommended_plan,
-        message: lastRequest
-      });
-      setResult(response);
-      setOrder(null);
-      localStorage.setItem("currentPlan", JSON.stringify(response.recommended_plan));
-      await streamAgentAnswer(response.answer);
-    } catch (error) {
-      message.error(error instanceof Error ? error.message : t("chat.requestFailed"));
-    } finally {
-      setOptimizing(null);
-    }
+      const r = await api.optimizePlan({ action: a, session_id: result.session_id, language, parsed_intent: result.parsed_intent, current_plan: result.recommended_plan, message: lastReq });
+      setResult(r); setOrder(null);
+      localStorage.setItem("currentPlan", JSON.stringify(r.recommended_plan));
+      await stream(r.answer, r.retrieval_evidence);
+    } catch (e) { message.error(e instanceof Error ? e.message : t("chat.requestFailed")); }
+    finally { setOpt(null); }
   }
 
-  async function exportExcel() {
+  async function xlsx() {
     if (!result?.recommended_plan) return;
-    try {
-      const blob = await api.exportExcel(result.recommended_plan);
-      const url = window.URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = "procurement_plan.xlsx";
-      anchor.click();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      message.error(error instanceof Error ? error.message : "Export failed");
-    }
+    try { const b = await api.exportExcel(result.recommended_plan); const u = window.URL.createObjectURL(b); const a = document.createElement("a"); a.href = u; a.download = "plan.xlsx"; a.click(); window.URL.revokeObjectURL(u); }
+    catch (e) { message.error(e instanceof Error ? e.message : "Export failed"); }
   }
 
-  async function ensureOrderForPlan(plan: NonNullable<ChatResponse["recommended_plan"]>) {
-    const planId = planIdFor(plan);
-    if (order && order.plan_id === planId) return order;
+  async function ensureOrder(plan: NonNullable<ChatResponse["recommended_plan"]>) {
+    if (order && order.plan_id === pid(plan)) return order;
     return createOrder(plan);
   }
 
-  async function pay(targetOrder: Order, planId = planIdFor(result?.recommended_plan)) {
-    if (result?.recommended_plan && !isPlanSelectable(result.recommended_plan)) {
-      message.warning("Over-budget plans cannot be paid directly.");
-      return;
-    }
-    if (!planId) {
-      message.error("Missing selected plan id.");
-      return;
-    }
-    try {
-      setCheckingOut(planId);
-      const checkout = await api.checkout(targetOrder, planId);
-      window.location.href = checkout.checkout_url;
-    } catch (error) {
-      message.error(error instanceof Error ? error.message : "Checkout failed");
-    } finally {
-      setCheckingOut(null);
-    }
+  async function pay(o: Order, planId = pid(result?.recommended_plan)) {
+    if (result?.recommended_plan && !isPlanSelectable(result.recommended_plan)) { message.warning("Over-budget."); return; }
+    if (!planId) { message.error("Missing plan id."); return; }
+    try { setCo(planId); const ch = await api.checkout(o, planId); window.location.href = ch.checkout_url; }
+    catch (e) { message.error(e instanceof Error ? e.message : "Checkout failed"); }
+    finally { setCo(null); }
   }
 
-  async function payForPlan(plan: NonNullable<ChatResponse["recommended_plan"]>) {
-    if (!isPlanSelectable(plan)) {
-      message.warning("Over-budget plans cannot be paid directly.");
-      return;
-    }
-    const nextOrder = await ensureOrderForPlan(plan);
-    if (!nextOrder) return;
-    await pay(nextOrder, planIdFor(plan));
+  async function payPlan(plan: NonNullable<ChatResponse["recommended_plan"]>) {
+    if (!isPlanSelectable(plan)) { message.warning("Over-budget."); return; }
+    const o = await ensureOrder(plan);
+    if (!o) return;
+    await pay(o, pid(plan));
   }
 
-  async function refreshHistory() {
-    setHistoryLoading(true);
-    try {
-      const response = await api.history();
-      setHistoryRecords(response.items);
-    } catch {
-      setHistoryRecords([]);
-    } finally {
-      setHistoryLoading(false);
-    }
-  }
+  async function refreshHist() { setHistLoading(true); try { setHist((await api.history()).items); } catch { setHist([]); } finally { setHistLoading(false); } }
 
-  async function saveHistory() {
+  async function saveHist() {
     if (!result?.recommended_plan) return;
     try {
-      const saved = await api.saveHistory({
-        original_request: lastRequest,
-        parsed_intent: result.parsed_intent,
-        procurement_plan: result.recommended_plan,
-        trace: {
-          trace_id: result.trace_id,
-          model_provider: result.model_provider,
-          model_name: result.model_name,
-          used_mock_llm: result.used_mock_llm
-        },
-        reasoning_summary: result.answer,
-        messages: [
-          { role: "user", content: lastRequest },
-          { role: "agent", content: result.answer }
-        ],
-        order_draft: order
-      });
-      setHistoryRecords((current) => [saved, ...current.filter((item) => item.id !== saved.id)]);
+      const s = await api.saveHistory({ original_request: lastReq, parsed_intent: result.parsed_intent, procurement_plan: result.recommended_plan, trace: { trace_id: result.trace_id, model_provider: result.model_provider, model_name: result.model_name, used_mock_llm: result.used_mock_llm }, reasoning_summary: result.answer, messages: [{ role: "user", content: lastReq }, { role: "agent", content: result.answer }], order_draft: order });
+      setHist(c => [s, ...c.filter(i => i.id !== s.id)]);
       message.success("History saved");
-    } catch (error) {
-      message.error(error instanceof Error ? error.message : "Failed to save history");
-    }
+    } catch (e) { message.error(e instanceof Error ? e.message : "Failed"); }
   }
 
-  async function restoreHistory(historyId: string) {
-    const record = await api.historyDetail(historyId);
-    const traceId = typeof record.trace?.trace_id === "string" ? record.trace.trace_id : record.id;
-    const restoredResult: ChatResponse = {
-      session_id: "demo-session-001",
-      parsed_intent: record.parsed_intent,
-      recommended_plan: record.selected_plan || record.procurement_plan,
-      plan_options: [],
-      selected_plan_id: null,
-      answer: record.reasoning_summary || "",
-      trace_id: traceId,
-      retrieved_products: [],
-      model_provider: typeof record.trace?.model_provider === "string" ? record.trace.model_provider : "history",
-      model_name: typeof record.trace?.model_name === "string" ? record.trace.model_name : "restored",
-      used_mock_llm: Boolean(record.trace?.used_mock_llm),
-      used_previous_context: false,
-      previous_trace_id: null
-    };
-    setResult(restoredResult);
-    setOrder((record.order_draft as Order | null) || null);
-    setLastRequest(record.original_request);
-    setChat([
-      { role: "user", content: record.original_request || "Restored procurement request" },
-      { role: "agent", content: record.reasoning_summary || "Restored procurement plan" }
-    ]);
-    localStorage.setItem("currentPlan", JSON.stringify(restoredResult.recommended_plan));
-    message.success("History restored");
+  async function restoreHist(id: string) {
+    const r = await api.historyDetail(id);
+    const tid = typeof r.trace?.trace_id === "string" ? r.trace.trace_id : r.id;
+    const restored: ChatResponse = { session_id: "demo-session-001", parsed_intent: r.parsed_intent, recommended_plan: r.selected_plan || r.procurement_plan, plan_options: [], selected_plan_id: null, answer: r.reasoning_summary || "", trace_id: tid, retrieved_products: [], model_provider: typeof r.trace?.model_provider === "string" ? r.trace.model_provider : "history", model_name: typeof r.trace?.model_name === "string" ? r.trace.model_name : "restored", used_mock_llm: Boolean(r.trace?.used_mock_llm), used_previous_context: false, previous_trace_id: null };
+    setResult(restored); setOrder((r.order_draft as Order | null) || null); setLastReq(r.original_request);
+    setChat([{ role: "user", content: r.original_request || "" }, { role: "agent", content: r.reasoning_summary || "" }]);
+    localStorage.setItem("currentPlan", JSON.stringify(restored.recommended_plan));
   }
 
-  async function deleteHistory(historyId: string) {
-    await api.deleteHistory(historyId);
-    setHistoryRecords((current) => current.filter((item) => item.id !== historyId));
-    message.success("History deleted");
-  }
+  async function delHist(id: string) { await api.deleteHistory(id); setHist(c => c.filter(i => i.id !== id)); message.success("Deleted"); }
 
-  function selectPlan(optionId: string) {
+  function selPlan(oid: string) {
     if (!result?.plan_options?.length) return;
-    const option = result.plan_options.find((item) => item.id === optionId);
-    if (!option) return;
-    if (!isPlanSelectable(option.plan)) {
-      message.warning(`${option.name} is over budget and requires approval.`);
-      return;
+    const o = result.plan_options.find(x => x.id === oid);
+    if (!o || !isPlanSelectable(o.plan)) { message.warning("Over budget."); return; }
+    setResult({ ...result, recommended_plan: o.plan, selected_plan_id: o.id }); setOrder(null);
+    localStorage.setItem("currentPlan", JSON.stringify(o.plan));
+  }
+
+  // Cart
+  function addCart(item: CartItem) {
+    setCart(p => { const ex = p.find(i => i.product_id === item.product_id); if (ex) return p.map(i => i.product_id === item.product_id ? { ...i, quantity: i.quantity + 1 } : i); return [...p, { ...item, quantity: 1 }]; });
+    message.success(`Added ${item.name}`);
+  }
+  function addPlanCart(items: CartItem[]) {
+    setCart(p => { const n = [...p]; for (const it of items) { const ex = n.find(i => i.product_id === it.product_id); if (ex) ex.quantity += it.quantity; else n.push({ ...it }); } return n; });
+    message.success("Plan added to cart");
+  }
+  function buyNow(p: Product) { addCart({ product_id: p.product_id, name: p.name, brand: p.brand, category: p.category, price: p.price, quantity: 1, supplier: p.supplier, delivery_days: p.delivery_days, stock: p.stock, rating: p.rating }); setCartOpen(true); }
+  function updQty(pid: string, q: number) { setCart(p => p.map(i => i.product_id === pid ? { ...i, quantity: q } : i)); }
+  function rmCart(pid: string) { setCart(p => p.filter(i => i.product_id !== pid)); }
+  async function onCartOrder(o: Order) { setOrder(o); setCartOpen(false); setChat(c => [...c, { role: "agent", content: `Order ${o.order_id} created. Total: ${currency(o.total_amount)}.` }]); }
+
+  const cps = isPlanSelectable(result?.recommended_plan);
+  const rt = result?.type;
+
+  function renderStructured() {
+    if (!result) return null;
+    if (rt === "product_results" && result.products?.length) {
+      return <ProductResultCards products={result.products as Product[]} onAddToCart={addCart} onBuyNow={buyNow} />;
     }
-    const nextResult = {
-      ...result,
-      recommended_plan: option.plan,
-      selected_plan_id: option.id
-    };
-    setResult(nextResult);
-    setOrder(null);
-    localStorage.setItem("currentPlan", JSON.stringify(option.plan));
-    message.success(`${option.name} selected`);
-  }
-
-  function strategyColor(strategy: string) {
-    if (strategy === "cost_optimized") return "green";
-    if (strategy === "premium") return "purple";
-    return "blue";
-  }
-
-  function valueFor(key: string) {
-    const value = result?.parsed_intent?.[key];
-    if (Array.isArray(value)) return value.join(", ");
-    if (value === undefined || value === null || value === "") return "-";
-    return String(value);
-  }
-
-  function parsedValueFor(key: string) {
-    const value = result?.parsed_intent?.[key];
-    if (key === "min_rating" && value !== undefined && value !== null && value !== "") {
-      return `>= ${value}`;
+    if (rt === "recommendation_plan") {
+      return <ProcurementPlanCard plan={result.recommendation_plan ?? result.recommended_plan} products={result.retrieved_products || []} onExportExcel={xlsx} onAddToCart={addPlanCart} onCreateOrder={() => createOrder()} onPayPlan={() => payPlan(result.recommended_plan)} creatingOrder={creating} payingPlan={Boolean(co)} />;
     }
-    if (key === "max_delivery_days" && value !== undefined && value !== null && value !== "") {
-      return `Fast preferred / <= ${value} days`;
-    }
-    return valueFor(key);
+    return null;
   }
 
-  const currentPlanSelectable = isPlanSelectable(result?.recommended_plan);
+  function vf(k: string) { const v = result?.parsed_intent?.[k]; if (Array.isArray(v)) return v.join(", "); if (k === "budget" && (v === undefined || v === null)) return t("plan.noBudget"); return v === undefined || v === null || v === "" ? "-" : String(v); }
+  function pv(k: string) { const v = result?.parsed_intent?.[k]; if (k === "min_rating" && v) return `>= ${v}`; if (k === "max_delivery_days" && v) return `<= ${v} days`; return vf(k); }
+  function sc(s: string) { if (s === "cost_optimized") return "green"; if (s === "premium") return "purple"; return "blue"; }
 
   return (
-    <div className="two-column">
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
-        <Card title={t("chat.title")}>
-          <Space direction="vertical" size={12} style={{ width: "100%" }}>
-            <Space wrap className="prompt-strip">
-              {examples.map((example) => (
-                <Button key={example} size="small" onClick={() => setInput(example)}>
-                  {example.slice(0, 42)}...
-                </Button>
-              ))}
-            </Space>
-            <div className="chat-surface" aria-live="polite">
-              {chat.length ? (
-                chat.map((item, index) => (
-                  <ChatMessage
-                    key={`${item.role}-${index}`}
-                    role={item.role === "agent" ? "assistant" : "user"}
-                    content={item.content}
-                    streaming={item.streaming}
-                  />
-                ))
-              ) : (
-                <div className="chat-empty">{t("chat.noMessages")}</div>
-              )}
-              {loading && chat[chat.length - 1]?.role === "user" ? (
-                <div className="chat-row is-agent">
-                  <div className="chat-avatar">
-                    <LoadingOutlined />
-                  </div>
-                  <div className="chat-bubble">
-                    <div className="typing-dots">
-                      <span />
-                      <span />
-                      <span />
-                    </div>
-                  </div>
+    <>
+      <div className="two-column">
+        <Space direction="vertical" size={16} style={{ width: "100%" }}>
+          {result?.checkout_url && result?.type === "order" ? (
+            <Card size="small" style={{borderColor: "#52c41a", backgroundColor: "#f6ffed"}}>
+              <Space>
+                <ShoppingCartOutlined style={{fontSize: 20, color: "#52c41a"}} />
+                <div>
+                  <div style={{fontWeight: 600}}>{t("chat.orderCreated", {orderId: result.order_id})}</div>
+                  <div>{t("chat.redirectingToPayment")}</div>
                 </div>
-              ) : null}
-              <div ref={chatEndRef} />
-            </div>
-            <div className="composer">
-              <Input.TextArea
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                onPressEnter={(event) => {
-                  if (!event.shiftKey) {
-                    event.preventDefault();
-                    submit();
-                  }
-                }}
-                autoSize={{ minRows: 2, maxRows: 5 }}
-                disabled={loading}
-                placeholder={loading ? t("chat.sending") : undefined}
-              />
-              <Button
-                type="primary"
-                shape="circle"
-                icon={<SendOutlined />}
-                loading={loading}
-                disabled={loading || !input.trim()}
-                onClick={() => submit()}
-                aria-label={t("chat.send")}
-              />
-            </div>
-            <Space wrap>
-              <Button icon={<ShoppingCartOutlined />} disabled={!result || !currentPlanSelectable} onClick={() => createOrder()}>
-                {t("chat.createOrder")}
-              </Button>
-              <Button icon={<SaveOutlined />} disabled={!result || !lastRequest} onClick={saveHistory}>
-                Save History
-              </Button>
-              <Button icon={<CreditCardOutlined />} disabled={!order || !currentPlanSelectable} onClick={() => order && pay(order)}>
-                {t("chat.payWithStripe")}
-              </Button>
-              {paymentStatus ? (
-                <Tag color={paymentStatus.payment_provider === "stripe" ? "green" : "blue"}>
-                  {t("chat.paymentMode")}: {paymentStatus.payment_provider}
-                </Tag>
-              ) : null}
-            </Space>
-          </Space>
-        </Card>
-        <OrderSummary order={order} onPay={currentPlanSelectable ? pay : undefined} />
-        <Card
-          title={
-            <Space>
-              <HistoryOutlined />
-              Procurement History
-            </Space>
-          }
-          extra={
-            <Button size="small" onClick={refreshHistory} loading={historyLoading}>
-              Refresh
-            </Button>
-          }
-        >
-          <List
-            loading={historyLoading}
-            dataSource={historyRecords}
-            locale={{ emptyText: result ? "No saved history yet. Click Save History to keep this plan." : "No saved history yet." }}
-            renderItem={(item) => (
-              <List.Item
-                actions={[
-                  <Button key="restore" type="link" onClick={() => restoreHistory(item.id)}>
-                    Restore
-                  </Button>,
-                  <Popconfirm
-                    key="delete"
-                    title="Delete this history record?"
-                    okText="Delete"
-                    okButtonProps={{ danger: true }}
-                    onConfirm={() => deleteHistory(item.id)}
-                  >
-                    <Button type="text" danger icon={<DeleteOutlined />} aria-label="Delete history" />
-                  </Popconfirm>
-                ]}
-              >
-                <List.Item.Meta
-                  title={item.original_request || item.id}
-                  description={`${new Date(item.created_at).toLocaleString()} · $${item.total_cost.toFixed(2)}`}
-                />
-              </List.Item>
-            )}
-          />
-        </Card>
-      </Space>
-
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
-        <Card title={t("chat.parsedIntent")}>
-          {result ? (
-            <Space wrap style={{ marginBottom: 12 }}>
-              <Tag color={result.used_mock_llm ? "orange" : "green"}>
-                {t("chat.modelStatus")}: {result.model_provider} / {result.model_name}
-              </Tag>
-              <Tag color={result.used_previous_context ? "blue" : "default"}>
-                {t("chat.previousContext")}:{" "}
-                {result.used_previous_context ? t("chat.usingPreviousContext") : t("chat.newConversation")}
-              </Tag>
-              <Tag>{t("chat.trace")}: {result.trace_id}</Tag>
-              {result.llm_error ? <Tag color="red">{result.llm_error}</Tag> : null}
-            </Space>
-          ) : null}
-          {result ? (
-            <Space direction="vertical" size={12} style={{ width: "100%" }}>
-              <Descriptions column={1} size="small" bordered>
-                <Descriptions.Item label="Team Size">{valueFor("people_count")}</Descriptions.Item>
-                <Descriptions.Item label="Categories">{valueFor("categories")}</Descriptions.Item>
-                <Descriptions.Item label="Budget">{valueFor("budget")}</Descriptions.Item>
-                <Descriptions.Item label="Rating">{parsedValueFor("min_rating")}</Descriptions.Item>
-                <Descriptions.Item label="Delivery">{parsedValueFor("max_delivery_days")}</Descriptions.Item>
-                <Descriptions.Item label="Intent">{valueFor("revision_intent")}</Descriptions.Item>
-              </Descriptions>
-              <Collapse
-                size="small"
-                items={[
-                  {
-                    key: "raw-json",
-                    label: "Raw JSON",
-                    children: (
-                      <Typography.Text code style={{ whiteSpace: "pre-wrap" }}>
-                        {JSON.stringify(result.parsed_intent, null, 2)}
-                      </Typography.Text>
-                    )
-                  }
-                ]}
-              />
-            </Space>
-          ) : (
-            <Typography.Text code>{"{}"}</Typography.Text>
-          )}
-        </Card>
-        <RetrievalEvidencePanel evidence={result?.retrieval_evidence} />
-        {result?.plan_options?.length ? (
-          <Card title="Compare Plans">
-            <Space direction="vertical" size={12} style={{ width: "100%" }}>
-              {result.plan_options.map((option) => {
-                const selectable = isPlanSelectable(option.plan);
-                const selected = result.selected_plan_id === option.id;
-                return (
-                  <Card
-                    key={option.id}
-                    size="small"
-                    type="inner"
-                    title={
-                      <Space wrap>
-                        <Typography.Text strong>{option.name}</Typography.Text>
-                        <Tag color={strategyColor(option.strategy)}>{option.description}</Tag>
-                        <Tag color={selectable ? "green" : "red"}>
-                          {selectable ? "Within Budget" : "Over Budget"}
-                        </Tag>
-                      </Space>
-                    }
-                    extra={
-                      <Space>
-                        <Button
-                          type={selected ? "primary" : "default"}
-                          size="small"
-                          disabled={!selectable}
-                          onClick={() => selectPlan(option.id)}
-                        >
-                          {selected ? "Selected" : selectable ? "Select Plan" : "Over Budget"}
-                        </Button>
-                        {selected && selectable ? (
-                          <Button
-                            type="primary"
-                            size="small"
-                            icon={<CreditCardOutlined />}
-                            loading={checkingOut === planIdFor(option.plan)}
-                            onClick={() => payForPlan(option.plan)}
-                          >
-                            Pay with Stripe
-                          </Button>
-                        ) : null}
-                      </Space>
-                    }
-                  >
-                    <Space size={18} wrap>
-                      <Statistic title="Total" value={option.plan.total_amount} precision={2} prefix="$" />
-                      {!selectable ? (
-                        <Statistic title="Over Budget" value={option.plan.budget_gap || 0} precision={2} prefix="+$" />
-                      ) : null}
-                      <Statistic title="Items" value={option.plan.items.length} />
-                      <Statistic title="Avg Rating" value={option.plan.avg_rating ?? 0} precision={1} />
-                      <Typography.Text type={selectable ? "success" : "danger"}>
-                        Status:{" "}
-                        {selectable ? "Within Budget" : `Need Approval (${currency(option.plan.budget_gap || 0)})`}
-                      </Typography.Text>
-                    </Space>
-                  </Card>
-                );
-              })}
-            </Space>
-          </Card>
-        ) : null}
-        {result?.recommended_plan ? (
-          <Card title="Quick Optimization" size="small">
-            <Space wrap>
-              {quickActions.map((item) => (
-                <Button
-                  key={item.action}
-                  icon={item.action === "regenerate" ? <RedoOutlined /> : <ThunderboltOutlined />}
-                  loading={optimizing === item.action}
-                  disabled={Boolean(optimizing)}
-                  onClick={() => optimize(item.action)}
-                >
-                  {item.label}
+                <Button type="primary" icon={<CreditCardOutlined />}
+                  onClick={() => window.location.href = result.checkout_url!}>
+                  {t("chat.payNow")}
                 </Button>
-              ))}
-              <Button icon={<DownloadOutlined />} onClick={exportExcel}>
-                Export Excel
-              </Button>
+              </Space>
+            </Card>
+          ) : null}
+          <Card title={t("chat.title")}>
+            <Space direction="vertical" size={12} style={{ width: "100%" }}>
+              <div className="chat-surface" aria-live="polite">
+                {chat.length ? chat.map((item, i) => <ChatMessage key={`${item.role}-${i}`} role={item.role === "agent" ? "assistant" : "user"} content={item.content} streaming={item.streaming} retrievalEvidence={item.retrievalEvidence} />) : <div className="chat-empty">{t("chat.noMessages")}</div>}
+                {loading && chat[chat.length - 1]?.role === "user" ? <div className="chat-row is-agent"><div className="chat-avatar"><LoadingOutlined /></div><div className="chat-bubble"><div className="typing-dots"><span /><span /><span /></div></div></div> : null}
+                <div ref={chatEnd} />
+              </div>
+              {renderStructured()}
+              <div className="composer">
+                <Input.TextArea value={input} onChange={e => setInput(e.target.value)} onPressEnter={e => { if (!e.shiftKey) { e.preventDefault(); submit(); } }} autoSize={{ minRows: 2, maxRows: 5 }} disabled={loading} />
+                <Button type="primary" shape="circle" icon={<SendOutlined />} loading={loading} disabled={loading || !input.trim()} onClick={() => submit()} />
+              </div>
+              <Space wrap>
+                <Button icon={<ShoppingCartOutlined />} onClick={() => setCartOpen(true)}>Cart ({cart.length})</Button>
+                <Button icon={<ShoppingCartOutlined />} disabled={!result || !cps} onClick={() => createOrder()}>{t("chat.createOrder")}</Button>
+                <Button icon={<SaveOutlined />} disabled={!result || !lastReq} onClick={saveHist}>Save History</Button>
+                <Button icon={<CreditCardOutlined />} disabled={!order || !cps} onClick={() => order && pay(order)}>{t("chat.payWithStripe")}</Button>
+                {paymentStatus ? <Tag color={paymentStatus.payment_provider === "stripe" ? "green" : "blue"}>{t("chat.paymentMode")}: {paymentStatus.payment_provider}</Tag> : null}
+              </Space>
             </Space>
           </Card>
-        ) : null}
-        <ProcurementPlanCard
-          plan={result?.recommended_plan}
-          products={result?.retrieved_products || []}
-          onExportExcel={result?.recommended_plan ? exportExcel : undefined}
-        />
-      </Space>
-    </div>
+          <OrderSummary order={order} onPay={cps ? pay : undefined} />
+          <Card title={<Space><HistoryOutlined />History</Space>} extra={<Button size="small" onClick={refreshHist} loading={histLoading}>Refresh</Button>}>
+            <List loading={histLoading} dataSource={hist} locale={{ emptyText: "No saved history." }} renderItem={item => (
+              <List.Item actions={[<Button key="r" type="link" onClick={() => restoreHist(item.id)}>Restore</Button>, <Popconfirm key="d" title="Delete?" okText="Delete" okButtonProps={{ danger: true }} onConfirm={() => delHist(item.id)}><Button type="text" danger icon={<DeleteOutlined />} /></Popconfirm>]}>
+                <List.Item.Meta title={item.original_request || item.id} description={`${new Date(item.created_at).toLocaleString()} · $${item.total_cost.toFixed(2)}`} />
+              </List.Item>
+            )} />
+          </Card>
+        </Space>
+
+        <Space direction="vertical" size={16} style={{ width: "100%" }}>
+          <Card title={t("chat.parsedIntent")}>
+            {result ? <Space wrap style={{ marginBottom: 12 }}><Tag color={result.used_mock_llm ? "orange" : "green"}>{t("chat.modelStatus")}: {result.model_provider} / {result.model_name}</Tag><Tag color={result.used_previous_context ? "blue" : "default"}>{t("chat.previousContext")}: {result.used_previous_context ? t("chat.usingPreviousContext") : t("chat.newConversation")}</Tag><Tag>{t("chat.trace")}: {result.trace_id}</Tag>{result.llm_error ? <Tag color="red">{result.llm_error}</Tag> : null}</Space> : null}
+            {result ? <Space direction="vertical" size={12} style={{ width: "100%" }}><Descriptions column={1} size="small" bordered><Descriptions.Item label="Team Size">{vf("people_count")}</Descriptions.Item><Descriptions.Item label="Categories">{vf("categories")}</Descriptions.Item><Descriptions.Item label="Budget">{vf("budget")}</Descriptions.Item><Descriptions.Item label="Budget Source">{getBudgetSourceLabel()}</Descriptions.Item><Descriptions.Item label="Rating">{pv("min_rating")}</Descriptions.Item><Descriptions.Item label="Delivery">{pv("max_delivery_days")}</Descriptions.Item><Descriptions.Item label="Intent">{vf("revision_intent")}</Descriptions.Item></Descriptions></Space> : <Typography.Text code>{"{}"}</Typography.Text>}
+          </Card>
+          <RetrievalEvidencePanel evidence={result?.retrieval_evidence} />
+          {result?.plan_options?.length ? <Card title="Compare Plans"><Space direction="vertical" size={12} style={{ width: "100%" }}>{result.plan_options.map(o => { const s = isPlanSelectable(o.plan); const sel = result.selected_plan_id === o.id; return <Card key={o.id} size="small" type="inner" title={<Space wrap><Typography.Text strong>{o.name}</Typography.Text><Tag color={sc(o.strategy)}>{o.description}</Tag><Tag color={s && o.plan.budget !== undefined && o.plan.budget !== null ? "green" : (o.plan.budget === undefined || o.plan.budget === null) ? "blue" : "red"}>{budgetStatusLabel(o.plan)}</Tag></Space>} extra={<Space><Button type={sel ? "primary" : "default"} size="small" disabled={!s} onClick={() => selPlan(o.id)}>{sel ? "Selected" : s ? "Select" : "Over Budget"}</Button>{sel && s ? <Button type="primary" size="small" icon={<CreditCardOutlined />} loading={co === pid(o.plan)} onClick={() => payPlan(o.plan)}>Pay</Button> : null}</Space>}><Space size={18} wrap><Statistic title="Total" value={o.plan.total_amount} precision={2} prefix="$" />{!s && o.plan.budget !== undefined && o.plan.budget !== null ? <Statistic title="Over Budget" value={o.plan.budget_gap || 0} precision={2} prefix="+$" /> : null}<Statistic title="Items" value={o.plan.items.length} /><Statistic title="Avg Rating" value={o.plan.avg_rating ?? 0} precision={1} /></Space></Card>; })}</Space></Card> : null}
+          {result?.recommended_plan ? <Card title="Quick Optimization" size="small"><Space wrap>{quickActions.map(a => <Button key={a.action} icon={a.action === "regenerate" ? <RedoOutlined /> : <ThunderboltOutlined />} loading={opt === a.action} disabled={Boolean(opt)} onClick={() => optimize(a.action)}>{a.label}</Button>)}<Button icon={<DownloadOutlined />} onClick={xlsx}>Export Excel</Button></Space></Card> : null}
+          {rt !== "recommendation_plan" ? <ProcurementPlanCard plan={result?.recommended_plan} products={result?.retrieved_products || []} onExportExcel={xlsx} /> : null}
+        </Space>
+      </div>
+      <CartDrawer open={cartOpen} items={cart} onClose={() => setCartOpen(false)} onUpdateQuantity={updQty} onRemoveItem={rmCart} onOrderCreated={onCartOrder} />
+    </>
   );
 }

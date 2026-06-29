@@ -26,6 +26,23 @@ BASIC_CATEGORY_ALIASES = {
     "会议大屏": "Meeting Display",
     "大屏": "Meeting Display",
     "会议室大屏": "Meeting Display",
+    "摄像头": "Webcam",
+    "相机": "Webcam",
+    "耳机": "Headset",
+    "耳麦": "Headset",
+    "头戴耳机": "Headset",
+    "扩展坞": "Docking Station",
+    "扩展底座": "Docking Station",
+    "底座": "Docking Station",
+    "办公椅": "Office Chair",
+    "电脑椅": "Office Chair",
+    "椅子": "Office Chair",
+    "投影仪": "Projector",
+    "投影": "Projector",
+    "路由器": "Router",
+    "固态硬盘": "External SSD",
+    "移动硬盘": "External SSD",
+    "会议音响": "Conference Speaker",
 }
 
 PRODUCTS_CSV = DATA_DIR / "products.csv"

@@ -12,7 +12,7 @@ def test_llm_status_reports_tongyi_configuration(monkeypatch):
         "settings",
         SimpleNamespace(
             LLM_PROVIDER="tongyi",
-            QWEN_MODEL="qwen3.7-max",
+            QWEN_MODEL="qwen-turbo",
             QWEN_TIMEOUT_SECONDS=12,
             QWEN_ENABLE_THINKING=False,
             DASHSCOPE_API_KEY="dash-test",
@@ -26,7 +26,7 @@ def test_llm_status_reports_tongyi_configuration(monkeypatch):
     assert response.status_code == 200
     assert response.json() == {
         "llm_provider": "tongyi",
-        "model_name": "qwen3.7-max",
+        "model_name": "qwen-turbo",
         "has_api_key": True,
         "use_mock_llm": False,
         "mock_fallback_enabled": False,
@@ -42,7 +42,7 @@ def test_llm_test_invokes_safe_llm_service(monkeypatch):
         lambda message, purpose: {
             "content": f"answered: {message}",
             "model_provider": "tongyi",
-            "model_name": "qwen3.7-max",
+            "model_name": "qwen-turbo",
             "used_mock_llm": False,
             "error": None,
         },
@@ -55,7 +55,7 @@ def test_llm_test_invokes_safe_llm_service(monkeypatch):
     assert response.json() == {
         "content": "answered: 你是谁呀能做什么？",
         "model_provider": "tongyi",
-        "model_name": "qwen3.7-max",
+        "model_name": "qwen-turbo",
         "used_mock_llm": False,
         "error": None,
     }

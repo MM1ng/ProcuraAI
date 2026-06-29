@@ -78,7 +78,7 @@ def test_parse_purchase_request_uses_qwen_json_when_available(monkeypatch):
             }
             """,
             "model_provider": "tongyi",
-            "model_name": "qwen3.7-max",
+            "model_name": "qwen-turbo",
             "used_mock_llm": False,
             "error": None,
         }
@@ -89,7 +89,7 @@ def test_parse_purchase_request_uses_qwen_json_when_available(monkeypatch):
 
     assert intent["used_llm_parser"] is True
     assert intent["model_provider"] == "tongyi"
-    assert intent["model_name"] == "qwen3.7-max"
+    assert intent["model_name"] == "qwen-turbo"
     assert intent["used_mock_llm"] is False
     assert intent["llm_error"] is None
     assert intent["people_count"] == 8
@@ -105,7 +105,7 @@ def test_parse_purchase_request_falls_back_to_rules_when_llm_json_is_invalid(mon
         lambda prompt, purpose: {
             "content": "not json",
             "model_provider": "tongyi",
-            "model_name": "qwen3.7-max",
+            "model_name": "qwen-turbo",
             "used_mock_llm": False,
             "error": None,
         },
@@ -115,7 +115,7 @@ def test_parse_purchase_request_falls_back_to_rules_when_llm_json_is_invalid(mon
 
     assert intent["used_llm_parser"] is False
     assert intent["model_provider"] == "tongyi"
-    assert intent["model_name"] == "qwen3.7-max"
+    assert intent["model_name"] == "qwen-turbo"
     assert intent["used_mock_llm"] is False
     assert "JSON" in intent["llm_error"]
     assert intent["people_count"] == 5
@@ -143,7 +143,7 @@ def test_parse_purchase_request_normalizes_plural_llm_categories(monkeypatch):
             }
             """,
             "model_provider": "tongyi",
-            "model_name": "qwen3.7-max",
+            "model_name": "qwen-turbo",
             "used_mock_llm": False,
             "error": None,
         },
@@ -175,7 +175,7 @@ def test_parse_purchase_request_adds_category_normalization_trace_for_chinese_mo
             }
             """,
             "model_provider": "tongyi",
-            "model_name": "qwen3.7-max",
+            "model_name": "qwen-turbo",
             "used_mock_llm": False,
             "error": None,
             "fallback_reason": None,
@@ -193,3 +193,41 @@ def test_parse_purchase_request_adds_category_normalization_trace_for_chinese_mo
     assert intent["category_normalization"][0]["normalization_method"] == "alias"
     assert "Monitor" in intent["category_normalization"][0]["allowed_categories"]
     assert intent["category_normalization"][0]["warning"] is None
+
+
+def test_no_budget_inheritance_when_not_specified():
+    prev = {"people_count": 20, "budget": 3000, "categories": ["Keyboard","Mouse","Headset"]}
+    intent = parse_purchase_request("Compare several keyboards", prev)
+    assert intent.get("budget") is None
+    assert intent.get("budget_source") == "none"
+    assert intent["categories"] == ["Keyboard"]
+
+def test_budget_inheritance_when_explicitly_requested():
+    prev = {"people_count": 20, "budget": 3000, "categories": ["Keyboard","Headset"]}
+    intent = parse_purchase_request("Keep same budget, compare several keyboards", prev)
+    assert intent.get("budget") == 3000
+    assert intent.get("budget_source") == "inherited"
+
+def test_budget_explicit_when_user_provides_budget():
+    prev = {"people_count": 10, "budget": 1000, "categories": ["Keyboard"]}
+    intent = parse_purchase_request("Budget $5000 or less, compare keyboards", prev)
+    assert intent.get("budget") == 5000
+    assert intent.get("budget_source") == "explicit"
+
+def test_no_previous_context_inheritance_for_new_topic():
+    prev = {"people_count": 20, "budget": 3000, "categories": ["Keyboard"], "min_rating": 4.2, "max_delivery_days": 5}
+    intent = parse_purchase_request("Recommend some headphones", prev)
+    assert intent.get("budget") is None
+    assert intent.get("min_rating") is None
+    assert intent.get("max_delivery_days") is None
+    assert intent["categories"] == ["Headset"]
+
+def test_budget_source_always_present():
+    intent = parse_purchase_request("Find me a good monitor")
+    assert "budget_source" in intent
+    assert intent["budget_source"] in ("explicit", "inherited", "none")
+
+def test_constraint_sources_always_present():
+    intent = parse_purchase_request("Find me a good monitor")
+    assert "constraint_sources" in intent
+    assert "budget" in intent["constraint_sources"]

@@ -4,6 +4,7 @@ import json
 import re
 from typing import Any
 
+from app.agent.category_normalizer import normalize_categories, normalize_category as normalize_single_category
 from app.services.llm_service import safe_llm_invoke
 
 
@@ -29,8 +30,16 @@ KNOWN_BRANDS = [
     "Anker",
     "CalDigit",
     "Dell",
+    "HP",
     "Jabra",
+    "Lenovo",
+    "Logitech",
+    "Microsoft",
+    "Poly",
     "Razer",
+    "Samsung",
+    "Sony",
+    "Yealink",
 ]
 
 CATEGORY_ALIASES = {
@@ -39,8 +48,10 @@ CATEGORY_ALIASES = {
     "monitor": "Monitor",
     "screen": "Monitor",
     "keyboard": "Keyboard",
+    "键盘": "Keyboard",
     "mouse": "Mouse",
     "mice": "Mouse",
+    "鼠标": "Mouse",
     "headset": "Headset",
     "headphone": "Headset",
     "耳机": "Headset",
@@ -68,6 +79,7 @@ CATEGORY_ALIASES = {
 def _extract_people_count(text: str) -> int:
     patterns = [
         r"(\d+)\s+(?:interns?|people|employees?|users?|staff|members?|teammates?)",
+        r"(\d+)\s*名?\s*(?:实习生|员工|用户|人员|人)",
         r"(?:team|group|department)\s+of\s+(\d+)",
         r"for\s+(\d+)",
     ]
@@ -81,6 +93,7 @@ def _extract_people_count(text: str) -> int:
 def _extract_budget(text: str) -> float | None:
     patterns = [
         r"(?:budget|under|below|less than|within|maximum|max)\D{0,20}\$?\s*([0-9][0-9,]*(?:\.[0-9]+)?)",
+        r"预算\D{0,20}([0-9][0-9,]*(?:\.[0-9]+)?)\s*(?:美元|美金|usd|USD)?\s*(?:以内|以下|内)?",
         r"\$([0-9][0-9,]*(?:\.[0-9]+)?)",
     ]
     for pattern in patterns:
@@ -88,6 +101,19 @@ def _extract_budget(text: str) -> float | None:
         if match:
             return float(match.group(1).replace(",", ""))
     return None
+
+
+def _explicitly_removes_budget(text: str) -> bool:
+    return bool(
+        re.search(
+            r"\b(?:no|without|unlimited|unrestricted)\s+budget\b|"
+            r"\bbudget\s+(?:unlimited|unrestricted|not\s+limited|does\s+not\s+matter)\b|"
+            r"(?:无|沒|没|没有|不设|不限|不限制|无需|不用)\s*预算|"
+            r"预算\s*(?:不限|不限制|不设限|无上限|没有限制)",
+            text,
+            flags=re.IGNORECASE,
+        )
+    )
 
 
 def _extract_categories(text: str) -> list[str]:
@@ -106,7 +132,7 @@ def _extract_categories(text: str) -> list[str]:
 
 def _extract_brand(text: str) -> str | None:
     for brand in KNOWN_BRANDS:
-        if re.search(rf"\b{re.escape(brand)}\b", text, flags=re.IGNORECASE):
+        if re.search(rf"(?<![a-zA-Z0-9_]){re.escape(brand)}(?![a-zA-Z0-9_])", text, flags=re.IGNORECASE):
             return brand
     match = re.search(r"\b(?:with|from|by)\s+([A-Z][A-Za-z0-9&-]+)\s+(?:brand|model)\b", text)
     if match:
@@ -132,7 +158,7 @@ def _extract_min_rating(text: str) -> float | None:
     match = re.search(r"(?:rating|rated|score)\s*(?:above|over|at least|>=?)\s*([0-9](?:\.[0-9])?)", text, re.I)
     if match:
         return float(match.group(1))
-    if re.search(r"high rating|highly rated|good rating|top rated", text, re.I):
+    if re.search(r"high rating|highly rated|good rating|top rated|高评分|评分高|质量好", text, re.I):
         return 4.2
     return None
 
@@ -141,7 +167,7 @@ def _extract_delivery_days(text: str) -> int | None:
     match = re.search(r"(?:within|under|less than|<=?)\s*(\d+)\s*days?", text, re.I)
     if match:
         return int(match.group(1))
-    if re.search(r"fast delivery|quick delivery|urgent|deliver fast|short delivery", text, re.I):
+    if re.search(r"fast delivery|quick delivery|urgent|deliver fast|short delivery|快速配送|尽快到货|配送快", text, re.I):
         return 5
     return None
 
@@ -161,28 +187,20 @@ def _normalize_category(value: Any) -> str | None:
     text = str(value or "").strip()
     if not text:
         return None
-    lowered = text.lower()
-    if lowered in CATEGORY_ALIASES:
-        return CATEGORY_ALIASES[lowered]
-    singular = lowered[:-1] if lowered.endswith("s") else lowered
-    if singular in CATEGORY_ALIASES:
-        return CATEGORY_ALIASES[singular]
-    for category in CATEGORIES:
-        if category.lower() == lowered:
-            return category
-        if category.lower() == singular:
-            return category
-    return text.title()
+    return normalize_single_category(text).normalized_category
 
 
 def _normalize_categories(values: Any) -> list[str]:
-    if not isinstance(values, list):
-        return []
-    categories: list[str] = []
-    for value in values:
-        category = _normalize_category(value)
-        if category and category not in categories:
-            categories.append(category)
+    categories, _trace = normalize_categories(values)
+    return _sort_categories(categories)
+
+
+def _normalize_categories_with_trace(values: Any) -> tuple[list[str], list[dict[str, Any]]]:
+    categories, trace = normalize_categories(values)
+    return _sort_categories(categories), trace
+
+
+def _sort_categories(categories: list[str]) -> list[str]:
     order = {category: index for index, category in enumerate(CATEGORIES)}
     return sorted(categories, key=lambda category: order.get(category, 999))
 
@@ -237,14 +255,17 @@ def _as_bool(value: Any) -> bool:
 def _build_intent_prompt(user_message: str, previous_intent: dict[str, Any] | None = None) -> str:
     previous_context = ""
     if previous_intent:
+        safe_previous = {k: v for k, v in previous_intent.items() if k not in ("raw_message",)}
         previous_context = f"""
 
 Previous structured intent:
-{json.dumps(previous_intent, ensure_ascii=False, indent=2, default=str)}
+{json.dumps(safe_previous, ensure_ascii=False, indent=2, default=str)}
 
-If the user message is a follow-up, preserve previous people_count, budget,
-categories, quantity_per_category, rating, and delivery constraints unless the
-new message explicitly changes them.
+Guidelines:
+- Only inherit previous budget when the user explicitly says to keep it.
+- If the user does NOT mention a budget in the new message, set "budget" to null.
+- When user mentions a new category (e.g. "keyboard"), extract only that category.
+- Do NOT inherit previous categories unless the user explicitly asks to continue.
 """
     return f"""
 You are an intent extraction engine for an enterprise procurement agent.
@@ -288,6 +309,60 @@ def _parse_json_object(content: Any) -> dict[str, Any]:
     return parsed
 
 
+
+def _wants_inherit_budget(text: str) -> bool:
+    lowered = text.lower()
+    patterns = [r"budget\s+(unchanged|same|keep|stay|as before|as previous)", r"(unchanged|same|keep|stay|continue).{0,30}budget"]
+    if any(re.search(p, lowered) for p in patterns): return True
+    if re.search(r"continue.{0,10}(?:budget|plan|config)", lowered): return True
+    if re.search(r"预算不变", text): return True
+    if re.search(r"沿用.*预算", text): return True
+    if re.search(r"原预算", text): return True
+    return False
+
+def _resolve_budget(msg, extracted, prev):
+    p = prev or {}
+    if _explicitly_removes_budget(msg): return (None, "explicit")
+    if extracted is not None: return (extracted, "explicit")
+    if _wants_inherit_budget(msg) and p.get("budget") is not None: return (p["budget"], "inherited")
+    return (None, "none")
+
+def _resolve_people_count(msg, extracted, prev):
+    p = prev or {}
+    if extracted != 1: return extracted
+    l = msg.lower()
+    if any(w in l for w in ["continue","previous","same team","same group","same people","cheaper","replace","make this","更便宜","换","替换","继续","刚才"]): return p.get("people_count", 1)
+    return 1
+
+def _resolve_min_rating(msg, extracted, prev):
+    if extracted is not None: return extracted
+    p = prev or {}; l = msg.lower()
+    if any(w in l for w in ["continue","previous","unchanged","same constraint","same rating","cheaper","replace"]): return p.get("min_rating")
+    return None
+
+def _resolve_max_delivery_days(msg, extracted, prev):
+    if extracted is not None: return extracted
+    p = prev or {}; l = msg.lower()
+    if any(w in l for w in ["continue","previous","unchanged","same constraint","same delivery","cheaper","replace"]): return p.get("max_delivery_days")
+    return None
+
+
+def _detect_response_language(message: str) -> str:
+    """Detect response language from user message.
+    
+    If the message contains any Chinese characters, return "zh".
+    Otherwise return "en".
+    """
+    if re.search(r"""[\u4e00-\u9fff\u3400-\u4dbf]""", message):
+        return "zh"
+    return "en"
+
+
+def _build_constraint_sources(msg, bs, budget, mr, emr, mdd, ed):
+    s = {}; s["budget"] = bs
+    s["min_rating"] = "explicit" if emr is not None else ("inherited" if mr is not None else "none")
+    s["max_delivery_days"] = "explicit" if ed is not None else ("inherited" if mdd is not None else "none")
+    return s
 def _parse_purchase_request_rules(message: str, previous_intent: dict[str, Any] | None = None) -> dict[str, Any]:
     """Parse procurement intent with deterministic mock-safe rules."""
 
@@ -296,29 +371,35 @@ def _parse_purchase_request_rules(message: str, previous_intent: dict[str, Any] 
     previous_intent = previous_intent or {}
 
     extracted_people_count = _extract_people_count(text)
-    people_count = extracted_people_count if extracted_people_count != 1 else previous_intent.get("people_count", 1)
-    budget = _extract_budget(text)
-    if budget is None:
-        budget = previous_intent.get("budget")
+    people_count = _resolve_people_count(text, extracted_people_count, previous_intent)
+    extracted_budget_val = _extract_budget(text)
+    budget, budget_source = _resolve_budget(text, extracted_budget_val, previous_intent)
     extracted_categories = _extract_categories(text)
-    categories = extracted_categories or list(previous_intent.get("categories", []))
-    min_rating = _extract_min_rating(text)
-    if min_rating is None:
-        min_rating = previous_intent.get("min_rating")
-    max_delivery_days = _extract_delivery_days(text)
-    if max_delivery_days is None:
-        max_delivery_days = previous_intent.get("max_delivery_days")
-
+    categories = extracted_categories
+    if not extracted_categories:
+        l2 = text.lower()
+        if any(w in l2 for w in ["continue", "previous", "same", "unchanged"]):
+            categories = list(previous_intent.get("categories", []))
+        else:
+            categories = []
+    extracted_min_rating = _extract_min_rating(text)
+    min_rating = _resolve_min_rating(text, extracted_min_rating, previous_intent)
+    extracted_delivery = _extract_delivery_days(text)
+    max_delivery_days = _resolve_max_delivery_days(text, extracted_delivery, previous_intent)
     preferences: list[str] = []
     revision_intent = "new_plan"
 
-    if any(word in lowered for word in ["cheaper", "lower cost", "less expensive", "reduce cost"]):
+    if any(word in lowered for word in ["cheaper", "lower cost", "less expensive", "reduce cost", "更便宜", "低价", "降低成本"]):
         revision_intent = "cheaper"
         preferences.append("lower cost")
-    if any(word in lowered for word in ["faster", "fast delivery", "quick delivery", "within"]):
+    if any(word in lowered for word in ["faster", "fast delivery", "quick delivery", "within"]) or any(
+        word in text for word in ["快速配送", "尽快到货", "配送快"]
+    ):
         if "fast delivery" not in preferences:
             preferences.append("fast delivery")
-    if min_rating is not None or "rating" in lowered or "rated" in lowered:
+    if min_rating is not None or "rating" in lowered or "rated" in lowered or any(
+        word in text for word in ["高评分", "评分高", "质量好"]
+    ):
         if "high rating" not in preferences:
             preferences.append("high rating")
     if any(word in lowered for word in ["replace", "swap", "换成", "替换"]):
@@ -340,16 +421,27 @@ def _parse_purchase_request_rules(message: str, previous_intent: dict[str, Any] 
         for category in extracted_categories
         if revision_intent == "replace_product" and category not in preserved_categories
     ]
-    replacement_brand = _extract_brand(text) if revision_intent == "replace_product" else None
+    preferred_brand = _extract_brand(text)
+    replacement_brand = preferred_brand if revision_intent == "replace_product" else None
 
+    llm_brand = _extract_brand(message)
+    response_language = _detect_response_language(message)
     return {
+        "response_language": response_language,
         "people_count": people_count,
         "budget": budget,
+        "budget_source": budget_source,
         "categories": categories,
         "quantity_per_category": quantity_by_category,
         "quantity_by_category": quantity_by_category,
         "preferences": preferences,
+        "constraint_sources": _build_constraint_sources(
+            text, budget_source, budget,
+            min_rating, extracted_min_rating,
+            max_delivery_days, extracted_delivery,
+        ),
         "constraints": _constraints_list(budget, min_rating, max_delivery_days),
+        "preferred_brand": preferred_brand,
         "min_rating": min_rating,
         "max_delivery_days": max_delivery_days,
         "need_cheaper_plan": need_cheaper_plan,
@@ -369,9 +461,17 @@ def _intent_from_llm_json(
     fallback = _parse_purchase_request_rules(message, previous_intent)
     people_count = _as_int_or_none(payload.get("people_count")) or fallback.get("people_count")
     budget = _as_float_or_none(payload.get("budget"))
-    if budget is None:
+    if _explicitly_removes_budget(message):
+        budget = None
+        budget_source = "explicit"
+    elif budget is not None:
+        budget_source = "explicit"
+    else:
         budget = fallback.get("budget")
-    categories = _normalize_categories(payload.get("categories")) or fallback.get("categories", [])
+        budget_source = fallback.get("budget_source", "none")
+    categories, category_trace = _normalize_categories_with_trace(payload.get("categories"))
+    if not categories:
+        categories = fallback.get("categories", [])
     quantity_by_category = _normalize_quantity_map(
         payload.get("quantity_per_category") or payload.get("quantity_by_category"),
         categories,
@@ -384,7 +484,7 @@ def _intent_from_llm_json(
     if max_delivery_days is None:
         max_delivery_days = fallback.get("max_delivery_days")
     preferences = payload.get("preferences") if isinstance(payload.get("preferences"), list) else fallback["preferences"]
-    constraints = payload.get("constraints") if isinstance(payload.get("constraints"), list) else fallback["constraints"]
+    constraints = payload.get("constraints") if isinstance(payload.get("constraints"), list) else fallback.get("constraints", [])
     need_cheaper_plan = _as_bool(payload.get("need_cheaper_plan"))
     replacement_request = payload.get("replacement_request")
     if replacement_request is not None:
@@ -404,15 +504,20 @@ def _intent_from_llm_json(
         revision_intent = "replace_product"
 
     if revision_intent in {"cheaper", "replace_product"} and previous_intent and previous_intent.get("categories"):
-        categories = _normalize_categories([*previous_intent.get("categories", []), *categories])
+        categories, category_trace = _normalize_categories_with_trace([*previous_intent.get("categories", []), *categories])
 
+    llm_brand = _extract_brand(message)
+    response_language = _detect_response_language(message)
     return {
+        "response_language": response_language,
         "people_count": people_count,
         "budget": budget,
+        "budget_source": budget_source,
         "categories": categories,
         "quantity_per_category": quantity_by_category,
         "quantity_by_category": quantity_by_category,
         "preferences": [str(item) for item in preferences],
+        "constraint_sources": fallback.get("constraint_sources", {}),
         "constraints": [str(item) for item in constraints],
         "min_rating": min_rating,
         "max_delivery_days": max_delivery_days,
@@ -420,8 +525,10 @@ def _intent_from_llm_json(
         "replacement_request": replacement_request,
         "replacement_categories": replacement_categories if revision_intent == "replace_product" else [],
         "replacement_brand": replacement_brand if revision_intent == "replace_product" else None,
+        "preferred_brand": replacement_brand or llm_brand,
         "revision_intent": revision_intent,
         "raw_message": message,
+        "category_normalization": category_trace,
     }
 
 

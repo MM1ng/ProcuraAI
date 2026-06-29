@@ -51,19 +51,26 @@ class Settings:
     openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
     llm_provider: str = os.getenv("LLM_PROVIDER", "tongyi")
     dashscope_api_key: str = os.getenv("DASHSCOPE_API_KEY", "")
-    qwen_model: str = os.getenv("QWEN_MODEL", "qwen3.7-max")
+    qwen_model: str = os.getenv("QWEN_MODEL", "qwen-turbo")
     qwen_top_p: float = _float_env("QWEN_TOP_P", 0.8)
     qwen_max_tokens: int = _int_env("QWEN_MAX_TOKENS", 2000)
     qwen_timeout_seconds: int = _int_env("QWEN_TIMEOUT_SECONDS", 12)
     qwen_enable_thinking: bool = _bool_env("QWEN_ENABLE_THINKING", False)
+    embedding_provider: str = os.getenv("EMBEDDING_PROVIDER", "tongyi")
+    embedding_model: str = os.getenv("EMBEDDING_MODEL", "text-embedding-v4")
+    embedding_dimension: int = _int_env("EMBEDDING_DIMENSION", 1024)
+    embedding_timeout_seconds: int = _int_env("EMBEDDING_TIMEOUT_SECONDS", 20)
     stripe_secret_key: str = os.getenv("STRIPE_SECRET_KEY", "")
     stripe_webhook_secret: str = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+    stripe_success_url: str = os.getenv("STRIPE_SUCCESS_URL", "")
+    stripe_cancel_url: str = os.getenv("STRIPE_CANCEL_URL", "")
     langfuse_public_key: str = os.getenv("LANGFUSE_PUBLIC_KEY", "")
     langfuse_secret_key: str = os.getenv("LANGFUSE_SECRET_KEY", "")
     langfuse_host: str = os.getenv("LANGFUSE_HOST", "https://cloud.langfuse.com")
     mlflow_tracking_uri: str = os.getenv("MLFLOW_TRACKING_URI", "file:./mlruns")
     use_mock_llm: bool = _bool_env("USE_MOCK_LLM", False)
     use_mock_payment: bool = _bool_env("USE_MOCK_PAYMENT", True)
+    query_rewrite_enabled: bool = _bool_env("QUERY_REWRITE_ENABLED", True)
     frontend_base_url: str = os.getenv("FRONTEND_BASE_URL", "http://localhost:3000")
 
     @property
@@ -101,6 +108,26 @@ class Settings:
     @property
     def QWEN_ENABLE_THINKING(self) -> bool:
         return self.qwen_enable_thinking
+
+    @property
+    def EMBEDDING_PROVIDER(self) -> str:
+        return self.embedding_provider
+
+    @property
+    def EMBEDDING_MODEL(self) -> str:
+        return self.embedding_model
+
+    @property
+    def EMBEDDING_DIMENSION(self) -> int:
+        return self.embedding_dimension
+
+    @property
+    def EMBEDDING_TIMEOUT_SECONDS(self) -> int:
+        return self.embedding_timeout_seconds
+
+    @property
+    def QUERY_REWRITE_ENABLED(self) -> bool:
+        return self.query_rewrite_enabled
 
 
 @lru_cache(maxsize=1)

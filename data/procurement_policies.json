@@ -1,0 +1,20 @@
+[
+  {
+    "id": "policy-approved-suppliers",
+    "title": "Approved Supplier Preference",
+    "category": "supplier_compliance",
+    "text": "Procurement requests above 1000 USD should prefer approved suppliers with documented compliance, reliable delivery, and clear warranty terms."
+  },
+  {
+    "id": "policy-budget-control",
+    "title": "Budget Control",
+    "category": "budget",
+    "text": "When a budget is provided, the recommended plan should stay within budget when a feasible catalog option exists. If all options exceed budget, the response should clearly mark the plan as over budget."
+  },
+  {
+    "id": "policy-delivery-risk",
+    "title": "Delivery Risk",
+    "category": "delivery",
+    "text": "Urgent onboarding purchases should prefer products with delivery windows of five days or less and sufficient stock for the requested team size."
+  }
+]

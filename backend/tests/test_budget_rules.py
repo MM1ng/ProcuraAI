@@ -49,10 +49,48 @@ def test_generate_procurement_plan_computes_quantities_totals_and_statuses():
     plan = generate_procurement_plan(products, intent)
 
     assert plan["total_amount"] == 530.0
+    assert plan["total"] == 530.0
     assert plan["budget_status"] == "within_budget"
+    assert plan["over_budget"] is False
+    assert plan["budget_gap"] == 0
+    assert plan["selectable"] is True
+    assert plan["status"] == "within_budget"
     assert plan["inventory_status"] == "valid"
     assert plan["constraint_satisfaction"] == "satisfied"
     assert [item["quantity"] for item in plan["items"]] == [10, 10]
+
+
+def test_generate_procurement_plan_marks_over_budget_plan_not_selectable():
+    products = [
+        {
+            "product_id": "P-expensive-headset",
+            "name": "Premium Headset",
+            "category": "Headset",
+            "brand": "Sony",
+            "price": 190,
+            "rating": 4.8,
+            "stock": 20,
+            "supplier": "Contoso",
+            "delivery_days": 3,
+        }
+    ]
+    intent = {
+        "people_count": 20,
+        "categories": ["Headset"],
+        "quantity_by_category": {"Headset": 20},
+        "budget": 3000,
+    }
+
+    plan = generate_procurement_plan(products, intent)
+
+    assert plan["total_amount"] == 3800.0
+    assert plan["total"] == 3800.0
+    assert plan["budget"] == 3000
+    assert plan["over_budget"] is True
+    assert plan["budget_gap"] == 800.0
+    assert plan["selectable"] is False
+    assert plan["status"] == "over_budget"
+    assert plan["budget_status"] == "over_budget"
 
 
 def test_generate_procurement_plan_prefers_budget_feasible_items_when_available():

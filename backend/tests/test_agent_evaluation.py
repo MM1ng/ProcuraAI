@@ -34,7 +34,7 @@ def test_run_agent_evaluation_records_real_agent_outputs(monkeypatch, tmp_path):
             },
             "trace_id": "trace-eval",
             "model_provider": "tongyi",
-            "model_name": "qwen3.7-max",
+            "model_name": "qwen-turbo",
             "used_mock_llm": False,
             "llm_error": None,
         },

@@ -72,6 +72,12 @@ temp/
 
 # --- Runtime / Generated Files ---
 data/retrieval_index.json
+data/bm25_index.pkl
+data/embedding_cache.pkl
+data/procurement_history.json
+data/chroma/
+data/embedding_eval/
+*.zip
 
 # --- Screenshots / Demo Assets ---
 *.png

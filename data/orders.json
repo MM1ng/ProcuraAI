@@ -29,7 +29,7 @@
       }
     ],
     "total_amount": 2661.0,
-    "status": "pending_payment",
+    "status": "paid",
     "stripe_session_id": null,
     "created_at": "2026-06-04T01:48:37.511539+00:00"
   },
@@ -288,5 +288,3278 @@
     "status": "pending_payment",
     "stripe_session_id": null,
     "created_at": "2026-06-05T18:06:31.822338+00:00"
+  },
+  {
+    "order_id": "ORD-38561816D6",
+    "user_id": "demo-user",
+    "plan_id": "plan_b",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 10,
+          "unit_price": 117.97,
+          "subtotal": 1179.7,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        },
+        {
+          "product_id": "P-0145",
+          "name": "Anker Fleet Webcam 119",
+          "category": "Webcam",
+          "brand": "Anker",
+          "supplier": "Globex Workplace",
+          "quantity": 10,
+          "unit_price": 155.69,
+          "subtotal": 1556.9,
+          "rating": 4.4,
+          "stock": 249,
+          "delivery_days": 3,
+          "reason": "Selected for Webcam: rating 4.4, delivery in 3 days, stock 249, unit price $155.69."
+        },
+        {
+          "product_id": "P-0185",
+          "name": "CalDigit Essential Docking Station 109",
+          "category": "Docking Station",
+          "brand": "CalDigit",
+          "supplier": "Fabrikam Procurement",
+          "quantity": 10,
+          "unit_price": 110.08,
+          "subtotal": 1100.8,
+          "rating": 4.7,
+          "stock": 108,
+          "delivery_days": 2,
+          "reason": "Selected for Docking Station: rating 4.7, delivery in 2 days, stock 108, unit price $110.08."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 10,
+          "unit_price": 117.97,
+          "subtotal": 1179.7,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        },
+        {
+          "product_id": "P-0145",
+          "name": "Anker Fleet Webcam 119",
+          "category": "Webcam",
+          "brand": "Anker",
+          "supplier": "Globex Workplace",
+          "quantity": 10,
+          "unit_price": 155.69,
+          "subtotal": 1556.9,
+          "rating": 4.4,
+          "stock": 249,
+          "delivery_days": 3,
+          "reason": "Selected for Webcam: rating 4.4, delivery in 3 days, stock 249, unit price $155.69."
+        },
+        {
+          "product_id": "P-0185",
+          "name": "CalDigit Essential Docking Station 109",
+          "category": "Docking Station",
+          "brand": "CalDigit",
+          "supplier": "Fabrikam Procurement",
+          "quantity": 10,
+          "unit_price": 110.08,
+          "subtotal": 1100.8,
+          "rating": 4.7,
+          "stock": 108,
+          "delivery_days": 2,
+          "reason": "Selected for Docking Station: rating 4.7, delivery in 2 days, stock 108, unit price $110.08."
+        }
+      ],
+      "total_amount": 3837.4,
+      "total": 3837.4,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "\u4e3a\u60a8\u627e\u5230 3 \u4ef6\u63a8\u8350\u5546\u54c1\uff0c\u603b\u4ef7 $3837.40\uff1a\n  - [Sony Pro Headset 105](/products/P-0106): \u6570\u91cf 10, \u5355\u4ef7 $117.97, \u5546\u5bb6 Globex Workplace, \u8bc4\u5206 4.6\n  - [Anker Fleet Webcam 119](/products/P-0145): \u6570\u91cf 10, \u5355\u4ef7 $155.69, \u5546\u5bb6 Globex Workplace, \u8bc4\u5206 4.4\n  - [CalDigit Essential Docking Station 109](/products/P-0185): \u6570\u91cf 10, \u5355\u4ef7 $110.08, \u5546\u5bb6 Fabrikam Procurement, \u8bc4\u5206 4.7\n\u9884\u7b97\u72b6\u6001\uff1ano_budget_provided\uff0c\u5e93\u5b58\u72b6\u6001\uff1avalid\u3002",
+      "recommendation_summary": "\u4e3a\u60a8\u627e\u5230 3 \u4ef6\u63a8\u8350\u5546\u54c1\uff0c\u603b\u4ef7 $3837.40\uff1a\n  - [Sony Pro Headset 105](/products/P-0106): \u6570\u91cf 10, \u5355\u4ef7 $117.97, \u5546\u5bb6 Globex Workplace, \u8bc4\u5206 4.6\n  - [Anker Fleet Webcam 119](/products/P-0145): \u6570\u91cf 10, \u5355\u4ef7 $155.69, \u5546\u5bb6 Globex Workplace, \u8bc4\u5206 4.4\n  - [CalDigit Essential Docking Station 109](/products/P-0185): \u6570\u91cf 10, \u5355\u4ef7 $110.08, \u5546\u5bb6 Fabrikam Procurement, \u8bc4\u5206 4.7\n\u9884\u7b97\u72b6\u6001\uff1ano_budget_provided\uff0c\u5e93\u5b58\u72b6\u6001\uff1avalid\u3002",
+      "status": "no_budget_provided",
+      "avg_rating": 4.6,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_b",
+      "plan_strategy": "balanced"
+    },
+    "order_items": [
+      {
+        "order_item_id": "cae8ced3-7b6e-4cd2-9ba0-d9652ac0eee8",
+        "product_id": "P-0106",
+        "name": "Sony Pro Headset 105",
+        "quantity": 10,
+        "unit_price": 117.97,
+        "subtotal": 1179.7
+      },
+      {
+        "order_item_id": "921bd105-5d58-413b-95a2-56924db05321",
+        "product_id": "P-0145",
+        "name": "Anker Fleet Webcam 119",
+        "quantity": 10,
+        "unit_price": 155.69,
+        "subtotal": 1556.9
+      },
+      {
+        "order_item_id": "c6d197e7-8f33-4d84-9e90-75b1566b7218",
+        "product_id": "P-0185",
+        "name": "CalDigit Essential Docking Station 109",
+        "quantity": 10,
+        "unit_price": 110.08,
+        "subtotal": 1100.8
+      }
+    ],
+    "total_amount": 3837.4,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_b1urITTU4XK0AulKjjC4CcTpxwy0vJN6BqIoI4uUI1dm6pDrgDlNnwCh67",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T14:27:14.837550+00:00"
+  },
+  {
+    "order_id": "ORD-0F98C36D2B",
+    "user_id": "demo-user",
+    "plan_id": "plan_b",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0052",
+          "name": "HP Essential Keyboard 101",
+          "category": "Keyboard",
+          "brand": "HP",
+          "supplier": "Contoso Business Tech",
+          "quantity": 1,
+          "unit_price": 55.48,
+          "subtotal": 55.48,
+          "rating": 4.7,
+          "stock": 98,
+          "delivery_days": 1,
+          "reason": "Selected for Keyboard: rating 4.7, delivery in 1 days, stock 98, unit price $55.48."
+        },
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        },
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0052",
+          "name": "HP Essential Keyboard 101",
+          "category": "Keyboard",
+          "brand": "HP",
+          "supplier": "Contoso Business Tech",
+          "quantity": 1,
+          "unit_price": 55.48,
+          "subtotal": 55.48,
+          "rating": 4.7,
+          "stock": 98,
+          "delivery_days": 1,
+          "reason": "Selected for Keyboard: rating 4.7, delivery in 1 days, stock 98, unit price $55.48."
+        },
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        },
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "total_amount": 191.39,
+      "total": 191.39,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "budget_aware",
+      "budget_aware": true,
+      "status": "within_budget",
+      "budget": 3000,
+      "budget_status": "within_budget",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "\u4e3a\u60a8\u627e\u5230 3 \u4ef6\u63a8\u8350\u5546\u54c1\uff0c\u603b\u4ef7 $191.39\uff1a\n  - [HP Essential Keyboard 101](/products/P-0052): \u6570\u91cf 1, \u5355\u4ef7 $55.48, \u5546\u5bb6 Contoso Business Tech, \u8bc4\u5206 4.7\n  - [Razer Ultra Mouse 107](/products/P-0083): \u6570\u91cf 1, \u5355\u4ef7 $17.94, \u5546\u5bb6 Northwind Office Supply, \u8bc4\u5206 4.8\n  - [Sony Pro Headset 105](/products/P-0106): \u6570\u91cf 1, \u5355\u4ef7 $117.97, \u5546\u5bb6 Globex Workplace, \u8bc4\u5206 4.6\n\u9884\u7b97\u72b6\u6001\uff1awithin_budget\uff0c\u5e93\u5b58\u72b6\u6001\uff1avalid\u3002",
+      "recommendation_summary": "\u4e3a\u60a8\u627e\u5230 3 \u4ef6\u63a8\u8350\u5546\u54c1\uff0c\u603b\u4ef7 $191.39\uff1a\n  - [HP Essential Keyboard 101](/products/P-0052): \u6570\u91cf 1, \u5355\u4ef7 $55.48, \u5546\u5bb6 Contoso Business Tech, \u8bc4\u5206 4.7\n  - [Razer Ultra Mouse 107](/products/P-0083): \u6570\u91cf 1, \u5355\u4ef7 $17.94, \u5546\u5bb6 Northwind Office Supply, \u8bc4\u5206 4.8\n  - [Sony Pro Headset 105](/products/P-0106): \u6570\u91cf 1, \u5355\u4ef7 $117.97, \u5546\u5bb6 Globex Workplace, \u8bc4\u5206 4.6\n\u9884\u7b97\u72b6\u6001\uff1awithin_budget\uff0c\u5e93\u5b58\u72b6\u6001\uff1avalid\u3002",
+      "avg_rating": 4.7,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_b",
+      "plan_strategy": "balanced"
+    },
+    "order_items": [
+      {
+        "order_item_id": "268caf3f-0799-4337-8c00-815a8f1cc5a2",
+        "product_id": "P-0052",
+        "name": "HP Essential Keyboard 101",
+        "quantity": 1,
+        "unit_price": 55.48,
+        "subtotal": 55.48
+      },
+      {
+        "order_item_id": "e67ad847-0ea2-4a2c-b3e0-e2503311e56b",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 1,
+        "unit_price": 17.94,
+        "subtotal": 17.94
+      },
+      {
+        "order_item_id": "7c49adde-88a2-4241-84f0-3ada4bc5663c",
+        "product_id": "P-0106",
+        "name": "Sony Pro Headset 105",
+        "quantity": 1,
+        "unit_price": 117.97,
+        "subtotal": 117.97
+      }
+    ],
+    "total_amount": 191.39,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_b1BG178167hcOkoIHZf8O97vP0IyfZAiI0BgAERRgEQ4sCmAUmsPeQqN1U",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T14:29:13.721455+00:00"
+  },
+  {
+    "order_id": "ORD-C264793791",
+    "user_id": "demo-user",
+    "plan_id": "plan_b",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0052",
+          "name": "HP Essential Keyboard 101",
+          "category": "Keyboard",
+          "brand": "HP",
+          "supplier": "Contoso Business Tech",
+          "quantity": 1,
+          "unit_price": 55.48,
+          "subtotal": 55.48,
+          "rating": 4.7,
+          "stock": 98,
+          "delivery_days": 1,
+          "reason": "Selected for Keyboard: rating 4.7, delivery in 1 days, stock 98, unit price $55.48."
+        },
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        },
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0052",
+          "name": "HP Essential Keyboard 101",
+          "category": "Keyboard",
+          "brand": "HP",
+          "supplier": "Contoso Business Tech",
+          "quantity": 1,
+          "unit_price": 55.48,
+          "subtotal": 55.48,
+          "rating": 4.7,
+          "stock": 98,
+          "delivery_days": 1,
+          "reason": "Selected for Keyboard: rating 4.7, delivery in 1 days, stock 98, unit price $55.48."
+        },
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        },
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "total_amount": 191.39,
+      "total": 191.39,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": 3000,
+      "budget_status": "within_budget",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "\u6211\u627e\u5230\u4e86 3 \u6761\u63a8\u8350\u91c7\u8d2d\u5546\u54c1\u7ebf\uff0c\u603b\u9884\u4f30\u6210\u672c\u4e3a $191.39\u3002\u9884\u7b97\u72b6\u6001\uff1a\u9884\u7b97\u5185\u3002\u5e93\u5b58\u72b6\u6001\uff1a\u6709\u6548\u3002\u7ea6\u675f\u72b6\u6001\uff1a\u5df2\u6ee1\u8db3\u3002",
+      "recommendation_summary": "\u6211\u627e\u5230\u4e86 3 \u6761\u63a8\u8350\u91c7\u8d2d\u5546\u54c1\u7ebf\uff0c\u603b\u9884\u4f30\u6210\u672c\u4e3a $191.39\u3002\u9884\u7b97\u72b6\u6001\uff1a\u9884\u7b97\u5185\u3002\u5e93\u5b58\u72b6\u6001\uff1a\u6709\u6548\u3002\u7ea6\u675f\u72b6\u6001\uff1a\u5df2\u6ee1\u8db3\u3002",
+      "status": "within_budget",
+      "avg_rating": 4.7,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_b",
+      "plan_strategy": "balanced"
+    },
+    "order_items": [
+      {
+        "order_item_id": "527a1869-ab7f-48ce-8a7e-9631af75ff45",
+        "product_id": "P-0052",
+        "name": "HP Essential Keyboard 101",
+        "quantity": 1,
+        "unit_price": 55.48,
+        "subtotal": 55.48
+      },
+      {
+        "order_item_id": "91a1c558-f597-4e0d-b09a-808c175a09a4",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 1,
+        "unit_price": 17.94,
+        "subtotal": 17.94
+      },
+      {
+        "order_item_id": "ba250b99-85ec-442a-8e5b-7bc5799407b2",
+        "product_id": "P-0106",
+        "name": "Sony Pro Headset 105",
+        "quantity": 1,
+        "unit_price": 117.97,
+        "subtotal": 117.97
+      }
+    ],
+    "total_amount": 191.39,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_b1u1veKAjDW0x7m7RiK5tkASV8kNKWP53ETWrNCJupO6LzGlzjzIjanqMY",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T16:03:10.824557+00:00"
+  },
+  {
+    "order_id": "ORD-0ADF5EF97D",
+    "user_id": "demo-user",
+    "plan_id": "plan_b",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        },
+        {
+          "product_id": "P-0129",
+          "name": "Logitech Essential Webcam 103",
+          "category": "Webcam",
+          "brand": "Logitech",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 118.42,
+          "subtotal": 118.42,
+          "rating": 4.2,
+          "stock": 242,
+          "delivery_days": 1,
+          "reason": "Selected for Webcam: rating 4.2, delivery in 1 days, stock 242, unit price $118.42."
+        },
+        {
+          "product_id": "P-0185",
+          "name": "CalDigit Essential Docking Station 109",
+          "category": "Docking Station",
+          "brand": "CalDigit",
+          "supplier": "Fabrikam Procurement",
+          "quantity": 1,
+          "unit_price": 110.08,
+          "subtotal": 110.08,
+          "rating": 4.7,
+          "stock": 108,
+          "delivery_days": 2,
+          "reason": "Selected for Docking Station: rating 4.7, delivery in 2 days, stock 108, unit price $110.08."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        },
+        {
+          "product_id": "P-0129",
+          "name": "Logitech Essential Webcam 103",
+          "category": "Webcam",
+          "brand": "Logitech",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 118.42,
+          "subtotal": 118.42,
+          "rating": 4.2,
+          "stock": 242,
+          "delivery_days": 1,
+          "reason": "Selected for Webcam: rating 4.2, delivery in 1 days, stock 242, unit price $118.42."
+        },
+        {
+          "product_id": "P-0185",
+          "name": "CalDigit Essential Docking Station 109",
+          "category": "Docking Station",
+          "brand": "CalDigit",
+          "supplier": "Fabrikam Procurement",
+          "quantity": 1,
+          "unit_price": 110.08,
+          "subtotal": 110.08,
+          "rating": 4.7,
+          "stock": 108,
+          "delivery_days": 2,
+          "reason": "Selected for Docking Station: rating 4.7, delivery in 2 days, stock 108, unit price $110.08."
+        }
+      ],
+      "total_amount": 346.47,
+      "total": 346.47,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": 3000,
+      "budget_status": "within_budget",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "\u6211\u627e\u5230\u4e86 3 \u6761\u63a8\u8350\u91c7\u8d2d\u5546\u54c1\u7ebf\uff0c\u603b\u9884\u4f30\u6210\u672c\u4e3a $346.47\u3002\u9884\u7b97\u72b6\u6001\uff1a\u9884\u7b97\u5185\u3002\u5e93\u5b58\u72b6\u6001\uff1a\u6709\u6548\u3002\u7ea6\u675f\u72b6\u6001\uff1a\u5df2\u6ee1\u8db3\u3002",
+      "recommendation_summary": "\u6211\u627e\u5230\u4e86 3 \u6761\u63a8\u8350\u91c7\u8d2d\u5546\u54c1\u7ebf\uff0c\u603b\u9884\u4f30\u6210\u672c\u4e3a $346.47\u3002\u9884\u7b97\u72b6\u6001\uff1a\u9884\u7b97\u5185\u3002\u5e93\u5b58\u72b6\u6001\uff1a\u6709\u6548\u3002\u7ea6\u675f\u72b6\u6001\uff1a\u5df2\u6ee1\u8db3\u3002",
+      "status": "within_budget",
+      "avg_rating": 4.5,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_b",
+      "plan_strategy": "balanced"
+    },
+    "order_items": [
+      {
+        "order_item_id": "14aebea0-a406-4226-9de4-15bdce734658",
+        "product_id": "P-0106",
+        "name": "Sony Pro Headset 105",
+        "quantity": 1,
+        "unit_price": 117.97,
+        "subtotal": 117.97
+      },
+      {
+        "order_item_id": "a9e454e4-cb12-4466-9a6f-a586229b942e",
+        "product_id": "P-0129",
+        "name": "Logitech Essential Webcam 103",
+        "quantity": 1,
+        "unit_price": 118.42,
+        "subtotal": 118.42
+      },
+      {
+        "order_item_id": "446ac0f5-9237-44d1-8993-8ef07d7355ee",
+        "product_id": "P-0185",
+        "name": "CalDigit Essential Docking Station 109",
+        "quantity": 1,
+        "unit_price": 110.08,
+        "subtotal": 110.08
+      }
+    ],
+    "total_amount": 346.47,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_b1FfaJD6gUAfccDI1KogKFwnSAC8ZHzxVgsl5FtQY0IiNt6pAVEfcEzc8h",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T16:09:10.035238+00:00"
+  },
+  {
+    "order_id": "ORD-A30AB9B780",
+    "user_id": "demo-user",
+    "plan_id": "",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0001",
+          "name": "Test",
+          "quantity": 2,
+          "unit_price": 50,
+          "price": 50
+        }
+      ],
+      "total_amount": 100,
+      "budget_status": "no_budget_provided"
+    },
+    "order_items": [
+      {
+        "order_item_id": "21de8c33-9faf-416d-9e97-c3ead13e9e7b",
+        "product_id": "P-0001",
+        "name": "Test",
+        "quantity": 2,
+        "unit_price": 50.0,
+        "subtotal": 100.0
+      }
+    ],
+    "total_amount": 100.0,
+    "status": "paid",
+    "stripe_session_id": null,
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T16:19:21.080713+00:00"
+  },
+  {
+    "order_id": "ORD-BF4CCDB951",
+    "user_id": "demo-user",
+    "plan_id": "",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0002",
+          "name": "Test2",
+          "quantity": 1,
+          "unit_price": 200,
+          "price": 200
+        }
+      ],
+      "total_amount": 200,
+      "budget_status": "no_budget_provided"
+    },
+    "order_items": [
+      {
+        "order_item_id": "c318d71b-5d23-4b33-bdc1-a7d36ba531ac",
+        "product_id": "P-0002",
+        "name": "Test2",
+        "quantity": 1,
+        "unit_price": 200.0,
+        "subtotal": 200.0
+      }
+    ],
+    "total_amount": 200.0,
+    "status": "paid",
+    "stripe_session_id": "cs_test_demo_session_12345",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T16:19:31.099829+00:00"
+  },
+  {
+    "order_id": "ORD-F0D501D012",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0069",
+          "name": "Keychron Ergo Keyboard 118",
+          "category": "Keyboard",
+          "brand": "Keychron",
+          "supplier": "Umbrella Office Systems",
+          "quantity": 20,
+          "unit_price": 54.71,
+          "subtotal": 1094.2,
+          "rating": 4.7,
+          "stock": 163,
+          "delivery_days": 2,
+          "reason": "Selected for Keyboard: rating 4.7, delivery in 2 days, stock 163, unit price $54.71."
+        },
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 20,
+          "unit_price": 17.94,
+          "subtotal": 358.8,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        },
+        {
+          "product_id": "P-0101",
+          "name": "Jabra Ergo Headset 100",
+          "category": "Headset",
+          "brand": "Jabra",
+          "supplier": "Contoso Business Tech",
+          "quantity": 20,
+          "unit_price": 60.4,
+          "subtotal": 1208,
+          "rating": 4.5,
+          "stock": 225,
+          "delivery_days": 4,
+          "reason": "Selected for Headset: rating 4.5, delivery in 4 days, stock 225, unit price $60.40."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0069",
+          "name": "Keychron Ergo Keyboard 118",
+          "category": "Keyboard",
+          "brand": "Keychron",
+          "supplier": "Umbrella Office Systems",
+          "quantity": 20,
+          "unit_price": 54.71,
+          "subtotal": 1094.2,
+          "rating": 4.7,
+          "stock": 163,
+          "delivery_days": 2,
+          "reason": "Selected for Keyboard: rating 4.7, delivery in 2 days, stock 163, unit price $54.71."
+        },
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 20,
+          "unit_price": 17.94,
+          "subtotal": 358.8,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        },
+        {
+          "product_id": "P-0101",
+          "name": "Jabra Ergo Headset 100",
+          "category": "Headset",
+          "brand": "Jabra",
+          "supplier": "Contoso Business Tech",
+          "quantity": 20,
+          "unit_price": 60.4,
+          "subtotal": 1208,
+          "rating": 4.5,
+          "stock": 225,
+          "delivery_days": 4,
+          "reason": "Selected for Headset: rating 4.5, delivery in 4 days, stock 225, unit price $60.40."
+        }
+      ],
+      "total_amount": 2661,
+      "total": 2661,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": 3000,
+      "budget_status": "within_budget",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "**\u91c7\u8d2d\u65b9\u6848\u63a8\u8350\u8bf4\u660e\uff1a**\n\n1. **\u5df2\u9009\u5546\u54c1\uff1a**  \n   - Keychron Ergo Keyboard 118 x20\uff0c\u5355\u4ef7 $54.71\uff0c\u5c0f\u8ba1 $1,094.20\uff0c2\u5929\u9001\u8fbe  \n   - Razer Ultra Mouse 107 x20\uff0c\u5355\u4ef7 $17.94\uff0c\u5c0f\u8ba1 $358.80\uff0c1\u5929\u9001\u8fbe  \n   - Jabra Ergo Headset 100 x20\uff0c\u5355\u4ef7 $60.40\uff0c\u5c0f\u8ba1 $1,208.00\uff0c4\u5929\u9001\u8fbe  \n\n2. **\u603b\u91d1\u989d\uff1a** $2,661.00  \n\n3. **\u9884\u7b97\u72b6\u6001\uff1a** \u9884\u7b97\u5185\uff08\u603b\u9884\u7b97 $3,000.00\uff09  \n\n4. **\u5e93\u5b58\u72b6\u6001\uff1a** \u6240\u6709\u5546\u54c1\u5e93\u5b58\u5145\u8db3\uff0c\u6ee1\u8db3\u91c7\u8d2d\u9700\u6c42  \n\n5. **\u63a8\u8350\u539f\u56e0\uff1a**  \n   \u6b64\u65b9\u6848\u5728\u9884\u7b97\u8303\u56f4\u5185\uff0c\u6240\u6709\u5546\u54c1\u5747\u6ee1\u8db3\u9ad8\u8bc4\u5206\uff08\u5e73\u5747\u8bc4\u5206 4.7\uff09\u548c\u5feb\u901f\u914d\u9001\uff08\u6700\u5feb 1 \u5929\uff0c\u6700\u6162 4 \u5929\uff09\u7684\u8981\u6c42\u3002\u6240\u9009\u4ea7\u54c1\u54c1\u724c\u53ef\u9760\uff0c\u4f9b\u5e94\u5546\u7a33\u5b9a\uff0c\u9002\u5408\u4e3a 20 \u540d\u5b9e\u4e60\u751f\u7edf\u4e00\u91c7\u8d2d\u8bbe\u5907\u3002\n\n6. **\u98ce\u9669\u4e0e\u9650\u5236\uff1a**  \n   - \u8be5\u65b9\u6848\u4ec5\u751f\u6210\u4e00\u4e2a\u7b26\u5408\u9884\u7b97\u7684\u53ef\u884c\u8ba1\u5212\uff08Plan A\uff09\uff0c\u5176\u4ed6\u5019\u9009\u65b9\u6848\u56e0\u8d85\u9884\u7b97\u672a\u88ab\u91c7\u7528\u3002  \n   - \u672a\u63d0\u4f9b\u66ff\u4ee3\u54c1\u724c\u6216\u4ea7\u54c1\u9009\u9879\uff0c\u5982\u9700\u8fdb\u4e00\u6b65\u4f18\u5316\u53ef\u8003\u8651\u8c03\u6574\u54c1\u7c7b\u6216\u54c1\u724c\u504f\u597d\u3002",
+      "recommendation_summary": "**\u91c7\u8d2d\u65b9\u6848\u63a8\u8350\u8bf4\u660e\uff1a**\n\n1. **\u5df2\u9009\u5546\u54c1\uff1a**  \n   - Keychron Ergo Keyboard 118 x20\uff0c\u5355\u4ef7 $54.71\uff0c\u5c0f\u8ba1 $1,094.20\uff0c2\u5929\u9001\u8fbe  \n   - Razer Ultra Mouse 107 x20\uff0c\u5355\u4ef7 $17.94\uff0c\u5c0f\u8ba1 $358.80\uff0c1\u5929\u9001\u8fbe  \n   - Jabra Ergo Headset 100 x20\uff0c\u5355\u4ef7 $60.40\uff0c\u5c0f\u8ba1 $1,208.00\uff0c4\u5929\u9001\u8fbe  \n\n2. **\u603b\u91d1\u989d\uff1a** $2,661.00  \n\n3. **\u9884\u7b97\u72b6\u6001\uff1a** \u9884\u7b97\u5185\uff08\u603b\u9884\u7b97 $3,000.00\uff09  \n\n4. **\u5e93\u5b58\u72b6\u6001\uff1a** \u6240\u6709\u5546\u54c1\u5e93\u5b58\u5145\u8db3\uff0c\u6ee1\u8db3\u91c7\u8d2d\u9700\u6c42  \n\n5. **\u63a8\u8350\u539f\u56e0\uff1a**  \n   \u6b64\u65b9\u6848\u5728\u9884\u7b97\u8303\u56f4\u5185\uff0c\u6240\u6709\u5546\u54c1\u5747\u6ee1\u8db3\u9ad8\u8bc4\u5206\uff08\u5e73\u5747\u8bc4\u5206 4.7\uff09\u548c\u5feb\u901f\u914d\u9001\uff08\u6700\u5feb 1 \u5929\uff0c\u6700\u6162 4 \u5929\uff09\u7684\u8981\u6c42\u3002\u6240\u9009\u4ea7\u54c1\u54c1\u724c\u53ef\u9760\uff0c\u4f9b\u5e94\u5546\u7a33\u5b9a\uff0c\u9002\u5408\u4e3a 20 \u540d\u5b9e\u4e60\u751f\u7edf\u4e00\u91c7\u8d2d\u8bbe\u5907\u3002\n\n6. **\u98ce\u9669\u4e0e\u9650\u5236\uff1a**  \n   - \u8be5\u65b9\u6848\u4ec5\u751f\u6210\u4e00\u4e2a\u7b26\u5408\u9884\u7b97\u7684\u53ef\u884c\u8ba1\u5212\uff08Plan A\uff09\uff0c\u5176\u4ed6\u5019\u9009\u65b9\u6848\u56e0\u8d85\u9884\u7b97\u672a\u88ab\u91c7\u7528\u3002  \n   - \u672a\u63d0\u4f9b\u66ff\u4ee3\u54c1\u724c\u6216\u4ea7\u54c1\u9009\u9879\uff0c\u5982\u9700\u8fdb\u4e00\u6b65\u4f18\u5316\u53ef\u8003\u8651\u8c03\u6574\u54c1\u7c7b\u6216\u54c1\u724c\u504f\u597d\u3002",
+      "status": "within_budget",
+      "avg_rating": 4.7,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "1f2c0a5c-4a97-4819-82a0-d7a20d0ccc25",
+        "product_id": "P-0069",
+        "name": "Keychron Ergo Keyboard 118",
+        "quantity": 20,
+        "unit_price": 54.71,
+        "subtotal": 1094.2
+      },
+      {
+        "order_item_id": "391d2eb0-2ae3-4759-a565-a5b42f9f0d62",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 20,
+        "unit_price": 17.94,
+        "subtotal": 358.8
+      },
+      {
+        "order_item_id": "06543ab0-367e-4c2b-9115-3d566a9c4f5c",
+        "product_id": "P-0101",
+        "name": "Jabra Ergo Headset 100",
+        "quantity": 20,
+        "unit_price": 60.4,
+        "subtotal": 1208.0
+      }
+    ],
+    "total_amount": 2661.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_b1x4OpFZhbGiAt2vfOU3K5tV4MHgwVR6g00xgbprNJrWYGqJQrKWvRxYOp",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T17:18:02.334845+00:00"
+  },
+  {
+    "order_id": "ORD-B6282C2157",
+    "user_id": "demo-user",
+    "plan_id": "plan_c",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0104",
+          "name": "Poly Pro Headset 103",
+          "category": "Headset",
+          "brand": "Poly",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.1,
+          "subtotal": 117.1,
+          "rating": 4.9,
+          "stock": 167,
+          "delivery_days": 9,
+          "reason": "Selected for Headset: rating 4.9, delivery in 9 days, stock 167, unit price $117.10."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0104",
+          "name": "Poly Pro Headset 103",
+          "category": "Headset",
+          "brand": "Poly",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.1,
+          "subtotal": 117.1,
+          "rating": 4.9,
+          "stock": 167,
+          "delivery_days": 9,
+          "reason": "Selected for Headset: rating 4.9, delivery in 9 days, stock 167, unit price $117.10."
+        }
+      ],
+      "total_amount": 117.1,
+      "total": 117.1,
+      "previous_total_amount": 117.97,
+      "savings_amount": 0.87,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "\u5df2\u4f18\u5148\u9009\u62e9\u8bc4\u5206\u66f4\u9ad8\u7684\u4ea7\u54c1\u4ee5\u63d0\u5347\u8d28\u91cf\u3002 \u603b\u91d1\u989d\uff1a$117.10",
+      "recommendation_summary": "\u5df2\u4f18\u5148\u9009\u62e9\u8bc4\u5206\u66f4\u9ad8\u7684\u4ea7\u54c1\u4ee5\u63d0\u5347\u8d28\u91cf\u3002 \u603b\u91d1\u989d\uff1a$117.10",
+      "status": "no_budget_provided",
+      "avg_rating": 4.9,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_c",
+      "plan_strategy": "premium"
+    },
+    "order_items": [
+      {
+        "order_item_id": "09a32642-dd08-48f7-965d-73b4b13d1bbd",
+        "product_id": "P-0104",
+        "name": "Poly Pro Headset 103",
+        "quantity": 1,
+        "unit_price": 117.1,
+        "subtotal": 117.1
+      }
+    ],
+    "total_amount": 117.1,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1kJd9WDA0DtXFel9REpLeuOOvhQUrmoaOH8bw77bh4QxpOxoYprbUzd7y",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T18:27:55.085145+00:00"
+  },
+  {
+    "order_id": "ORD-1591A82704",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0117",
+          "name": "Logitech Ultra Headset 116",
+          "category": "Headset",
+          "brand": "Logitech",
+          "supplier": "Globex Workplace",
+          "quantity": 108,
+          "unit_price": 45.46,
+          "subtotal": 4909.68,
+          "rating": 4.5,
+          "stock": 219,
+          "delivery_days": 12,
+          "reason": "Selected for Headset: rating 4.5, delivery in 12 days, stock 219, unit price $45.46."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0117",
+          "name": "Logitech Ultra Headset 116",
+          "category": "Headset",
+          "brand": "Logitech",
+          "supplier": "Globex Workplace",
+          "quantity": 108,
+          "unit_price": 45.46,
+          "subtotal": 4909.68,
+          "rating": 4.5,
+          "stock": 219,
+          "delivery_days": 12,
+          "reason": "Selected for Headset: rating 4.5, delivery in 12 days, stock 219, unit price $45.46."
+        }
+      ],
+      "total_amount": 4909.68,
+      "total": 4909.68,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $4909.68.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $4909.68.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.5,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "becd6278-1011-4d4b-b4dc-a9f77cf883ab",
+        "product_id": "P-0117",
+        "name": "Logitech Ultra Headset 116",
+        "quantity": 108,
+        "unit_price": 45.46,
+        "subtotal": 4909.68
+      }
+    ],
+    "total_amount": 4909.68,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1cCexizXZHeGuylHAy4OwW7ds3NL7eJA20VWVJ7oEvosTso3rMdQJYCMt",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T18:40:27.009797+00:00"
+  },
+  {
+    "order_id": "ORD-42A65FF41F",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "total_amount": 17.94,
+      "total": 17.94,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "1d5b78ff-8941-4061-82e0-364bb368ee3e",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 1,
+        "unit_price": 17.94,
+        "subtotal": 17.94
+      }
+    ],
+    "total_amount": 17.94,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1cLvE2pRT3qAneXYVZEzDBCPu3QroAO2QSjGW8Jrb4yZ8pWh6ApxchFKc",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T18:41:10.619744+00:00"
+  },
+  {
+    "order_id": "ORD-D846629301",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0116",
+          "name": "Sony Ergo Headset 115",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Contoso Business Tech",
+          "quantity": 1,
+          "unit_price": 40.65,
+          "subtotal": 40.65,
+          "rating": 4.7,
+          "stock": 28,
+          "delivery_days": 9,
+          "reason": "Selected for Headset: rating 4.7, delivery in 9 days, stock 28, unit price $40.65."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0116",
+          "name": "Sony Ergo Headset 115",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Contoso Business Tech",
+          "quantity": 1,
+          "unit_price": 40.65,
+          "subtotal": 40.65,
+          "rating": 4.7,
+          "stock": 28,
+          "delivery_days": 9,
+          "reason": "Selected for Headset: rating 4.7, delivery in 9 days, stock 28, unit price $40.65."
+        }
+      ],
+      "total_amount": 40.65,
+      "total": 40.65,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $40.65.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $40.65.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.7,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "b7f3d6a6-db67-4f4f-a63b-234ec61bf23b",
+        "product_id": "P-0116",
+        "name": "Sony Ergo Headset 115",
+        "quantity": 1,
+        "unit_price": 40.65,
+        "subtotal": 40.65
+      }
+    ],
+    "total_amount": 40.65,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1kEPxKbFSSaiW7WsGpkOi3KmImvaUZyDWipfW5t0tyA7P9g48DykNqo5s",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T18:51:21.101295+00:00"
+  },
+  {
+    "order_id": "ORD-EDDCB767D1",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "total_amount": 17.94,
+      "total": 17.94,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "24a8de88-f666-4c0a-aebc-6e4c84884a78",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 1,
+        "unit_price": 17.94,
+        "subtotal": 17.94
+      }
+    ],
+    "total_amount": 17.94,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1vVH2Cvv1Cklu3obSeE1UUAV7xfZK3qdNTv2BmCpJ5S5fkDHQFsynXzLb",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T18:51:45.292758+00:00"
+  },
+  {
+    "order_id": "ORD-7362EECBD2",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "total_amount": 17.94,
+      "total": 17.94,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "5708b17e-e85a-4eee-8ba5-5f395b3d1871",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 1,
+        "unit_price": 17.94,
+        "subtotal": 17.94
+      }
+    ],
+    "total_amount": 17.94,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a12wlX7LjtRVTM1bntTA0hT5fiHmcKNa7j9U8sPoBNMOJOxrjr3Jbzhbbj",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T18:54:35.601996+00:00"
+  },
+  {
+    "order_id": "ORD-7D976896F9",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "total_amount": 17.94,
+      "total": 17.94,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "7700d763-9f2c-41b6-8f45-ef3619ae5e75",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 1,
+        "unit_price": 17.94,
+        "subtotal": 17.94
+      }
+    ],
+    "total_amount": 17.94,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1bsJcA0PYe4xAESqL02POUfuP94sLBGX5JvrIXAZd9OTTP4UzOqUiaBU2",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T18:55:06.376424+00:00"
+  },
+  {
+    "order_id": "ORD-3111BD7F39",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "total_amount": 17.94,
+      "total": 17.94,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "28b3e4b4-7c4a-4d2d-8162-42e89e5c3b61",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 1,
+        "unit_price": 17.94,
+        "subtotal": 17.94
+      }
+    ],
+    "total_amount": 17.94,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1Hws43AVWjBfIzi0sgoE7fImAmnPfC92fAyEwsj2ZL1pK9q7hM3iOpwpX",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T18:57:40.468631+00:00"
+  },
+  {
+    "order_id": "ORD-63A70CBBBA",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "total_amount": 17.94,
+      "total": 17.94,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "c0e44172-d160-4cc3-af88-3abacce241b3",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 1,
+        "unit_price": 17.94,
+        "subtotal": 17.94
+      }
+    ],
+    "total_amount": 17.94,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1e43xUy49RTel3WHMPy1O6Yjukatgt98XjFaSD6YeSs220InIvb1JgnzR",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T18:58:58.621657+00:00"
+  },
+  {
+    "order_id": "ORD-3CC1A8B9B8",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 17.94,
+          "subtotal": 17.94,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        }
+      ],
+      "total_amount": 17.94,
+      "total": 17.94,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $17.94.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "94f1d8c6-3bea-4391-9477-1906b40ba1a2",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 1,
+        "unit_price": 17.94,
+        "subtotal": 17.94
+      }
+    ],
+    "total_amount": 17.94,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1AxM2sDVIwz1m7BQ0NoV1biJ7xNm0Q8d7qjdDgbvsHAMMfIt51GeA61g9",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T18:59:29.922115+00:00"
+  },
+  {
+    "order_id": "ORD-8BEBF6FC3A",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0098",
+          "name": "Logitech Pro Mouse 122",
+          "category": "Mouse",
+          "brand": "Logitech",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 28.54,
+          "subtotal": 28.54,
+          "rating": 4.2,
+          "stock": 147,
+          "delivery_days": 9,
+          "reason": "Selected for Mouse: rating 4.2, delivery in 9 days, stock 147, unit price $28.54."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0098",
+          "name": "Logitech Pro Mouse 122",
+          "category": "Mouse",
+          "brand": "Logitech",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 28.54,
+          "subtotal": 28.54,
+          "rating": 4.2,
+          "stock": 147,
+          "delivery_days": 9,
+          "reason": "Selected for Mouse: rating 4.2, delivery in 9 days, stock 147, unit price $28.54."
+        }
+      ],
+      "total_amount": 28.54,
+      "total": 28.54,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $28.54.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $28.54.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.2,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "e077a4f1-72ea-43fa-a59f-cc1d920ecc45",
+        "product_id": "P-0098",
+        "name": "Logitech Pro Mouse 122",
+        "quantity": 1,
+        "unit_price": 28.54,
+        "subtotal": 28.54
+      }
+    ],
+    "total_amount": 28.54,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1TicjJzr3p4YMvtdhp3biuhUlKtpJTfledBdIL4EXnizBO3hl7y7TcOi8",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T19:00:32.408974+00:00"
+  },
+  {
+    "order_id": "ORD-7B19339F1D",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0098",
+          "name": "Logitech Pro Mouse 122",
+          "category": "Mouse",
+          "brand": "Logitech",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 28.54,
+          "subtotal": 28.54,
+          "rating": 4.2,
+          "stock": 147,
+          "delivery_days": 9,
+          "reason": "Selected for Mouse: rating 4.2, delivery in 9 days, stock 147, unit price $28.54."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0098",
+          "name": "Logitech Pro Mouse 122",
+          "category": "Mouse",
+          "brand": "Logitech",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 28.54,
+          "subtotal": 28.54,
+          "rating": 4.2,
+          "stock": 147,
+          "delivery_days": 9,
+          "reason": "Selected for Mouse: rating 4.2, delivery in 9 days, stock 147, unit price $28.54."
+        }
+      ],
+      "total_amount": 28.54,
+      "total": 28.54,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $28.54.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $28.54.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.2,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "2f4b58da-e12c-4b56-897f-7bf863c41fe1",
+        "product_id": "P-0098",
+        "name": "Logitech Pro Mouse 122",
+        "quantity": 1,
+        "unit_price": 28.54,
+        "subtotal": 28.54
+      }
+    ],
+    "total_amount": 28.54,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1aCLXlGeTeiVmO8scAPxa9o6nWK90IB0yQX6OkCFWwq90FNyH8QnvstfP",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T19:02:23.739965+00:00"
+  },
+  {
+    "order_id": "ORD-9E60D1DD0C",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0098",
+          "name": "Logitech Pro Mouse 122",
+          "category": "Mouse",
+          "brand": "Logitech",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 28.54,
+          "subtotal": 28.54,
+          "rating": 4.2,
+          "stock": 147,
+          "delivery_days": 9,
+          "reason": "Selected for Mouse: rating 4.2, delivery in 9 days, stock 147, unit price $28.54."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0098",
+          "name": "Logitech Pro Mouse 122",
+          "category": "Mouse",
+          "brand": "Logitech",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 28.54,
+          "subtotal": 28.54,
+          "rating": 4.2,
+          "stock": 147,
+          "delivery_days": 9,
+          "reason": "Selected for Mouse: rating 4.2, delivery in 9 days, stock 147, unit price $28.54."
+        }
+      ],
+      "total_amount": 28.54,
+      "total": 28.54,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $28.54.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $28.54.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.2,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "09918613-b7c3-4954-8a25-33d1a2a694a8",
+        "product_id": "P-0098",
+        "name": "Logitech Pro Mouse 122",
+        "quantity": 1,
+        "unit_price": 28.54,
+        "subtotal": 28.54
+      }
+    ],
+    "total_amount": 28.54,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1AlnyPtKv5joEtoTBZmGdsthZmw5Pxwh9kczvUyflII2XpiUe38sPmctG",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T19:02:44.442545+00:00"
+  },
+  {
+    "order_id": "ORD-99D4D1B260",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "total_amount": 117.97,
+      "total": 117.97,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $117.97.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $117.97.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.6,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "45145b7a-bdb3-430a-b89e-d4942f73e5f3",
+        "product_id": "P-0106",
+        "name": "Sony Pro Headset 105",
+        "quantity": 1,
+        "unit_price": 117.97,
+        "subtotal": 117.97
+      }
+    ],
+    "total_amount": 117.97,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1gZRJXNFdyQWQARXJeT7uUV9PG9Ilz4EXApqbfOygq5ZNspkC6mrnd4Qo",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-08T19:03:15.949934+00:00"
+  },
+  {
+    "order_id": "ORD-41FD9A0EAF",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "total_amount": 117.97,
+      "total": 117.97,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $117.97.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $117.97.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.6,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "0d6362fa-dbbf-4224-a9da-3862281f4788",
+        "product_id": "P-0106",
+        "name": "Sony Pro Headset 105",
+        "quantity": 1,
+        "unit_price": 117.97,
+        "subtotal": 117.97
+      }
+    ],
+    "total_amount": 117.97,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1sUvaQarpOZeCY3k3gTOl1Gb1q6aSCKEhCWa2fxDlO6DIGhL9dr3vpAja",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-09T00:29:48.218566+00:00"
+  },
+  {
+    "order_id": "ORD-B153C707D4",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0098",
+          "name": "Logitech Pro Mouse 122",
+          "category": "Mouse",
+          "brand": "Logitech",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 28.54,
+          "subtotal": 28.54,
+          "rating": 4.2,
+          "stock": 147,
+          "delivery_days": 9,
+          "reason": "Selected for Mouse: rating 4.2, delivery in 9 days, stock 147, unit price $28.54."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0098",
+          "name": "Logitech Pro Mouse 122",
+          "category": "Mouse",
+          "brand": "Logitech",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 28.54,
+          "subtotal": 28.54,
+          "rating": 4.2,
+          "stock": 147,
+          "delivery_days": 9,
+          "reason": "Selected for Mouse: rating 4.2, delivery in 9 days, stock 147, unit price $28.54."
+        }
+      ],
+      "total_amount": 28.54,
+      "total": 28.54,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $28.54.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $28.54.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.2,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "59dce4e6-4674-4265-a16e-86a8b9bcead0",
+        "product_id": "P-0098",
+        "name": "Logitech Pro Mouse 122",
+        "quantity": 1,
+        "unit_price": 28.54,
+        "subtotal": 28.54
+      }
+    ],
+    "total_amount": 28.54,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1AWenOxdYGaMngMwxUhqkoC3IHY9FiU0eDpWQIK9QBlaX03oc7SbRjoG0",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-09T00:32:29.807034+00:00"
+  },
+  {
+    "order_id": "ORD-669BDFD87A",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0098",
+          "name": "Logitech Pro Mouse 122",
+          "category": "Mouse",
+          "brand": "Logitech",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 28.54,
+          "subtotal": 28.54,
+          "rating": 4.2,
+          "stock": 147,
+          "delivery_days": 9,
+          "reason": "Selected for Mouse: rating 4.2, delivery in 9 days, stock 147, unit price $28.54."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0098",
+          "name": "Logitech Pro Mouse 122",
+          "category": "Mouse",
+          "brand": "Logitech",
+          "supplier": "Northwind Office Supply",
+          "quantity": 1,
+          "unit_price": 28.54,
+          "subtotal": 28.54,
+          "rating": 4.2,
+          "stock": 147,
+          "delivery_days": 9,
+          "reason": "Selected for Mouse: rating 4.2, delivery in 9 days, stock 147, unit price $28.54."
+        }
+      ],
+      "total_amount": 28.54,
+      "total": 28.54,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $28.54.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $28.54.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.2,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "55e443d2-30e0-4b78-acd5-5c5b547f637b",
+        "product_id": "P-0098",
+        "name": "Logitech Pro Mouse 122",
+        "quantity": 1,
+        "unit_price": 28.54,
+        "subtotal": 28.54
+      }
+    ],
+    "total_amount": 28.54,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a192vE5Vz6t5T51cFvDQ9SyFXJIwjtlItq5BHn0YOCpUM72Aq7ZYjTSzGe",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-09T00:32:41.461161+00:00"
+  },
+  {
+    "order_id": "ORD-B90AC79556",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "total_amount": 117.97,
+      "total": 117.97,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $117.97.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $117.97.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.6,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "44f20643-7d05-4658-9337-728ac3b8015d",
+        "product_id": "P-0106",
+        "name": "Sony Pro Headset 105",
+        "quantity": 1,
+        "unit_price": 117.97,
+        "subtotal": 117.97
+      }
+    ],
+    "total_amount": 117.97,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1PNxJ0CStiJRxwzxzNbb41KjQSOCdCVX2k6haGtlrUYEkHhqMYQha3LlI",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-09T00:36:57.032815+00:00"
+  },
+  {
+    "order_id": "ORD-1223F085B9",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "total_amount": 117.97,
+      "total": 117.97,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $117.97.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $117.97.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.6,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "b25de052-56d3-49c4-bc0e-e646f3d6298e",
+        "product_id": "P-0106",
+        "name": "Sony Pro Headset 105",
+        "quantity": 1,
+        "unit_price": 117.97,
+        "subtotal": 117.97
+      }
+    ],
+    "total_amount": 117.97,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1xDUpiLf7wXnodhka7yjXInxA8iA6X7MHKFN08gSdGwK7wy6YKH6mIDQN",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-09T00:39:31.472528+00:00"
+  },
+  {
+    "order_id": "ORD-D783B525E8",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0052",
+          "name": "HP Essential Keyboard 101",
+          "category": "Keyboard",
+          "brand": "HP",
+          "supplier": "Contoso Business Tech",
+          "quantity": 20,
+          "unit_price": 55.48,
+          "subtotal": 1109.6,
+          "rating": 4.7,
+          "stock": 98,
+          "delivery_days": 1,
+          "reason": "Selected for Keyboard: rating 4.7, delivery in 1 days, stock 98, unit price $55.48."
+        },
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 20,
+          "unit_price": 17.94,
+          "subtotal": 358.8,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        },
+        {
+          "product_id": "P-0116",
+          "name": "Sony Ergo Headset 115",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Contoso Business Tech",
+          "quantity": 20,
+          "unit_price": 40.65,
+          "subtotal": 813.0,
+          "rating": 4.7,
+          "stock": 28,
+          "delivery_days": 9,
+          "reason": "Selected for Headset: rating 4.7, delivery in 9 days, stock 28, unit price $40.65."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0052",
+          "name": "HP Essential Keyboard 101",
+          "category": "Keyboard",
+          "brand": "HP",
+          "supplier": "Contoso Business Tech",
+          "quantity": 20,
+          "unit_price": 55.48,
+          "subtotal": 1109.6,
+          "rating": 4.7,
+          "stock": 98,
+          "delivery_days": 1,
+          "reason": "Selected for Keyboard: rating 4.7, delivery in 1 days, stock 98, unit price $55.48."
+        },
+        {
+          "product_id": "P-0083",
+          "name": "Razer Ultra Mouse 107",
+          "category": "Mouse",
+          "brand": "Razer",
+          "supplier": "Northwind Office Supply",
+          "quantity": 20,
+          "unit_price": 17.94,
+          "subtotal": 358.8,
+          "rating": 4.8,
+          "stock": 141,
+          "delivery_days": 1,
+          "reason": "Selected for Mouse: rating 4.8, delivery in 1 days, stock 141, unit price $17.94."
+        },
+        {
+          "product_id": "P-0116",
+          "name": "Sony Ergo Headset 115",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Contoso Business Tech",
+          "quantity": 20,
+          "unit_price": 40.65,
+          "subtotal": 813.0,
+          "rating": 4.7,
+          "stock": 28,
+          "delivery_days": 9,
+          "reason": "Selected for Headset: rating 4.7, delivery in 9 days, stock 28, unit price $40.65."
+        }
+      ],
+      "total_amount": 2281.4,
+      "total": 2281.4,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": 3000.0,
+      "budget_status": "within_budget",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "I generated a procurement plan with 3 items, total $2281.40, avg rating 4.7. Budget: within budget, Inventory: valid, Constraints: satisfied.\n\nItem details:\n\n  - HP Essential Keyboard 101 x20, unit $55.48, subtotal $1109.60, 1-day delivery\n\n  - Razer Ultra Mouse 107 x20, unit $17.94, subtotal $358.80, 1-day delivery\n\n  - Sony Ergo Headset 115 x20, unit $40.65, subtotal $813.00, 9-day delivery\n\nCategory breakdown: Headset: 1 item(s) | Keyboard: 1 item(s) | Mouse: 1 item(s)\n\nEstimated delivery: 1-9 days\n\nGenerated 3 candidate plans; only Plan A meets the budget constraint. Plan B, Plan C are reference-only.",
+      "recommendation_summary": "I generated a procurement plan with 3 items, total $2281.40, avg rating 4.7. Budget: within budget, Inventory: valid, Constraints: satisfied.\n\nItem details:\n\n  - HP Essential Keyboard 101 x20, unit $55.48, subtotal $1109.60, 1-day delivery\n\n  - Razer Ultra Mouse 107 x20, unit $17.94, subtotal $358.80, 1-day delivery\n\n  - Sony Ergo Headset 115 x20, unit $40.65, subtotal $813.00, 9-day delivery\n\nCategory breakdown: Headset: 1 item(s) | Keyboard: 1 item(s) | Mouse: 1 item(s)\n\nEstimated delivery: 1-9 days\n\nGenerated 3 candidate plans; only Plan A meets the budget constraint. Plan B, Plan C are reference-only.",
+      "status": "within_budget",
+      "avg_rating": 4.7,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "3245e336-1858-4903-9417-49acb9ef7e3c",
+        "product_id": "P-0052",
+        "name": "HP Essential Keyboard 101",
+        "quantity": 20,
+        "unit_price": 55.48,
+        "subtotal": 1109.6
+      },
+      {
+        "order_item_id": "e7a75d4b-57f4-49e0-a906-8cbc48caaae3",
+        "product_id": "P-0083",
+        "name": "Razer Ultra Mouse 107",
+        "quantity": 20,
+        "unit_price": 17.94,
+        "subtotal": 358.8
+      },
+      {
+        "order_item_id": "f2e609e8-a072-46e7-9f01-4a4576bebd31",
+        "product_id": "P-0116",
+        "name": "Sony Ergo Headset 115",
+        "quantity": 20,
+        "unit_price": 40.65,
+        "subtotal": 813.0
+      }
+    ],
+    "total_amount": 2281.4,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_b18XpBDhmKBwvVsz3PuWzxMbbjhpIU7n6QtsKPK2UULEig5WAWL9wdDu1W",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-09T00:54:58.750484+00:00"
+  },
+  {
+    "order_id": "ORD-67ECE87568",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "P-0106",
+          "name": "Sony Pro Headset 105",
+          "category": "Headset",
+          "brand": "Sony",
+          "supplier": "Globex Workplace",
+          "quantity": 1,
+          "unit_price": 117.97,
+          "subtotal": 117.97,
+          "rating": 4.6,
+          "stock": 75,
+          "delivery_days": 1,
+          "reason": "Selected for Headset: rating 4.6, delivery in 1 days, stock 75, unit price $117.97."
+        }
+      ],
+      "total_amount": 117.97,
+      "total": 117.97,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 1 people. Total amount is $117.97.",
+      "recommendation_summary": "Recommended 1 product lines for 1 people. Total amount is $117.97.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.6,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "6a7f15aa-6cb1-47c2-b988-6912dd7896dc",
+        "product_id": "P-0106",
+        "name": "Sony Pro Headset 105",
+        "quantity": 1,
+        "unit_price": 117.97,
+        "subtotal": 117.97
+      }
+    ],
+    "total_amount": 117.97,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1tI9Vg3yjCQxhzq56XlCH2RkfZi6Jl0REeRMV77DKqGWZVpdiIau3FTGl",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-09T02:56:52.037747+00:00"
+  },
+  {
+    "order_id": "ORD-4DB46DF5A7",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "total_amount": 540.0,
+      "total": 540.0,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "recommendation_summary": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "08db794a-68d3-479a-9493-d202666be416",
+        "product_id": "monitor-dell",
+        "name": "Dell UltraSharp Monitor",
+        "quantity": 3,
+        "unit_price": 180.0,
+        "subtotal": 540.0
+      }
+    ],
+    "total_amount": 540.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1CPMxL1MoNZFQUB9eUPkns86bMaDjIqPO8nNiugg4tjyg8DJ6xY8kkbWE",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-20T18:43:45.830300+00:00"
+  },
+  {
+    "order_id": "ORD-E26EB4D14C",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "total_amount": 540.0,
+      "total": 540.0,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "recommendation_summary": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "233f0dfc-5d42-4f0a-9a9a-9c2dd261cbbe",
+        "product_id": "monitor-dell",
+        "name": "Dell UltraSharp Monitor",
+        "quantity": 3,
+        "unit_price": 180.0,
+        "subtotal": 540.0
+      }
+    ],
+    "total_amount": 540.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1Ip8cjv7llXaeRi540q1dyJ9VpyRczaClEdfcH4MFxjhwRih1d1Nsxyl4",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-20T18:45:01.991418+00:00"
+  },
+  {
+    "order_id": "ORD-1A8915C0AC",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "total_amount": 540.0,
+      "total": 540.0,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "recommendation_summary": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "63af302e-5d67-483d-a93c-271e194a5c3f",
+        "product_id": "monitor-dell",
+        "name": "Dell UltraSharp Monitor",
+        "quantity": 3,
+        "unit_price": 180.0,
+        "subtotal": 540.0
+      }
+    ],
+    "total_amount": 540.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1siqCjtNWDbxASHypsCBrJ2WVpYjkUrNLF2fwQbH1PRbNwQwlMsI5AKbX",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-20T18:45:45.727809+00:00"
+  },
+  {
+    "order_id": "ORD-C987AC5624",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "total_amount": 540.0,
+      "total": 540.0,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "recommendation_summary": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "3cc50185-aeba-4a08-8a7e-4e17537c0638",
+        "product_id": "monitor-dell",
+        "name": "Dell UltraSharp Monitor",
+        "quantity": 3,
+        "unit_price": 180.0,
+        "subtotal": 540.0
+      }
+    ],
+    "total_amount": 540.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1zpI0G5VYzrIholIOKAwzNrFNqK7LDeqsNZg4yirxptzZscZ43t4LzIsv",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-20T19:09:06.391286+00:00"
+  },
+  {
+    "order_id": "ORD-98263DC6EC",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "total_amount": 540.0,
+      "total": 540.0,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "recommendation_summary": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "eae6402e-9637-4397-9ee9-86d7ada51ac2",
+        "product_id": "monitor-dell",
+        "name": "Dell UltraSharp Monitor",
+        "quantity": 3,
+        "unit_price": 180.0,
+        "subtotal": 540.0
+      }
+    ],
+    "total_amount": 540.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1ywFOXRv0KX96iKevMmvyRIxa09jfLwcBCAfVO0TvhoS1q33E4TJoopi3",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-20T19:11:55.631685+00:00"
+  },
+  {
+    "order_id": "ORD-C3A70082FE",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "total_amount": 540.0,
+      "total": 540.0,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "recommendation_summary": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "10726c12-ba51-48f0-b9cb-b168d0d1521b",
+        "product_id": "monitor-dell",
+        "name": "Dell UltraSharp Monitor",
+        "quantity": 3,
+        "unit_price": 180.0,
+        "subtotal": 540.0
+      }
+    ],
+    "total_amount": 540.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1Mb9yNqvErnpPsjcNjT4QLiGEs5QOjO9G7FJBJ9Y8JKfAp0iLK6ZHdcvQ",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-20T19:32:17.827447+00:00"
+  },
+  {
+    "order_id": "ORD-B6D9154862",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "total_amount": 540.0,
+      "total": 540.0,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "recommendation_summary": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "3621834e-e859-40b0-a890-d963830d7736",
+        "product_id": "monitor-dell",
+        "name": "Dell UltraSharp Monitor",
+        "quantity": 3,
+        "unit_price": 180.0,
+        "subtotal": 540.0
+      }
+    ],
+    "total_amount": 540.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1R7iNtZlL3vZkXbRdE4cd406MjlD6P5qL6kXRVYNoH1U1zanHKTkQ3Xft",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-20T19:39:29.512099+00:00"
+  },
+  {
+    "order_id": "ORD-6D6056B93F",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "total_amount": 540.0,
+      "total": 540.0,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "recommendation_summary": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "cde9edd6-9ee3-4e73-bfc7-8566fe32e2ff",
+        "product_id": "monitor-dell",
+        "name": "Dell UltraSharp Monitor",
+        "quantity": 3,
+        "unit_price": 180.0,
+        "subtotal": 540.0
+      }
+    ],
+    "total_amount": 540.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a19p9VPwONeu2bT4HKKNomjF1sF9HyIrVvF7ibX42gLGJ50aTzzVIRvPAp",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-20T19:41:17.000455+00:00"
+  },
+  {
+    "order_id": "ORD-7D3225A82D",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "total_amount": 540.0,
+      "total": 540.0,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "recommendation_summary": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "618d69e9-29ee-41c5-a46c-a8dc7d46114b",
+        "product_id": "monitor-dell",
+        "name": "Dell UltraSharp Monitor",
+        "quantity": 3,
+        "unit_price": 180.0,
+        "subtotal": 540.0
+      }
+    ],
+    "total_amount": 540.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a10cYLlLAf4rpLTYVTyetXmCf1BJiGCSqMQwyLLF6D8YuPFxA1KjhuZlTC",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-20T19:42:12.037631+00:00"
+  },
+  {
+    "order_id": "ORD-DBA67F6368",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "total_amount": 540.0,
+      "total": 540.0,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "recommendation_summary": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "f36c1e44-6b37-4a2f-9290-8675e0dcbc5c",
+        "product_id": "monitor-dell",
+        "name": "Dell UltraSharp Monitor",
+        "quantity": 3,
+        "unit_price": 180.0,
+        "subtotal": 540.0
+      }
+    ],
+    "total_amount": 540.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1RaNKiuuqUsdYXvxi606BmbWnzNO8FO7y9ZSV2B8qHaRMir6jXVgnp3Z4",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-20T19:44:12.639530+00:00"
+  },
+  {
+    "order_id": "ORD-F69864976C",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "total_amount": 540.0,
+      "total": 540.0,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "recommendation_summary": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "9966e4b6-3d15-4675-952b-b110d66298f5",
+        "product_id": "monitor-dell",
+        "name": "Dell UltraSharp Monitor",
+        "quantity": 3,
+        "unit_price": 180.0,
+        "subtotal": 540.0
+      }
+    ],
+    "total_amount": 540.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1up04J7VqjZiW4c8G5DAW2LJh7Nknmkgjntt6Ngyn7bNXD3guHGxIzlSU",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-20T19:53:54.249686+00:00"
+  },
+  {
+    "order_id": "ORD-EEFE43BC36",
+    "user_id": "demo-user",
+    "plan_id": "plan_a",
+    "procurement_plan": {
+      "items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "selected_items": [
+        {
+          "product_id": "monitor-dell",
+          "name": "Dell UltraSharp Monitor",
+          "category": "Monitor",
+          "brand": "Dell",
+          "supplier": "Contoso Business Tech",
+          "quantity": 3,
+          "unit_price": 180.0,
+          "subtotal": 540.0,
+          "rating": 4.8,
+          "stock": 50,
+          "delivery_days": 2,
+          "reason": "Selected for Monitor: rating 4.8, delivery in 2 days, stock 50, unit price $180.00."
+        }
+      ],
+      "total_amount": 540.0,
+      "total": 540.0,
+      "previous_total_amount": null,
+      "savings_amount": null,
+      "revision_type": "new_plan",
+      "budget": null,
+      "budget_status": "no_budget_provided",
+      "inventory_status": "valid",
+      "constraint_satisfaction": "satisfied",
+      "missing_categories": [],
+      "recommendation_reason": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "recommendation_summary": "Recommended 1 product lines for 3 people. Total amount is $540.00.",
+      "status": "no_budget_provided",
+      "avg_rating": 4.8,
+      "over_budget": false,
+      "budget_gap": 0,
+      "selectable": true,
+      "plan_option_id": "plan_a",
+      "plan_strategy": "cost_optimized"
+    },
+    "order_items": [
+      {
+        "order_item_id": "ef06f313-e836-4980-9894-2123b7098b8f",
+        "product_id": "monitor-dell",
+        "name": "Dell UltraSharp Monitor",
+        "quantity": 3,
+        "unit_price": 180.0,
+        "subtotal": 540.0
+      }
+    ],
+    "total_amount": 540.0,
+    "status": "pending_payment",
+    "stripe_session_id": "cs_test_a1bhgxcHi3Qcsm7H3RDpbPSuJ2rDh0ixsyXwrSP7rH8UOUsVZhbjnYlrLS",
+    "processed_payment_event_ids": [],
+    "created_at": "2026-06-20T19:55:06.564559+00:00"
   }
 ]

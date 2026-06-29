@@ -1,0 +1,20 @@
+[
+  {
+    "id": "supplier-contoso",
+    "supplier": "Contoso Business Tech",
+    "risk_level": "low",
+    "text": "Contoso Business Tech is an approved enterprise technology supplier with strong monitor, headset, and docking station fulfillment history."
+  },
+  {
+    "id": "supplier-northwind",
+    "supplier": "Northwind Office Supply",
+    "risk_level": "medium",
+    "text": "Northwind Office Supply provides broad office equipment coverage and competitive prices, but delivery windows vary by product line."
+  },
+  {
+    "id": "supplier-umbrella",
+    "supplier": "Umbrella Office Systems",
+    "risk_level": "low",
+    "text": "Umbrella Office Systems is a reliable supplier for peripherals and office setup kits with consistent enterprise warranty documentation."
+  }
+]

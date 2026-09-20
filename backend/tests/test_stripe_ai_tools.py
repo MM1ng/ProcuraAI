@@ -112,12 +112,12 @@ def test_ai_tool_rejects_unselectable_plan(tmp_path, monkeypatch):
         raise AssertionError("Expected unselectable plan to be rejected")
 
 
-def test_ai_tool_uses_backend_recalculated_item_amounts(tmp_path, monkeypatch):
+def test_ai_tool_uses_persisted_order_amounts(tmp_path, monkeypatch):
     order = _save_order(tmp_path, monkeypatch)
-    # Seed stale persisted totals explicitly now that order creation repairs them.
+    # Stale plan totals must not replace the Task 02 canonical order total.
     order["procurement_plan"]["total_amount"] = 9999.99
     order_service.update_order(order["order_id"], {
-        "total_amount": 9999.99, "procurement_plan": order["procurement_plan"],
+        "procurement_plan": order["procurement_plan"],
     })
     _patch_stripe(monkeypatch)
 

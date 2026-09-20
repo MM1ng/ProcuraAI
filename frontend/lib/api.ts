@@ -60,11 +60,11 @@ export const api = {
   },
   orders() { return request<{ items: Order[]; total: number }>("/api/orders"); },
   getOrder(id: string) { return request<Order>(`/api/orders/${id}`); },
-  checkout(order: Order, planId: string) {
-    return request<{ checkout_url: string; session_id: string }>("/api/payments/stripe/checkout", { method: "POST", body: JSON.stringify({ order_id: order.order_id, plan_id: planId }) });
+  checkout(order: Order, _planId?: string) {
+    return request<{ checkout_url: string; session_id: string }>("/api/payments/stripe/checkout", { method: "POST", body: JSON.stringify({ order_id: order.order_id }) });
   },
-  createCheckoutSession(orderId: string, amount: number) {
-    return request<{ checkout_url: string; session_id: string; provider?: string; status?: string }>("/api/payments/create-checkout-session", { method: "POST", body: JSON.stringify({ order_id: orderId, amount }) });
+  createCheckoutSession(orderId: string) {
+    return request<{ checkout_url: string; session_id: string; provider?: string; status?: string }>("/api/payments/stripe/checkout", { method: "POST", body: JSON.stringify({ order_id: orderId }) });
   },
   mockPaymentSuccess(orderId: string) {
     return request<{ order_id: string; status: string; message: string; order?: Order }>("/api/payments/mock-success", { method: "POST", body: JSON.stringify({ order_id: orderId }) });

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from typing import Any
 import uuid
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
@@ -34,7 +34,7 @@ def _plan_id(plan: dict[str, Any]) -> str:
     return str(plan.get("plan_option_id") or plan.get("plan_id") or "")
 
 
-def _load_payable_plan(plan_id: str, order_id: str) -> tuple[dict[str, Any], dict[str, Any]]:
+def _load_payable_plan(plan_id: str | None, order_id: str) -> tuple[dict[str, Any], dict[str, Any]]:
     order = get_order(order_id)
     if not order:
         raise ValueError("Order not found.")
@@ -44,7 +44,7 @@ def _load_payable_plan(plan_id: str, order_id: str) -> tuple[dict[str, Any], dic
     plan = order.get("procurement_plan")
     if not isinstance(plan, dict) or not plan:
         raise ValueError("Plan not found.")
-    if _plan_id(plan) != plan_id:
+    if plan_id is not None and _plan_id(plan) != plan_id:
         raise ValueError("Plan not found.")
     if (
         plan.get("selectable") is False
@@ -56,17 +56,23 @@ def _load_payable_plan(plan_id: str, order_id: str) -> tuple[dict[str, Any], dic
 
 
 def _amount_to_cents(value: Any) -> int:
-    amount = Decimal(str(value or 0)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    try:
+        amount = Decimal(str(value)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        if not amount.is_finite() or amount <= 0:
+            raise ValueError("Invalid persisted order amount.")
+    except InvalidOperation as exc:
+        raise ValueError("Invalid persisted order amount.") from exc
     return int((amount * 100).to_integral_value(rounding=ROUND_HALF_UP))
 
 
-def _recalculated_total(plan: dict[str, Any]) -> Decimal:
-    total = Decimal("0.00")
-    for item in plan.get("items", []) or []:
-        unit_price = Decimal(str(item.get("unit_price", item.get("price", 0)) or 0))
-        quantity = Decimal(str(int(item.get("quantity", 0) or 0)))
-        total += unit_price * quantity
-    return total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+def _checkout_amount(order: dict[str, Any]) -> tuple[int, list[dict[str, Any]]]:
+    """Use the Task 02 order snapshot, never a request or a reconstructed plan."""
+    total_cents = _amount_to_cents(order.get("total_amount"))
+    line_items = [_line_item(item) for item in order.get("order_items", []) or []]
+    line_total = sum(item["price_data"]["unit_amount"] * item["quantity"] for item in line_items)
+    if line_total != total_cents:
+        raise ValueError("Order total does not match persisted order items.")
+    return total_cents, line_items
 
 
 def _line_item(item: dict[str, Any]) -> dict[str, Any]:
@@ -98,10 +104,12 @@ def _url_with_params(url: str, params: dict[str, str]) -> str:
     return urlunsplit((parts.scheme, parts.netloc, parts.path, encoded_query, parts.fragment))
 
 
-def create_procurement_checkout_session(plan_id: str, order_id: str) -> dict[str, str]:
+def create_procurement_checkout_session(plan_id: str | None, order_id: str) -> dict[str, str]:
     order, plan = _load_payable_plan(plan_id, order_id)
+    plan_id = _plan_id(plan)
     settings = get_settings()
-    total_amount = _recalculated_total(plan)
+    total_cents, line_items = _checkout_amount(order)
+    total_amount = Decimal(total_cents) / 100
     metadata = {
         "order_id": order_id,
         "plan_id": plan_id,
@@ -114,7 +122,7 @@ def create_procurement_checkout_session(plan_id: str, order_id: str) -> dict[str
 
     if settings.use_mock_payment or not settings.stripe_secret_key:
         session_id = f"mock_{uuid.uuid4().hex[:16]}"
-        update_order(order_id, {"stripe_session_id": session_id, "total_amount": float(total_amount)})
+        update_order(order_id, {"stripe_session_id": session_id})
         return {
             "checkout_url": _url_with_params(success_url, {"mock": "true", "session_id": session_id}),
             "session_id": session_id,
@@ -129,13 +137,13 @@ def create_procurement_checkout_session(plan_id: str, order_id: str) -> dict[str
         mode="payment",
         success_url=_url_with_params(success_url, {"session_id": "{CHECKOUT_SESSION_ID}"}),
         cancel_url=cancel_url,
-        line_items=[_line_item(item) for item in plan.get("items", []) or []],
+        line_items=line_items,
         metadata=metadata,
         payment_intent_data={"metadata": metadata},
         client_reference_id=order_id,
         idempotency_key=f"procuraai-checkout-{order_id}-{plan_id}",
     )
-    update_order(order_id, {"stripe_session_id": session.id, "total_amount": float(total_amount)})
+    update_order(order_id, {"stripe_session_id": session.id})
     return {"checkout_url": session.url, "session_id": session.id}
 
 

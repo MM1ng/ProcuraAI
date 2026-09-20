@@ -28,21 +28,19 @@ def payment_status() -> dict[str, object]:
     }
 
 
-@router.post("/create-checkout-session", response_model=CheckoutSessionResponse)
+@router.post("/create-checkout-session", response_model=CheckoutSessionResponse, deprecated=True)
 def create_checkout_session(request: CheckoutSessionRequest) -> CheckoutSessionResponse:
-    session = create_checkout(
-        order_id=request.order_id,
-        amount=request.amount,
-        success_url=request.success_url,
-        cancel_url=request.cancel_url,
-    )
+    try:
+        session = create_checkout(order_id=request.order_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
     return CheckoutSessionResponse(**session)
 
 
 @router.post("/stripe/checkout", response_model=StripeCheckoutResponse)
 def create_stripe_checkout(request: StripeCheckoutRequest) -> StripeCheckoutResponse:
     try:
-        session = create_procurement_checkout_session(plan_id=request.plan_id, order_id=request.order_id)
+        session = create_procurement_checkout_session(plan_id=None, order_id=request.order_id)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     return StripeCheckoutResponse(**session)

@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class CheckoutSessionRequest(BaseModel):
-    order_id: str
-    amount: float
-    success_url: str | None = None
-    cancel_url: str | None = None
+    # Legacy amount/plan/redirect fields may be sent but are never trusted.
+    model_config = ConfigDict(extra="ignore")
+
+    order_id: str = Field(min_length=1, strict=True)
 
 
 class CheckoutSessionResponse(BaseModel):
@@ -17,9 +17,8 @@ class CheckoutSessionResponse(BaseModel):
     status: str | None = None
 
 
-class StripeCheckoutRequest(BaseModel):
-    plan_id: str
-    order_id: str
+class StripeCheckoutRequest(CheckoutSessionRequest):
+    pass
 
 
 class StripeCheckoutResponse(BaseModel):

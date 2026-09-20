@@ -1,7 +1,30 @@
 import re
 from typing import Literal
 
-RouteType = Literal["search", "recommendation", "order", "compare", "unknown"]
+RouteType = Literal["search", "recommendation", "confirm_order", "payment", "compare", "unknown"]
+
+
+def transaction_intent(message: str) -> Literal["recommend", "confirm_order", "payment"]:
+    """Recognize explicit commands, never transaction words embedded in prose.
+
+    Fail closed for questions, negations, quoted examples and ambiguous wording.
+    Procurement requirements such as buy/purchase are not authorization.
+    """
+    text = message.strip()
+    order_patterns = (
+        r"(?:please\s+)?(?:confirm|approve)\s+(?:(?:this|the|selected)\s+)?"
+        r"plan(?:\s+[abc])?\s+and\s+(?:place|create)\s+(?:(?:an?|the)\s+)?order",
+        r"(?:please\s+)?(?:place|create)\s+(?:(?:an?|the)\s+)?order(?:\s+now)?",
+        r"(?:请)?确认\s*(?:(?:这个|该|所选)?方案\s*[ABCabc]?\s*(?:并|并且|然后))?\s*下单",
+    )
+    payment_patterns = (
+        r"(?:please\s+)?(?:pay\s+now|proceed\s+to\s+(?:payment|checkout)|confirm\s+payment)",
+        r"(?:请)?(?:确认|立即)\s*(?:支付|付款|结账)",
+    )
+    for intent, patterns in (("confirm_order", order_patterns), ("payment", payment_patterns)):
+        if any(re.fullmatch(pattern + r"[.!。！]?", text, re.IGNORECASE) for pattern in patterns):
+            return intent
+    return "recommend"
 
 _KNOWN_CATEGORIES = {
     "laptop", "monitor", "keyboard", "mouse", "headset", "webcam",
@@ -14,15 +37,9 @@ def route_intent(message: str) -> dict:
     text = message.strip()
     lowered = text.lower()
 
-    # --- Order ---
-    order_patterns = [
-        r"\b(?:place|create|make)\s*(?:an?\s*)?order\b",
-        r"\b(?:checkout|buy|purchase|order\s*now|add\s*to\s*cart)\b",
-        r"\b下单|购买|加入购物车|结算\b",
-    ]
-    for pat in order_patterns:
-        if re.search(pat, lowered):
-            return {"route": "order", "confidence": 0.9, "matched_by": "order_keywords"}
+    transaction = transaction_intent(text)
+    if transaction != "recommend":
+        return {"route": transaction, "confidence": 0.9, "matched_by": "explicit_transaction_command"}
 
     # --- Compare ---
     compare_patterns = [
@@ -35,7 +52,8 @@ def route_intent(message: str) -> dict:
 
     # --- Recommendation ---
     recommend_patterns = [
-        r"\b(?:recommend|suggest|need|want|looking for|setup|配置|配一套)\b",
+        r"\b(?:recommend|suggest|need|want|looking for|setup|buy|purchase|procure|procurement)\b",
+        r"配置|配一套|采购|购买|买",
         r"\b预算\s*\d+",
         r"\b推荐|预算|买[一\d]",
         r"\b推荐\s*\d+\s*台",

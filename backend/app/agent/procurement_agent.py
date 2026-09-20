@@ -5,6 +5,7 @@ from typing import Any
 from app.agent.intent_parser import parse_purchase_request
 from app.agent.plan_generator import generate_plan_explanation, generate_procurement_plan
 from app.agent.plan_variants import generate_plan_options
+from app.agent.router import transaction_intent
 from app.agent.prompts import ERROR_MESSAGES, PLAN_RESPONSE_TEMPLATES
 from app.agent.session_state import get_session_state, save_session_state
 from app.observability.langfuse_client import LangfuseClient
@@ -77,7 +78,7 @@ def _determine_response_type(
     """Determine response type from parsed intent and plan context.
 
     Priority:
-      1) Explicit order/payment keywords → order/payment
+      1) Explicit transaction commands → order/payment
       2) Search/browse + categories → product_results
       3) Plan signals (recommend/need/budget/multi+qty) → recommendation_plan
       4) Fallback: plan has items → recommendation_plan
@@ -87,8 +88,11 @@ def _determine_response_type(
     categories = intent.get("categories") or []
     budget = intent.get("budget")
 
-    if any(w in lowered for w in ["order", "checkout", "pay", "payment", "buy", "purchase", "订单", "下单", "结账", "支付", "付款", "买", "购买"]):
-        return "payment" if any(w in lowered for w in ["pay", "checkout", "支付", "付款", "结账"]) else "order"
+    transaction = transaction_intent(message)
+    if transaction == "confirm_order":
+        return "order"  # Preserve the public response schema.
+    if transaction == "payment":
+        return "payment"
 
     has_search_kw = any(
         w in lowered for w in [
@@ -325,11 +329,16 @@ def run_procurement_agent(
 
     recommendation_plan = plan if response_type == "recommendation_plan" else None
 
-    # Auto-order + checkout for order/payment intents
+    # Only explicit transaction commands may reach order/checkout side effects.
     order_id = None
     order_status = None
     checkout_url = None
-    if response_type in ("order", "payment") and plan.get("items"):
+    if (
+        error is None
+        and response_type in ("order", "payment")
+        and transaction_intent(message) in ("confirm_order", "payment")
+        and plan.get("items")
+    ):
         try:
             if plan_options:
                 first_valid = next((o for o in plan_options if o.get("plan", {}).get("budget_status") != "over_budget"), plan_options[0])

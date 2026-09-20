@@ -6,7 +6,7 @@ from types import SimpleNamespace
 from fastapi.testclient import TestClient
 
 import app.services.stripe_payment_service as stripe_payment_service
-from app.services import order_service
+from app.services import order_service, product_service
 from main import app
 
 
@@ -38,7 +38,15 @@ def _plan(**overrides):
 def _save_order(tmp_path, monkeypatch, plan=None, status="pending_payment"):
     orders_file = tmp_path / "orders.json"
     monkeypatch.setattr(order_service, "ORDERS_FILE", orders_file)
+    monkeypatch.setattr(product_service, "load_products_from_csv", lambda: [
+        {"product_id": "P-1", "name": "Team Keyboard", "category": "Keyboard",
+         "supplier": "Northwind", "price": 25.25},
+    ])
     order = order_service.create_order_from_plan(plan or _plan(), user_id="demo-user")
+    # Payment tests exercise existing server-side plan states, not client input.
+    # Seed these states after order canonicalization; retain canonical amounts.
+    for key in ("over_budget", "selectable", "status", "budget_status"):
+        order["procurement_plan"][key] = (plan or _plan())[key]
     order["status"] = status
     order_service.save_order(order)
     return order

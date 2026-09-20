@@ -2,12 +2,30 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
+
+
+class OrderItemSelection(BaseModel):
+    # Accept legacy payloads, but never retain their prices or product metadata.
+    model_config = ConfigDict(extra="ignore")
+
+    product_id: str = Field(min_length=1, strict=True)
+    quantity: int = Field(gt=0, strict=True)
+
+
+class OrderPlanSelection(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    items: list[OrderItemSelection] = Field(min_length=1)
+    plan_option_id: str | None = None
+    plan_id: str | None = None
+    # A requested spending limit, not proof of approval or execution eligibility.
+    budget: float | None = Field(default=None, ge=0, allow_inf_nan=False)
 
 
 class OrderCreateRequest(BaseModel):
     user_id: str = "demo-user"
-    plan: dict[str, Any]
+    plan: OrderPlanSelection
 
 
 class OrderResponse(BaseModel):

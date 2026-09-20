@@ -11,7 +11,10 @@ router = APIRouter(prefix="/api/orders", tags=["orders"])
 
 @router.post("", response_model=OrderResponse)
 def create_order(request: OrderCreateRequest) -> OrderResponse:
-    order = create_order_from_plan(request.plan, request.user_id)
+    try:
+        order = create_order_from_plan(request.plan.model_dump(), request.user_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     return OrderResponse(**save_order(order))
 
 

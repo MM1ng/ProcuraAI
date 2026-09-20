@@ -47,13 +47,16 @@ export const api = {
   },
   getProduct(id: string) { return request<Product>(`/api/products/${id}`); },
   createOrderFromCart(items: CartItem[], userId = "demo-user") {
-    const pis = items.map(i => ({ product_id: i.product_id, name: i.name, category: i.category, brand: i.brand, supplier: i.supplier, quantity: i.quantity, unit_price: i.price, subtotal: i.price * i.quantity, rating: i.rating, stock: i.stock, delivery_days: i.delivery_days }));
-    const total = pis.reduce((s, i) => s + i.subtotal, 0);
-    const plan = { items: pis, total_amount: total, budget_status: "no_budget_provided", inventory_status: "valid", constraint_satisfaction: "satisfied" };
+    const plan = { items: items.map(i => ({ product_id: i.product_id, quantity: i.quantity })) };
     return request<Order>("/api/orders", { method: "POST", body: JSON.stringify({ user_id: userId, plan }) });
   },
   createOrder(plan: ProcurementPlan, userId = "demo-user") {
-    return request<Order>("/api/orders", { method: "POST", body: JSON.stringify({ user_id: userId, plan }) });
+    const selection = {
+      plan_option_id: plan.plan_option_id,
+      budget: plan.budget,
+      items: plan.items.map(i => ({ product_id: i.product_id, quantity: i.quantity })),
+    };
+    return request<Order>("/api/orders", { method: "POST", body: JSON.stringify({ user_id: userId, plan: selection }) });
   },
   orders() { return request<{ items: Order[]; total: number }>("/api/orders"); },
   getOrder(id: string) { return request<Order>(`/api/orders/${id}`); },

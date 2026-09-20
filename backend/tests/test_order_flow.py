@@ -1,7 +1,12 @@
 from app.services.order_service import create_order_from_plan
+from app.services import product_service
 
 
-def test_create_order_from_plan_returns_pending_payment_order_with_items():
+def test_create_order_from_plan_returns_pending_payment_order_with_items(monkeypatch):
+    monkeypatch.setattr(product_service, "load_products_from_csv", lambda: [
+        {"product_id": "P-201", "name": "Reliable Keyboard", "price": 40.0},
+        {"product_id": "P-202", "name": "Reliable Mouse", "price": 20.0},
+    ])
     plan = {
         "items": [
             {

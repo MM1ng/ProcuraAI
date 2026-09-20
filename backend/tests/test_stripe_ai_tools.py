@@ -3,7 +3,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 
 import app.services.stripe_payment_service as stripe_payment_service
-from app.services import order_service
+from app.services import order_service, product_service
 from app.tools.stripe_ai_tools import create_checkout_for_selected_plan
 
 
@@ -35,7 +35,15 @@ def _plan(**overrides):
 def _save_order(tmp_path, monkeypatch, plan=None, status="pending_payment"):
     orders_file = tmp_path / "orders.json"
     monkeypatch.setattr(order_service, "ORDERS_FILE", orders_file)
+    monkeypatch.setattr(product_service, "load_products_from_csv", lambda: [
+        {"product_id": "P-1", "name": "Team Keyboard", "category": "Keyboard",
+         "supplier": "Northwind", "price": 25.25},
+    ])
     order = order_service.create_order_from_plan(plan or _plan(), user_id="demo-user")
+    # Payment tests exercise existing server-side plan states, not client input.
+    # Seed these states after order canonicalization; retain canonical amounts.
+    for key in ("over_budget", "selectable", "status", "budget_status"):
+        order["procurement_plan"][key] = (plan or _plan())[key]
     order["status"] = status
     order_service.save_order(order)
     return order
@@ -106,6 +114,11 @@ def test_ai_tool_rejects_unselectable_plan(tmp_path, monkeypatch):
 
 def test_ai_tool_uses_backend_recalculated_item_amounts(tmp_path, monkeypatch):
     order = _save_order(tmp_path, monkeypatch)
+    # Seed stale persisted totals explicitly now that order creation repairs them.
+    order["procurement_plan"]["total_amount"] = 9999.99
+    order_service.update_order(order["order_id"], {
+        "total_amount": 9999.99, "procurement_plan": order["procurement_plan"],
+    })
     _patch_stripe(monkeypatch)
 
     create_checkout_for_selected_plan("plan_a", order["order_id"])

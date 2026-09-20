@@ -3,10 +3,13 @@ from __future__ import annotations
 import json
 import uuid
 from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from pathlib import Path
 from typing import Any
 
 from app.core.config import DATA_DIR
+from app.schemas.order import OrderPlanSelection
+from app.services import product_service
 
 
 ORDERS_FILE = DATA_DIR / "orders.json"
@@ -24,29 +27,59 @@ def _write_orders(orders: list[dict[str, Any]]) -> None:
 
 
 def create_order_from_plan(plan: dict[str, Any], user_id: str = "demo-user") -> dict[str, Any]:
+    # Validate here too: Agent/tool callers bypass the HTTP request schema.
+    selection = OrderPlanSelection.model_validate(plan)
+    catalog = {product["product_id"]: product for product in product_service.load_products_from_csv()}
     order_items = []
-    for item in plan.get("items", []):
-        quantity = int(item.get("quantity", 0) or 0)
-        unit_price = float(item.get("unit_price", item.get("price", 0)) or 0)
-        subtotal = round(float(item.get("subtotal", unit_price * quantity) or 0), 2)
+    total = Decimal("0.00")
+    for item in selection.items:
+        product = catalog.get(item.product_id)
+        if product is None:
+            raise ValueError(f"Unknown product_id: {item.product_id}")
+        try:
+            unit_price = Decimal(str(product["price"]))
+            if not unit_price.is_finite() or unit_price <= 0:
+                raise ValueError(f"Invalid catalog price for product: {item.product_id}")
+            unit_price = unit_price.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            if unit_price <= 0:
+                raise ValueError(f"Invalid catalog price for product: {item.product_id}")
+            subtotal = (unit_price * item.quantity).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            total += subtotal
+        except (InvalidOperation, KeyError) as exc:
+            raise ValueError(f"Invalid catalog amount for product: {item.product_id}") from exc
         order_items.append(
             {
+                **{key: product[key] for key in ("category", "brand", "supplier", "rating", "stock", "delivery_days") if key in product},
                 "order_item_id": str(uuid.uuid4()),
-                "product_id": item.get("product_id"),
-                "name": item.get("name", ""),
-                "quantity": quantity,
-                "unit_price": round(unit_price, 2),
-                "subtotal": subtotal,
+                "product_id": item.product_id,
+                "name": product.get("name", ""),
+                "quantity": item.quantity,
+                "unit_price": float(unit_price),
+                "subtotal": float(subtotal),
             }
         )
 
-    total_amount = round(float(plan.get("total_amount", sum(item["subtotal"] for item in order_items)) or 0), 2)
-    plan_id = str(plan.get("plan_option_id") or plan.get("plan_id") or "")
+    total_amount = float(total)
+    plan_id = selection.plan_option_id or selection.plan_id or ""
+    over_budget = selection.budget is not None and total > Decimal(str(selection.budget))
+    budget_status = "no_budget_provided" if selection.budget is None else ("over_budget" if over_budget else "within_budget")
+    # Rebuild rather than copying the original plan: checkout also reads this snapshot.
+    snapshot = {
+        "plan_option_id": plan_id,
+        "items": [{key: value for key, value in item.items() if key != "order_item_id"} for item in order_items],
+        "total": total_amount,
+        "total_amount": total_amount,
+        "budget": selection.budget,
+        "budget_status": budget_status,
+        "status": budget_status,
+        "over_budget": over_budget,
+        "selectable": not over_budget,
+    }
     return {
         "order_id": f"ORD-{uuid.uuid4().hex[:10].upper()}",
         "user_id": user_id,
         "plan_id": plan_id,
-        "procurement_plan": plan,
+        "procurement_plan": snapshot,
         "order_items": order_items,
         "total_amount": total_amount,
         "status": "pending_payment",

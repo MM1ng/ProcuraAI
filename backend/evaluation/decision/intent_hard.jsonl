@@ -1,0 +1,48 @@
+{"id":"hard-clr-01","text":"那套看着挺合适","label":"clarify","language":"zh"}
+{"id":"hard-clr-02","text":"B似乎不错","label":"clarify","language":"zh"}
+{"id":"hard-clr-03","text":"先按这个思路保留","label":"clarify","language":"zh"}
+{"id":"hard-clr-04","text":"我想再确认下细节","label":"clarify","language":"zh"}
+{"id":"hard-clr-05","text":"如果有折扣再说","label":"clarify","language":"zh"}
+{"id":"hard-clr-06","text":"暂不需要操作","label":"clarify","language":"zh"}
+{"id":"hard-clr-07","text":"我只是看一下报价","label":"clarify","language":"zh"}
+{"id":"hard-clr-08","text":"可以先不提交","label":"clarify","language":"zh"}
+{"id":"hard-clr-09","text":"先别创建采购单","label":"clarify","language":"zh"}
+{"id":"hard-clr-10","text":"不要进行支付","label":"clarify","language":"zh"}
+{"id":"hard-clr-11","text":"现在能不能下单？","label":"clarify","language":"zh"}
+{"id":"hard-clr-12","text":"这个是否已经可以结账","label":"clarify","language":"zh"}
+{"id":"hard-clr-13","text":"This option looks acceptable","label":"clarify","language":"en"}
+{"id":"hard-clr-14","text":"Do not submit anything yet","label":"clarify","language":"en"}
+{"id":"hard-clr-15","text":"Can we order this at this point","label":"clarify","language":"en"}
+{"id":"hard-clr-16","text":"I am not ready to make a payment","label":"clarify","language":"en"}
+{"id":"hard-rec-01","text":"为二十位新人规划基础办公用品","label":"recommend","language":"zh"}
+{"id":"hard-rec-02","text":"想了解适合直播间的摄像设备","label":"recommend","language":"zh"}
+{"id":"hard-rec-03","text":"预算一万给小组配显示器","label":"recommend","language":"zh"}
+{"id":"hard-rec-04","text":"采购会议室音响有什么建议","label":"recommend","language":"zh"}
+{"id":"hard-rec-05","text":"列出适合出差员工的轻便电脑","label":"recommend","language":"zh"}
+{"id":"hard-rec-06","text":"What equipment should a new branch buy","label":"recommend","language":"en"}
+{"id":"hard-rec-07","text":"Suggest monitors for a finance department","label":"recommend","language":"en"}
+{"id":"hard-rec-08","text":"Need a reliable printer for invoices","label":"recommend","language":"en"}
+{"id":"hard-mod-01","text":"如果库存够，就把键盘加到方案里","label":"modify_plan","language":"zh"}
+{"id":"hard-mod-02","text":"预算允许的话改用高端鼠标","label":"modify_plan","language":"zh"}
+{"id":"hard-mod-03","text":"保留耳机但把配送限制改宽","label":"modify_plan","language":"zh"}
+{"id":"hard-mod-04","text":"请把方案A的笔记本替换为轻薄款","label":"modify_plan","language":"zh"}
+{"id":"hard-mod-05","text":"If stock permits, add two monitors","label":"modify_plan","language":"en"}
+{"id":"hard-mod-06","text":"Change delivery to within five days","label":"modify_plan","language":"en"}
+{"id":"hard-exp-01","text":"如果用户说确认下单，系统会做什么","label":"explain_plan","language":"zh"}
+{"id":"hard-exp-02","text":"“支付该订单”这句话是什么意思","label":"explain_plan","language":"zh"}
+{"id":"hard-exp-03","text":"为什么这个计划被标为不可执行","label":"explain_plan","language":"zh"}
+{"id":"hard-exp-04","text":"What does the phrase pay this order mean","label":"explain_plan","language":"en"}
+{"id":"hard-cmp-01","text":"我不是购买，只是想对照A和B","label":"compare_plan","language":"zh"}
+{"id":"hard-cmp-02","text":"比较两种方案的库存风险","label":"compare_plan","language":"zh"}
+{"id":"hard-cmp-03","text":"A与B的预算差额是多少","label":"compare_plan","language":"zh"}
+{"id":"hard-cmp-04","text":"Compare these plans without taking action","label":"compare_plan","language":"en"}
+{"id":"hard-conf-01","text":"确认方案B并创建订单","label":"confirm_order","language":"zh"}
+{"id":"hard-conf-02","text":"按A方案现在提交采购单","label":"confirm_order","language":"zh"}
+{"id":"hard-conf-03","text":"Approve plan B and create the order now","label":"confirm_order","language":"en"}
+{"id":"hard-conf-04","text":"Submit an order for the selected plan","label":"confirm_order","language":"en"}
+{"id":"hard-pay-01","text":"支付 ORDER-5566","label":"payment","language":"zh"}
+{"id":"hard-pay-02","text":"立刻为当前订单结算","label":"payment","language":"zh"}
+{"id":"hard-pay-03","text":"Proceed with payment for this order","label":"payment","language":"en"}
+{"id":"hard-stat-01","text":"ORD-5566 是否已付款","label":"order_status","language":"zh"}
+{"id":"hard-stat-02","text":"Is order ORD-5566 ready for payment","label":"order_status","language":"en"}
+{"id":"hard-stat-03","text":"Where is my order in the process","label":"order_status","language":"en"}

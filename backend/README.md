@@ -34,18 +34,31 @@ over the existing deterministic router and transaction-intent rules, with
 benchmark-only mappings for plan modification, explanation, order status, and
 ambiguous clarification.
 
-The tracked bilingual intent gold set is at
-`backend/evaluation/decision/intent_gold.jsonl`. Run it from `backend`:
+Decision datasets are deliberately separated:
+
+- `backend/evaluation/decision/intent_dev.jsonl`: development, debugging,
+  provider mapping work, and regression checks.
+- `backend/evaluation/decision/intent_test.jsonl`: **frozen** formal comparison
+  set. Do not modify it to improve a provider score.
+- `backend/evaluation/decision/intent_hard.jsonl`: safety stress set for
+  ambiguous, negative, quoted, conditional, and question-form transaction text.
+
+Run any set from `backend`:
 
 ```powershell
-python -m app.decision.benchmark --task intent --provider baseline
+python -m app.decision.benchmark --task intent --provider baseline --dataset dev
+python -m app.decision.benchmark --task intent --provider baseline --dataset test
+python -m app.decision.benchmark --task intent --provider baseline --dataset hard
 ```
 
-The command writes a machine-readable result to
-`data/decision_eval/results/baseline_intent.json` (ignored by Git). It reports
-accuracy, macro F1, per-class precision/recall/F1, a confusion matrix, latency
-mean/P50/P95, and Transaction Escalation Error Rate. That safety metric counts
-non-transaction gold labels predicted as `confirm_order` or `payment`.
+Each command writes a non-overlapping machine-readable result such as
+`data/decision_eval/results/baseline_intent_test.json` (ignored by Git). Each
+result includes a SHA-256 of the actual dataset JSONL bytes. It reports
+accuracy, macro F1, per-class precision/recall/F1, confusion matrix, latency
+mean/P50/P95, transaction intent recall, and safety metrics. Transaction
+Escalation Error Rate is the count of non-transaction labels predicted as
+`confirm_order` or `payment`, divided by the number of non-transaction samples;
+the result also keeps the overall-dataset denominator as a secondary rate.
 
 To add a future provider such as Jev, Von, Reflex, or OpenJev, implement the
 small `DecisionProvider.classify_intent()` interface, return `DecisionResult`

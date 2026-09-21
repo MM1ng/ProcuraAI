@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -11,8 +12,21 @@ from app.decision.registry import get_provider
 from app.decision.schemas import IntentGoldCase
 
 
-GOLD_SET_PATH = Path(__file__).resolve().parents[2] / "evaluation" / "decision" / "intent_gold.jsonl"
+DATASET_DIR = Path(__file__).resolve().parents[2] / "evaluation" / "decision"
+DATASET_PATHS = {name: DATASET_DIR / f"intent_{name}.jsonl" for name in ("dev", "test", "hard")}
+GOLD_SET_PATH = DATASET_PATHS["dev"]  # Backward-compatible constant for development callers.
 RESULTS_DIR = DATA_DIR / "decision_eval" / "results"
+
+
+def dataset_path(dataset_name: str) -> Path:
+    try:
+        return DATASET_PATHS[dataset_name]
+    except KeyError as exc:
+        raise ValueError(f"Unknown intent dataset: {dataset_name}") from exc
+
+
+def dataset_sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def load_intent_gold_set(path: Path = GOLD_SET_PATH) -> list[IntentGoldCase]:
@@ -20,19 +34,23 @@ def load_intent_gold_set(path: Path = GOLD_SET_PATH) -> list[IntentGoldCase]:
         return [IntentGoldCase.model_validate_json(line) for line in handle if line.strip()]
 
 
-def run_intent_benchmark(provider_name: str, dataset_path: Path = GOLD_SET_PATH) -> dict[str, Any]:
-    provider, cases = get_provider(provider_name), load_intent_gold_set(dataset_path)
+def run_intent_benchmark(provider_name: str, dataset_name: str = "dev") -> dict[str, Any]:
+    path = dataset_path(dataset_name)
+    provider, cases = get_provider(provider_name), load_intent_gold_set(path)
     results = [provider.classify_intent(case.text, case.context) for case in cases]
     metrics = calculate_metrics(
         [case.label.value for case in cases], [result.label.value for result in results],
         [result.latency_ms for result in results],
     )
-    return {"task": "intent", "provider": provider.name, "dataset_size": len(cases), **metrics}
+    return {
+        "task": "intent", "provider": provider.name, "dataset_name": dataset_name,
+        "dataset_size": len(cases), "dataset_sha256": dataset_sha256(path), **metrics,
+    }
 
 
 def write_result(result: dict[str, Any], output_dir: Path = RESULTS_DIR) -> Path:
     output_dir.mkdir(parents=True, exist_ok=True)
-    output_path = output_dir / f"{result['provider']}_{result['task']}.json"
+    output_path = output_dir / f"{result['provider']}_{result['task']}_{result['dataset_name']}.json"
     output_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     return output_path
 
@@ -41,7 +59,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run an offline ProcuraAI decision benchmark.")
     parser.add_argument("--task", choices=["intent"], required=True)
     parser.add_argument("--provider", required=True)
-    parser.add_argument("--dataset", type=Path, default=GOLD_SET_PATH)
+    parser.add_argument("--dataset", choices=sorted(DATASET_PATHS), default="dev")
     parser.add_argument("--output-dir", type=Path, default=RESULTS_DIR)
     args = parser.parse_args()
     result = run_intent_benchmark(args.provider, args.dataset)

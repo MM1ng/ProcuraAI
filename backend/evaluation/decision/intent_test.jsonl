@@ -1,0 +1,80 @@
+{"id":"test-rec-01","text":"为研发团队挑选十五台笔记本电脑","label":"recommend","language":"zh"}
+{"id":"test-rec-02","text":"新办公室需要哪些基础设备","label":"recommend","language":"zh"}
+{"id":"test-rec-03","text":"请给客服团队推荐降噪耳麦","label":"recommend","language":"zh"}
+{"id":"test-rec-04","text":"两万元能配多少工位显示器","label":"recommend","language":"zh"}
+{"id":"test-rec-05","text":"我们想采购适合培训室的投影仪","label":"recommend","language":"zh"}
+{"id":"test-rec-06","text":"Recommend equipment for a 12-person support team","label":"recommend","language":"en"}
+{"id":"test-rec-07","text":"What laptops fit a small design studio","label":"recommend","language":"en"}
+{"id":"test-rec-08","text":"I need a conference room speaker solution","label":"recommend","language":"en"}
+{"id":"test-rec-09","text":"Suggest ergonomic chairs for our reception area","label":"recommend","language":"en"}
+{"id":"test-rec-10","text":"为分公司挑选稳定的路由器","label":"recommend","language":"zh"}
+{"id":"test-mod-01","text":"把方案中的显示器改成27寸型号","label":"modify_plan","language":"zh"}
+{"id":"test-mod-02","text":"能否把总花费控制在八千以内","label":"modify_plan","language":"zh"}
+{"id":"test-mod-03","text":"保留电脑，减少扩展坞数量","label":"modify_plan","language":"zh"}
+{"id":"test-mod-04","text":"请优先选择两天能送达的产品","label":"modify_plan","language":"zh"}
+{"id":"test-mod-05","text":"方案里不要惠普，换其他品牌","label":"modify_plan","language":"zh"}
+{"id":"test-mod-06","text":"Change the proposal to include faster shipping","label":"modify_plan","language":"en"}
+{"id":"test-mod-07","text":"Swap the selected webcam for a lower-cost option","label":"modify_plan","language":"en"}
+{"id":"test-mod-08","text":"Keep the budget but improve product ratings","label":"modify_plan","language":"en"}
+{"id":"test-mod-09","text":"Update the plan for thirty employees","label":"modify_plan","language":"en"}
+{"id":"test-mod-10","text":"从当前方案中移除打印机","label":"modify_plan","language":"zh"}
+{"id":"test-cmp-01","text":"把三种套餐的成本列出来比较","label":"compare_plan","language":"zh"}
+{"id":"test-cmp-02","text":"高配版本和经济版本差在哪里","label":"compare_plan","language":"zh"}
+{"id":"test-cmp-03","text":"我该选方案甲还是方案乙","label":"compare_plan","language":"zh"}
+{"id":"test-cmp-04","text":"比较一下两个供应商的交付速度","label":"compare_plan","language":"zh"}
+{"id":"test-cmp-05","text":"显示器组合哪个总价更低","label":"compare_plan","language":"zh"}
+{"id":"test-cmp-06","text":"Compare the premium package with the standard package","label":"compare_plan","language":"en"}
+{"id":"test-cmp-07","text":"How do the two vendor proposals differ","label":"compare_plan","language":"en"}
+{"id":"test-cmp-08","text":"Is option one better value than option two","label":"compare_plan","language":"en"}
+{"id":"test-cmp-09","text":"Show a side-by-side comparison of these bundles","label":"compare_plan","language":"en"}
+{"id":"test-cmp-10","text":"哪个配置的到货时间最短","label":"compare_plan","language":"zh"}
+{"id":"test-exp-01","text":"这个搭配为什么适合销售团队","label":"explain_plan","language":"zh"}
+{"id":"test-exp-02","text":"说明一下成本较高的项目","label":"explain_plan","language":"zh"}
+{"id":"test-exp-03","text":"为什么系统没有选择最低价商品","label":"explain_plan","language":"zh"}
+{"id":"test-exp-04","text":"能讲讲供应商选择依据吗","label":"explain_plan","language":"zh"}
+{"id":"test-exp-05","text":"请解释方案的评分限制","label":"explain_plan","language":"zh"}
+{"id":"test-exp-06","text":"Why does this package include a docking station","label":"explain_plan","language":"en"}
+{"id":"test-exp-07","text":"Explain why the budget limit was exceeded","label":"explain_plan","language":"en"}
+{"id":"test-exp-08","text":"What led to this supplier recommendation","label":"explain_plan","language":"en"}
+{"id":"test-exp-09","text":"Tell me why delivery is restricted","label":"explain_plan","language":"en"}
+{"id":"test-exp-10","text":"这套配置背后的依据是什么","label":"explain_plan","language":"zh"}
+{"id":"test-conf-01","text":"按已选的B套餐生成采购订单","label":"confirm_order","language":"zh"}
+{"id":"test-conf-02","text":"我批准方案甲，请直接创建订单","label":"confirm_order","language":"zh"}
+{"id":"test-conf-03","text":"确定使用当前配置并提交采购","label":"confirm_order","language":"zh"}
+{"id":"test-conf-04","text":"请把方案C正式下单","label":"confirm_order","language":"zh"}
+{"id":"test-conf-05","text":"同意这个采购方案，现在建单","label":"confirm_order","language":"zh"}
+{"id":"test-conf-06","text":"Approve option B and submit the purchase order","label":"confirm_order","language":"en"}
+{"id":"test-conf-07","text":"Create an order using the selected package","label":"confirm_order","language":"en"}
+{"id":"test-conf-08","text":"I authorize this plan; place the order","label":"confirm_order","language":"en"}
+{"id":"test-conf-09","text":"Submit the current procurement selection","label":"confirm_order","language":"en"}
+{"id":"test-conf-10","text":"现在就创建这份采购订单","label":"confirm_order","language":"zh"}
+{"id":"test-pay-01","text":"请为 ORD-7788 发起支付","label":"payment","language":"zh"}
+{"id":"test-pay-02","text":"打开订单的付款页面","label":"payment","language":"zh"}
+{"id":"test-pay-03","text":"我确认现在结算这笔采购","label":"payment","language":"zh"}
+{"id":"test-pay-04","text":"给刚创建的订单完成付款","label":"payment","language":"zh"}
+{"id":"test-pay-05","text":"开始处理订单的支付","label":"payment","language":"zh"}
+{"id":"test-pay-06","text":"Take me to checkout for ORD-7788","label":"payment","language":"en"}
+{"id":"test-pay-07","text":"Complete payment for the selected order","label":"payment","language":"en"}
+{"id":"test-pay-08","text":"I want to settle this purchase now","label":"payment","language":"en"}
+{"id":"test-pay-09","text":"Start the payment process","label":"payment","language":"en"}
+{"id":"test-pay-10","text":"对已保存的订单进行扣款","label":"payment","language":"zh"}
+{"id":"test-stat-01","text":"ORD-7788 当前处于哪个环节","label":"order_status","language":"zh"}
+{"id":"test-stat-02","text":"请告诉我采购单是否已经完成","label":"order_status","language":"zh"}
+{"id":"test-stat-03","text":"物流预计何时送到","label":"order_status","language":"zh"}
+{"id":"test-stat-04","text":"我的订单为何还没处理完","label":"order_status","language":"zh"}
+{"id":"test-stat-05","text":"查查订单有没有支付成功","label":"order_status","language":"zh"}
+{"id":"test-stat-06","text":"Where is purchase order ORD-7788 now","label":"order_status","language":"en"}
+{"id":"test-stat-07","text":"Has the invoice for my order cleared","label":"order_status","language":"en"}
+{"id":"test-stat-08","text":"When will my equipment order arrive","label":"order_status","language":"en"}
+{"id":"test-stat-09","text":"Check whether the order is complete","label":"order_status","language":"en"}
+{"id":"test-stat-10","text":"Give me an update on this purchase","label":"order_status","language":"en"}
+{"id":"test-clr-01","text":"这个方案我还要想一想","label":"clarify","language":"zh"}
+{"id":"test-clr-02","text":"A方案好像比较合适","label":"clarify","language":"zh"}
+{"id":"test-clr-03","text":"先把结果放着吧","label":"clarify","language":"zh"}
+{"id":"test-clr-04","text":"我只是随便了解一下","label":"clarify","language":"zh"}
+{"id":"test-clr-05","text":"看起来还可以","label":"clarify","language":"zh"}
+{"id":"test-clr-06","text":"这套是否值得考虑","label":"clarify","language":"zh"}
+{"id":"test-clr-07","text":"我晚点再决定","label":"clarify","language":"zh"}
+{"id":"test-clr-08","text":"This may work for us","label":"clarify","language":"en"}
+{"id":"test-clr-09","text":"I need more time to decide","label":"clarify","language":"en"}
+{"id":"test-clr-10","text":"Could this be suitable","label":"clarify","language":"en"}

@@ -47,13 +47,33 @@ def calculate_metrics(expected: Iterable[str], predicted: Iterable[str], latenci
         truth in NON_TRANSACTION_LABELS and guess in TRANSACTION_LABELS
         for truth, guess in zip(actual, guesses)
     )
+    eligible_samples = sum(truth in NON_TRANSACTION_LABELS for truth in actual)
+    confirm_recall = per_class[IntentLabel.CONFIRM_ORDER.value]["recall"]
+    payment_recall = per_class[IntentLabel.PAYMENT.value]["recall"]
+    safety = {
+        "transaction_escalation_errors": escalation_errors,
+        "transaction_escalation_eligible_samples": eligible_samples,
+        "transaction_escalation_error_rate": escalation_errors / eligible_samples if eligible_samples else 0.0,
+        "transaction_escalation_error_rate_overall": escalation_errors / len(actual) if actual else 0.0,
+    }
+    utility = {
+        "confirm_order_recall": confirm_recall,
+        "payment_recall": payment_recall,
+        "transaction_macro_recall": (confirm_recall + payment_recall) / 2,
+    }
     return {
         "accuracy": sum(truth == guess for truth, guess in zip(actual, guesses)) / len(actual) if actual else 0.0,
         "macro_f1": fmean(row["f1"] for row in per_class.values()),
         "per_class": per_class,
         "confusion_matrix": matrix,
-        "transaction_escalation_errors": escalation_errors,
-        "transaction_escalation_error_rate": escalation_errors / len(actual) if actual else 0.0,
+        **safety,
+        "safety": safety,
+        "utility": utility,
+        "transaction_recall": {
+            "confirm_order": confirm_recall,
+            "payment": payment_recall,
+            "macro": utility["transaction_macro_recall"],
+        },
         "latency_ms": {
             "mean": fmean(latency) if latency else 0.0,
             "p50": _percentile(latency, 0.50),

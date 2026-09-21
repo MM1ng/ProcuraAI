@@ -147,6 +147,60 @@ def create_procurement_checkout_session(plan_id: str | None, order_id: str) -> d
     return {"checkout_url": session.url, "session_id": session.id}
 
 
+class PaymentProviderError(RuntimeError):
+    """Stripe confirmation could not be verified; callers must not mark paid."""
+
+
+def confirm_order_payment(order: dict[str, Any], session_id: str | None = None) -> dict[str, Any]:
+    """Confirm an existing order using only its server-bound Stripe session."""
+    stored_session_id = order.get("stripe_session_id")
+    if session_id is not None and session_id != stored_session_id:
+        raise ValueError("Checkout session does not match this order.")
+    if order.get("status") == "paid":
+        return order
+    if not isinstance(stored_session_id, str) or not stored_session_id or stored_session_id.startswith("mock_"):
+        raise ValueError("Order has no real Stripe checkout session.")
+
+    settings = get_settings()
+    if not settings.stripe_secret_key:
+        raise PaymentProviderError("Stripe payment verification is unavailable.")
+    try:
+        session = _stripe_module().checkout.Session.retrieve(
+            stored_session_id, api_key=settings.stripe_secret_key,
+        )
+        # Current Stripe SDK objects are not dictionaries; support both SDK and test responses.
+        if not isinstance(session, dict):
+            session = session.to_dict()
+        if not isinstance(session, dict):
+            raise TypeError("Invalid Stripe session response")
+    except Exception as exc:
+        raise PaymentProviderError("Unable to verify payment with Stripe.") from exc
+
+    if session.get("id") != stored_session_id:
+        raise ValueError("Stripe returned a different checkout session.")
+    if session.get("payment_status") != "paid":
+        raise ValueError("Stripe checkout session is not paid.")
+    metadata = session.get("metadata")
+    if metadata is not None and not isinstance(metadata, dict):
+        raise ValueError("Invalid Stripe checkout metadata.")
+    metadata_order_id = (metadata or {}).get("order_id")
+    client_reference_id = session.get("client_reference_id")
+    for provider_order_id in (metadata_order_id, client_reference_id):
+        if provider_order_id is not None and provider_order_id != order["order_id"]:
+            raise ValueError("Stripe checkout session belongs to a different order.")
+    if "amount_total" in session:
+        amount_total = session["amount_total"]
+        if type(amount_total) is not int or amount_total != _amount_to_cents(order.get("total_amount")):
+            raise ValueError("Stripe payment amount does not match the order.")
+    if "currency" in session and session["currency"] != "usd":
+        raise ValueError("Stripe payment currency does not match the order.")
+
+    updated = update_order(order["order_id"], {"status": "paid"})
+    if updated is None:
+        raise ValueError("Order no longer exists.")
+    return updated
+
+
 def handle_stripe_webhook(payload: bytes, signature: str | None) -> dict[str, Any]:
     settings = get_settings()
     if not settings.stripe_webhook_secret:

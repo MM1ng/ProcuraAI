@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
 
@@ -46,6 +46,8 @@ def _int_env(name: str, default: int) -> int:
 
 @dataclass(frozen=True)
 class Settings:
+    app_env: str = field(default_factory=lambda: os.getenv("APP_ENV", "").strip().lower())
+    allow_mock_payment: bool = field(default_factory=lambda: _bool_env("ALLOW_MOCK_PAYMENT", False))
     database_url: str = os.getenv("DATABASE_URL", "")
     sqlite_database_url: str = os.getenv("SQLITE_DATABASE_URL", DEFAULT_SQLITE_URL)
     openai_api_key: str = os.getenv("OPENAI_API_KEY", "")

@@ -10,7 +10,12 @@ from app.schemas.payment import (
     StripeCheckoutResponse,
 )
 from app.services.payment_service import create_checkout
-from app.services.stripe_payment_service import create_procurement_checkout_session, handle_stripe_webhook
+from app.services.stripe_payment_service import (
+    PaymentProviderError,
+    confirm_order_payment,
+    create_procurement_checkout_session,
+    handle_stripe_webhook,
+)
 from app.services.order_service import get_order, get_order_by_stripe_session_id, update_order
 
 
@@ -64,10 +69,14 @@ async def stripe_webhook(request: Request) -> dict:
 
 @router.post("/mock-success")
 def mock_payment_success(payload: dict) -> dict:
-    """Idempotent mock payment success endpoint.
-
-    Sets order status to 'paid'. If already paid, returns current status.
-    """
+    """Explicitly enabled local-only mock confirmation; never confirm real sessions."""
+    settings = get_settings()
+    if (
+        settings.app_env not in {"development", "test"}
+        or not settings.allow_mock_payment
+        or not (settings.use_mock_payment or not settings.stripe_secret_key)
+    ):
+        raise HTTPException(status_code=403, detail="Mock payment confirmation is disabled.")
     order_id = payload.get("order_id")
     if not order_id:
         raise HTTPException(status_code=400, detail="order_id is required")
@@ -75,6 +84,10 @@ def mock_payment_success(payload: dict) -> dict:
     order = get_order(order_id)
     if not order:
         raise HTTPException(status_code=404, detail=f"Order {order_id} not found")
+
+    stored_session_id = order.get("stripe_session_id")
+    if stored_session_id and not str(stored_session_id).startswith("mock_"):
+        raise HTTPException(status_code=403, detail="Real checkout sessions require Stripe verification.")
 
     if order.get("status") == "paid":
         return {
@@ -94,15 +107,12 @@ def mock_payment_success(payload: dict) -> dict:
 
 @router.post("/confirm")
 def confirm_payment(payload: dict) -> dict:
-    """Confirm payment by order_id or session_id.
-
-    Used by the payment success page when the user is redirected back
-    from Stripe Checkout (real or mock). This handles the local-dev case
-    where no Stripe webhook reaches the backend.
-    """
+    """Look up the order, then verify its bound checkout session with Stripe."""
     order_id = payload.get("order_id")
     session_id = payload.get("session_id")
 
+    if any(value is not None and (not isinstance(value, str) or not value.strip()) for value in (order_id, session_id)):
+        raise HTTPException(status_code=400, detail="order_id and session_id must be non-empty strings")
     if not order_id and not session_id:
         raise HTTPException(status_code=400, detail="order_id or session_id is required")
 
@@ -115,17 +125,15 @@ def confirm_payment(payload: dict) -> dict:
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
 
-    if order.get("status") == "paid":
-        return {
-            "order_id": order.get("order_id"),
-            "status": "paid",
-            "message": "Order was already paid",
-        }
-
-    updated = update_order(order.get("order_id"), {"status": "paid"})
+    try:
+        updated = confirm_order_payment(order, session_id=session_id)
+    except PaymentProviderError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
     return {
         "order_id": updated.get("order_id"),
-        "status": "paid",
-        "message": "Payment confirmed successfully",
+        "status": updated.get("status"),
+        "message": "Order was already paid" if order.get("status") == "paid" else "Payment verified with Stripe",
         "order": updated,
     }

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from types import SimpleNamespace
+from unittest.mock import Mock
 
 from fastapi.testclient import TestClient
 
@@ -113,6 +114,16 @@ def test_mock_checkout_success_url_preserves_order_id_and_mock_params(tmp_path, 
 
 def test_confirm_payment_marks_order_paid_by_order_id(tmp_path, monkeypatch):
     order = _save_order(tmp_path, monkeypatch)
+    order_service.update_order(order["order_id"], {"stripe_session_id": "cs_test_confirm"})
+    retrieve = Mock(return_value={
+        "id": "cs_test_confirm", "payment_status": "paid",
+        "metadata": {"order_id": order["order_id"]}, "client_reference_id": order["order_id"],
+        "amount_total": 5050, "currency": "usd",
+    })
+    monkeypatch.setattr(stripe_payment_service, "get_settings", _stripe_settings)
+    monkeypatch.setattr(stripe_payment_service, "_stripe_module", lambda: SimpleNamespace(
+        checkout=SimpleNamespace(Session=SimpleNamespace(retrieve=retrieve)),
+    ))
 
     response = TestClient(app).post(
         "/api/payments/confirm",
@@ -122,6 +133,7 @@ def test_confirm_payment_marks_order_paid_by_order_id(tmp_path, monkeypatch):
     assert response.status_code == 200
     assert response.json()["status"] == "paid"
     assert order_service.get_order(order["order_id"])["status"] == "paid"
+    retrieve.assert_called_once_with("cs_test_confirm", api_key="sk_test_value")
 
 
 def test_no_budget_plan_can_create_stripe_checkout_session(tmp_path, monkeypatch):

@@ -7,6 +7,7 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from app.core.config import get_settings
 from app.services.order_service import get_order, get_order_by_stripe_session_id, mark_payment_event_processed, update_order
+from app.services.plan_execution_guard import PlanExecutionGuard
 
 
 OVER_BUDGET_ERROR = "Over-budget plans cannot be paid directly."
@@ -46,11 +47,8 @@ def _load_payable_plan(plan_id: str | None, order_id: str) -> tuple[dict[str, An
         raise ValueError("Plan not found.")
     if plan_id is not None and _plan_id(plan) != plan_id:
         raise ValueError("Plan not found.")
-    if (
-        plan.get("selectable") is False
-        or plan.get("over_budget") is True
-        or plan.get("status") not in PAYABLE_PLAN_STATUSES
-    ):
+    PlanExecutionGuard.require_executable(plan)
+    if plan.get("status") not in PAYABLE_PLAN_STATUSES:
         raise ValueError(OVER_BUDGET_ERROR)
     return order, plan
 

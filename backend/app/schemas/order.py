@@ -21,6 +21,14 @@ class OrderPlanSelection(BaseModel):
     plan_id: str | None = None
     # A requested spending limit, not proof of approval or execution eligibility.
     budget: float | None = Field(default=None, ge=0, allow_inf_nan=False)
+    # Recommendation restrictions may only veto execution, never grant it.
+    over_budget: bool | None = Field(default=None, strict=True)
+    budget_status: str | None = None
+    inventory_status: str | None = None
+    constraint_satisfaction: str | None = None
+    missing_categories: list[str] = Field(default_factory=list)
+    constraints_relaxed: bool = Field(default=False, strict=True)
+    selectable: bool | None = Field(default=None, strict=True)
 
 
 class OrderCreateRequest(BaseModel):

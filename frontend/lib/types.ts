@@ -22,6 +22,7 @@ export type ProcurementPlan = {
   budget?: number; over_budget?: boolean; budget_gap?: number;
   selectable?: boolean; status?: string; avg_rating?: number;
   budget_status: string; inventory_status: string; constraint_satisfaction: string;
+  missing_categories?: string[]; constraints_relaxed?: boolean;
   recommendation_reason?: string; recommendation_summary?: string;
   plan_option_id?: string; plan_strategy?: string;
 };

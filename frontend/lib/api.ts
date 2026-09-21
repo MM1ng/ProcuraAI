@@ -54,6 +54,13 @@ export const api = {
     const selection = {
       plan_option_id: plan.plan_option_id,
       budget: plan.budget,
+      over_budget: plan.over_budget,
+      budget_status: plan.budget_status,
+      inventory_status: plan.inventory_status,
+      constraint_satisfaction: plan.constraint_satisfaction,
+      missing_categories: plan.missing_categories,
+      constraints_relaxed: plan.constraints_relaxed,
+      selectable: plan.selectable,
       items: plan.items.map(i => ({ product_id: i.product_id, quantity: i.quantity })),
     };
     return request<Order>("/api/orders", { method: "POST", body: JSON.stringify({ user_id: userId, plan: selection }) });

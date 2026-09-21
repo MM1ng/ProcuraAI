@@ -231,6 +231,11 @@ def run_procurement_agent(
             default_option = select_default_plan_option(plan_options)
             if default_option:
                 plan = default_option["plan"]
+        # Retrieval fallback is execution evidence, including for alternative plans.
+        for candidate in [plan, *(option["plan"] for option in plan_options)]:
+            candidate["constraints_relaxed"] = bool(
+                candidate.get("constraints_relaxed") or retrieval_evidence.get("constraints_relaxed")
+            )
         tool_calls.append({"name": "generate_procurement_plan", "status": "success"})
 
         response_type = _determine_response_type(intent, plan, message)

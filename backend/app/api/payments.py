@@ -10,6 +10,7 @@ from app.schemas.payment import (
     StripeCheckoutResponse,
 )
 from app.services.payment_service import create_checkout
+from app.services.plan_execution_guard import PlanNotExecutableError
 from app.services.stripe_payment_service import (
     PaymentProviderError,
     confirm_order_payment,
@@ -37,6 +38,8 @@ def payment_status() -> dict[str, object]:
 def create_checkout_session(request: CheckoutSessionRequest) -> CheckoutSessionResponse:
     try:
         session = create_checkout(order_id=request.order_id)
+    except PlanNotExecutableError as exc:
+        raise HTTPException(status_code=409, detail=exc.detail) from exc
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     return CheckoutSessionResponse(**session)
@@ -46,6 +49,8 @@ def create_checkout_session(request: CheckoutSessionRequest) -> CheckoutSessionR
 def create_stripe_checkout(request: StripeCheckoutRequest) -> StripeCheckoutResponse:
     try:
         session = create_procurement_checkout_session(plan_id=None, order_id=request.order_id)
+    except PlanNotExecutableError as exc:
+        raise HTTPException(status_code=409, detail=exc.detail) from exc
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     return StripeCheckoutResponse(**session)

@@ -16,7 +16,7 @@ from main import app
 def confirmation(monkeypatch, tmp_path):
     monkeypatch.setattr(order_service, "ORDERS_FILE", tmp_path / "orders.json")
     monkeypatch.setattr(product_service, "load_products_from_csv", lambda: [
-        {"product_id": "A", "name": "Canonical product", "price": 25},
+        {"product_id": "A", "name": "Canonical product", "price": 25, "stock": 100},
     ])
     order = order_service.create_order_from_plan({"items": [{"product_id": "A", "quantity": 4}]})
     order["stripe_session_id"] = "cs_test_bound"

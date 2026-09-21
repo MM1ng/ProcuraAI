@@ -10,9 +10,9 @@ from main import app
 @pytest.fixture
 def catalog(monkeypatch, tmp_path):
     products = [
-        {"product_id": "A", "name": "Canonical A", "price": 100.0},
-        {"product_id": "B", "name": "Canonical B", "price": 50.0},
-        {"product_id": "C", "name": "Decimal cents", "price": 0.29},
+        {"product_id": "A", "name": "Canonical A", "price": 100.0, "stock": 100},
+        {"product_id": "B", "name": "Canonical B", "price": 50.0, "stock": 100},
+        {"product_id": "C", "name": "Decimal cents", "price": 0.29, "stock": 100},
     ]
     monkeypatch.setattr(product_service, "load_products_from_csv", lambda: deepcopy(products))
     monkeypatch.setattr(order_service, "ORDERS_FILE", tmp_path / "orders.json")
@@ -95,8 +95,8 @@ def test_valid_selection_produces_canonical_immutable_snapshot(catalog):
          "unit_price": 0.01, "subtotal": 0.03}
     ], "total": 0.03, "total_amount": 0.03,
         "selected_items": [{"product_id": "FORGED", "unit_price": 0.01}],
-        "budget_status": "over_budget", "status": "paid", "executable": True,
-        "selectable": False, "over_budget": True}
+        "budget_status": "within_budget", "status": "paid", "executable": True,
+        "selectable": True, "over_budget": False}
     original = deepcopy(plan)
     order = order_service.create_order_from_plan(plan)
     assert plan == original
@@ -121,15 +121,15 @@ def test_valid_selection_produces_canonical_immutable_snapshot(catalog):
     assert snapshot["items"][0]["unit_price"] == 0.29
 
 
-def test_budget_status_is_recomputed_using_canonical_total(catalog):
+def test_over_budget_canonical_total_blocks_order_creation(catalog):
     response = post_order({"items": [{"product_id": "A", "quantity": 2, "unit_price": 1}],
                            "budget": 150, "total_amount": 2, "budget_status": "within_budget",
                            "status": "within_budget", "selectable": True, "over_budget": False})
-    assert response.status_code == 200
-    snapshot = response.json()["procurement_plan"]
-    assert snapshot["total_amount"] == 200
-    assert snapshot["budget_status"] == "over_budget"
-    assert snapshot["selectable"] is False
+    assert response.status_code == 409
+    detail = response.json()["detail"]
+    assert detail["code"] == "PLAN_NOT_EXECUTABLE"
+    assert "over_budget" in detail["blocking_reasons"]
+    assert order_service.list_orders() == []
 
 
 @pytest.mark.parametrize("quantity", [0, -1, 1.5, "2", True])

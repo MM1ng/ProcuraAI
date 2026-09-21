@@ -16,7 +16,7 @@ ENDPOINTS = ["/api/payments/create-checkout-session", "/api/payments/stripe/chec
 
 @pytest.fixture
 def checkout_context(monkeypatch, tmp_path):
-    products = [{"product_id": "A", "name": "Canonical product", "price": 25.00}]
+    products = [{"product_id": "A", "name": "Canonical product", "price": 25.00, "stock": 100}]
     monkeypatch.setattr(product_service, "load_products_from_csv", lambda: deepcopy(products))
     monkeypatch.setattr(order_service, "ORDERS_FILE", tmp_path / "orders.json")
 
@@ -177,7 +177,7 @@ def test_extra_payload_fields_are_not_used_as_checkout_inputs(checkout_context, 
 def test_multi_item_checkout_matches_persisted_order_total(checkout_context, endpoint):
     context = checkout_context
     context.products[0]["price"] = 100
-    context.products.append({"product_id": "B", "name": "Second product", "price": 50})
+    context.products.append({"product_id": "B", "name": "Second product", "price": 50, "stock": 100})
     order = order_service.save_order(order_service.create_order_from_plan({
         "items": [{"product_id": "A", "quantity": 2}, {"product_id": "B", "quantity": 3}],
     }))

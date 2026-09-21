@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import uuid
+from collections import Counter
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from pathlib import Path
@@ -10,6 +11,7 @@ from typing import Any
 from app.core.config import DATA_DIR
 from app.schemas.order import OrderPlanSelection
 from app.services import product_service
+from app.services.plan_execution_guard import PlanExecutionGuard
 
 
 ORDERS_FILE = DATA_DIR / "orders.json"
@@ -63,6 +65,15 @@ def create_order_from_plan(plan: dict[str, Any], user_id: str = "demo-user") -> 
     plan_id = selection.plan_option_id or selection.plan_id or ""
     over_budget = selection.budget is not None and total > Decimal(str(selection.budget))
     budget_status = "no_budget_provided" if selection.budget is None else ("over_budget" if over_budget else "within_budget")
+    quantities = Counter()
+    for item in order_items:
+        quantities[item["product_id"]] += item["quantity"]
+    # Rebuild the basic cart plan from the catalog already loaded for canonical pricing.
+    # This is a snapshot check only: no reservation, deduction, or checkout-time refresh.
+    inventory_valid = all(
+        int(catalog[product_id].get("stock", 0) or 0) >= quantity
+        for product_id, quantity in quantities.items()
+    )
     # Rebuild rather than copying the original plan: checkout also reads this snapshot.
     snapshot = {
         "plan_option_id": plan_id,
@@ -74,7 +85,25 @@ def create_order_from_plan(plan: dict[str, Any], user_id: str = "demo-user") -> 
         "status": budget_status,
         "over_budget": over_budget,
         "selectable": not over_budget,
+        "inventory_status": "valid" if inventory_valid else "insufficient_stock",
+        "constraint_satisfaction": "satisfied",
+        "missing_categories": [],
+        "constraints_relaxed": False,
     }
+    # Supplied failures survive rebuilding; supplied successes cannot erase failures.
+    restrictions = selection.model_dump(exclude_unset=True)
+    if restrictions.get("over_budget") is True or restrictions.get("budget_status") == "over_budget":
+        snapshot["over_budget"] = True
+    for key, success in (("inventory_status", "valid"), ("constraint_satisfaction", "satisfied")):
+        if key in restrictions and restrictions[key] != success:
+            snapshot[key] = restrictions[key]
+    if selection.missing_categories:
+        snapshot["missing_categories"] = list(selection.missing_categories)
+    if selection.constraints_relaxed:
+        snapshot["constraints_relaxed"] = True
+    if selection.selectable is False:
+        snapshot["selectable"] = False
+    PlanExecutionGuard.require_executable(snapshot)
     return {
         "order_id": f"ORD-{uuid.uuid4().hex[:10].upper()}",
         "user_id": user_id,

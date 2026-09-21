@@ -4,6 +4,7 @@ from types import SimpleNamespace
 
 import app.services.stripe_payment_service as stripe_payment_service
 from app.services import order_service, product_service
+from app.services.plan_execution_guard import PlanNotExecutableError
 from app.tools.stripe_ai_tools import create_checkout_for_selected_plan
 
 
@@ -37,13 +38,21 @@ def _save_order(tmp_path, monkeypatch, plan=None, status="pending_payment"):
     monkeypatch.setattr(order_service, "ORDERS_FILE", orders_file)
     monkeypatch.setattr(product_service, "load_products_from_csv", lambda: [
         {"product_id": "P-1", "name": "Team Keyboard", "category": "Keyboard",
-         "supplier": "Northwind", "price": 25.25},
+         "supplier": "Northwind", "price": 25.25, "stock": 30},
     ])
-    order = order_service.create_order_from_plan(plan or _plan(), user_id="demo-user")
+    requested_plan = plan or _plan()
+    creation_plan = dict(requested_plan)
+    creation_plan.update({
+        "over_budget": False,
+        "selectable": True,
+        "status": "within_budget",
+        "budget_status": "within_budget",
+    })
+    order = order_service.create_order_from_plan(creation_plan, user_id="demo-user")
     # Payment tests exercise existing server-side plan states, not client input.
     # Seed these states after order canonicalization; retain canonical amounts.
     for key in ("over_budget", "selectable", "status", "budget_status"):
-        order["procurement_plan"][key] = (plan or _plan())[key]
+        order["procurement_plan"][key] = requested_plan[key]
     order["status"] = status
     order_service.save_order(order)
     return order
@@ -95,8 +104,8 @@ def test_ai_tool_rejects_over_budget_plan(tmp_path, monkeypatch):
 
     try:
         create_checkout_for_selected_plan("plan_a", order["order_id"])
-    except ValueError as exc:
-        assert str(exc) == "Over-budget plans cannot be paid directly."
+    except PlanNotExecutableError as exc:
+        assert "over_budget" in exc.result.blocking_reasons
     else:
         raise AssertionError("Expected over-budget plan to be rejected")
 
@@ -106,8 +115,8 @@ def test_ai_tool_rejects_unselectable_plan(tmp_path, monkeypatch):
 
     try:
         create_checkout_for_selected_plan("plan_a", order["order_id"])
-    except ValueError as exc:
-        assert str(exc) == "Over-budget plans cannot be paid directly."
+    except PlanNotExecutableError as exc:
+        assert "not_selectable" in exc.result.blocking_reasons
     else:
         raise AssertionError("Expected unselectable plan to be rejected")
 

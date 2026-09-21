@@ -77,6 +77,7 @@ data/embedding_cache.pkl
 data/procurement_history.json
 data/chroma/
 data/embedding_eval/
+data/decision_eval/results/
 *.zip
 
 # --- Screenshots / Demo Assets ---

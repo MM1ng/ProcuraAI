@@ -25,6 +25,34 @@ cd backend
 pytest
 ```
 
+## Offline Decision Benchmark / 离线决策评测
+
+The offline-only Decision Benchmark foundation is isolated under
+`app/decision/`; it is not imported by the procurement agent, order, checkout,
+payment, or `PlanExecutionGuard` paths. Its `baseline` provider is an adapter
+over the existing deterministic router and transaction-intent rules, with
+benchmark-only mappings for plan modification, explanation, order status, and
+ambiguous clarification.
+
+The tracked bilingual intent gold set is at
+`backend/evaluation/decision/intent_gold.jsonl`. Run it from `backend`:
+
+```powershell
+python -m app.decision.benchmark --task intent --provider baseline
+```
+
+The command writes a machine-readable result to
+`data/decision_eval/results/baseline_intent.json` (ignored by Git). It reports
+accuracy, macro F1, per-class precision/recall/F1, a confusion matrix, latency
+mean/P50/P95, and Transaction Escalation Error Rate. That safety metric counts
+non-transaction gold labels predicted as `confirm_order` or `payment`.
+
+To add a future provider such as Jev, Von, Reflex, or OpenJev, implement the
+small `DecisionProvider.classify_intent()` interface, return `DecisionResult`
+without fabricated confidence/probabilities, and register its explicit name in
+`app/decision/registry.py`. Do not wire a benchmark provider into production
+routing without a separately approved integration task.
+
 ## Main Endpoints / 主要接口
 
 - `GET /health` - Health check / 健康检查

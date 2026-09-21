@@ -1,0 +1,120 @@
+{"id":"recommend-001","text":"我要买20个鼠标","label":"recommend","language":"zh"}
+{"id":"recommend-002","text":"帮我采购10台显示器","label":"recommend","language":"zh"}
+{"id":"recommend-003","text":"20人办公电脑怎么配","label":"recommend","language":"zh"}
+{"id":"recommend-004","text":"推荐一套办公设备","label":"recommend","language":"zh"}
+{"id":"recommend-005","text":"预算5000买键盘和鼠标","label":"recommend","language":"zh"}
+{"id":"recommend-006","text":"采购一批会议耳机","label":"recommend","language":"zh"}
+{"id":"recommend-007","text":"给新员工配置笔记本","label":"recommend","language":"zh"}
+{"id":"recommend-008","text":"推荐戴尔显示器","label":"recommend","language":"zh"}
+{"id":"recommend-009","text":"买30把办公椅","label":"recommend","language":"zh"}
+{"id":"recommend-010","text":"帮我找适合远程会议的摄像头","label":"recommend","language":"zh"}
+{"id":"recommend-011","text":"Recommend monitors for 20 people","label":"recommend","language":"en"}
+{"id":"recommend-012","text":"Buy keyboards for a new office","label":"recommend","language":"en"}
+{"id":"recommend-013","text":"Need headsets under 3000 dollars","label":"recommend","language":"en"}
+{"id":"recommend-014","text":"Suggest a laptop setup","label":"recommend","language":"en"}
+{"id":"recommend-015","text":"Find webcams for remote staff","label":"recommend","language":"en"}
+{"id":"modify-001","text":"预算降到3万","label":"modify_plan","language":"zh"}
+{"id":"modify-002","text":"换成戴尔","label":"modify_plan","language":"zh"}
+{"id":"modify-003","text":"鼠标换便宜一点","label":"modify_plan","language":"zh"}
+{"id":"modify-004","text":"配送时间改成三天以内","label":"modify_plan","language":"zh"}
+{"id":"modify-005","text":"把预算改为5000","label":"modify_plan","language":"zh"}
+{"id":"modify-006","text":"修改方案里的键盘数量","label":"modify_plan","language":"zh"}
+{"id":"modify-007","text":"显示器换个品牌","label":"modify_plan","language":"zh"}
+{"id":"modify-008","text":"调整为高评分产品","label":"modify_plan","language":"zh"}
+{"id":"modify-009","text":"把耳机换成便宜型号","label":"modify_plan","language":"zh"}
+{"id":"modify-010","text":"改成五天内配送","label":"modify_plan","language":"zh"}
+{"id":"modify-011","text":"Make the plan cheaper","label":"modify_plan","language":"en"}
+{"id":"modify-012","text":"Change the budget to 5000","label":"modify_plan","language":"en"}
+{"id":"modify-013","text":"Replace the monitor with Dell","label":"modify_plan","language":"en"}
+{"id":"modify-014","text":"Modify the keyboard quantity","label":"modify_plan","language":"en"}
+{"id":"modify-015","text":"Reduce budget to 3000","label":"modify_plan","language":"en"}
+{"id":"compare-001","text":"比较方案A和方案B","label":"compare_plan","language":"zh"}
+{"id":"compare-002","text":"哪个方案更省钱","label":"compare_plan","language":"zh"}
+{"id":"compare-003","text":"A和C有什么区别","label":"compare_plan","language":"zh"}
+{"id":"compare-004","text":"对比这两个采购方案","label":"compare_plan","language":"zh"}
+{"id":"compare-005","text":"比较戴尔和联想的方案","label":"compare_plan","language":"zh"}
+{"id":"compare-006","text":"方案A和B哪个好","label":"compare_plan","language":"zh"}
+{"id":"compare-007","text":"两个显示器方案区别是什么","label":"compare_plan","language":"zh"}
+{"id":"compare-008","text":"对比价格和配送时间","label":"compare_plan","language":"zh"}
+{"id":"compare-009","text":"哪个组合性价比高","label":"compare_plan","language":"zh"}
+{"id":"compare-010","text":"帮我比较选项A与选项B","label":"compare_plan","language":"zh"}
+{"id":"compare-011","text":"Compare plan A and plan B","label":"compare_plan","language":"en"}
+{"id":"compare-012","text":"What is the difference between A and C","label":"compare_plan","language":"en"}
+{"id":"compare-013","text":"Compare Dell versus Lenovo","label":"compare_plan","language":"en"}
+{"id":"compare-014","text":"Which plan is cheaper","label":"compare_plan","language":"en"}
+{"id":"compare-015","text":"Plan A vs plan B","label":"compare_plan","language":"en"}
+{"id":"explain-001","text":"为什么推荐这个","label":"explain_plan","language":"zh"}
+{"id":"explain-002","text":"为什么选戴尔","label":"explain_plan","language":"zh"}
+{"id":"explain-003","text":"这个方案为什么超预算","label":"explain_plan","language":"zh"}
+{"id":"explain-004","text":"解释一下方案A","label":"explain_plan","language":"zh"}
+{"id":"explain-005","text":"为什么不推荐另一个","label":"explain_plan","language":"zh"}
+{"id":"explain-006","text":"说说这个采购组合的原因","label":"explain_plan","language":"zh"}
+{"id":"explain-007","text":"为什么配送要这么久","label":"explain_plan","language":"zh"}
+{"id":"explain-008","text":"解释价格差异","label":"explain_plan","language":"zh"}
+{"id":"explain-009","text":"这个选择的理由是什么","label":"explain_plan","language":"zh"}
+{"id":"explain-010","text":"为什么库存不足","label":"explain_plan","language":"zh"}
+{"id":"explain-011","text":"Why was this plan recommended","label":"explain_plan","language":"en"}
+{"id":"explain-012","text":"Explain plan A","label":"explain_plan","language":"en"}
+{"id":"explain-013","text":"Why is this over budget","label":"explain_plan","language":"en"}
+{"id":"explain-014","text":"What is the reason for this choice","label":"explain_plan","language":"en"}
+{"id":"explain-015","text":"Explain the delivery delay","label":"explain_plan","language":"en"}
+{"id":"confirm-001","text":"确认方案A并下单","label":"confirm_order","language":"zh"}
+{"id":"confirm-002","text":"确认这个方案并下单","label":"confirm_order","language":"zh"}
+{"id":"confirm-003","text":"确认方案B并且下单","label":"confirm_order","language":"zh"}
+{"id":"confirm-004","text":"确认下单","label":"confirm_order","language":"zh"}
+{"id":"confirm-005","text":"请确认这个方案下单","label":"confirm_order","language":"zh"}
+{"id":"confirm-006","text":"确认所选方案并下单","label":"confirm_order","language":"zh"}
+{"id":"confirm-007","text":"确认方案C然后下单","label":"confirm_order","language":"zh"}
+{"id":"confirm-008","text":"确认该方案并下单","label":"confirm_order","language":"zh"}
+{"id":"confirm-009","text":"确认方案A并且下单","label":"confirm_order","language":"zh"}
+{"id":"confirm-010","text":"请确认下单","label":"confirm_order","language":"zh"}
+{"id":"confirm-011","text":"Confirm plan A and place order","label":"confirm_order","language":"en"}
+{"id":"confirm-012","text":"Please confirm selected plan and create order","label":"confirm_order","language":"en"}
+{"id":"confirm-013","text":"Place the order now","label":"confirm_order","language":"en"}
+{"id":"confirm-014","text":"Approve this plan and place an order","label":"confirm_order","language":"en"}
+{"id":"confirm-015","text":"Create order","label":"confirm_order","language":"en"}
+{"id":"payment-001","text":"去付款","label":"payment","language":"zh"}
+{"id":"payment-002","text":"确认支付","label":"payment","language":"zh"}
+{"id":"payment-003","text":"立即付款","label":"payment","language":"zh"}
+{"id":"payment-004","text":"支付这个订单","label":"payment","language":"zh"}
+{"id":"payment-005","text":"为订单123付款","label":"payment","language":"zh"}
+{"id":"payment-006","text":"现在去支付","label":"payment","language":"zh"}
+{"id":"payment-007","text":"请帮我付款","label":"payment","language":"zh"}
+{"id":"payment-008","text":"这个订单怎么支付","label":"payment","language":"zh"}
+{"id":"payment-009","text":"我要支付订单","label":"payment","language":"zh"}
+{"id":"payment-010","text":"进入结账","label":"payment","language":"zh"}
+{"id":"payment-011","text":"Pay now","label":"payment","language":"en"}
+{"id":"payment-012","text":"Proceed to payment","label":"payment","language":"en"}
+{"id":"payment-013","text":"Pay this order","label":"payment","language":"en"}
+{"id":"payment-014","text":"Checkout order 123","label":"payment","language":"en"}
+{"id":"payment-015","text":"Confirm payment","label":"payment","language":"en"}
+{"id":"status-001","text":"我的订单现在什么状态","label":"order_status","language":"zh"}
+{"id":"status-002","text":"订单支付了吗","label":"order_status","language":"zh"}
+{"id":"status-003","text":"订单123怎么样了","label":"order_status","language":"zh"}
+{"id":"status-004","text":"查一下订单状态","label":"order_status","language":"zh"}
+{"id":"status-005","text":"订单什么时候到","label":"order_status","language":"zh"}
+{"id":"status-006","text":"我的采购订单进度","label":"order_status","language":"zh"}
+{"id":"status-007","text":"订单是否已付款","label":"order_status","language":"zh"}
+{"id":"status-008","text":"看看订单情况","label":"order_status","language":"zh"}
+{"id":"status-009","text":"订单还在处理中吗","label":"order_status","language":"zh"}
+{"id":"status-010","text":"查询ORDER-123状态","label":"order_status","language":"zh"}
+{"id":"status-011","text":"What is my order status","label":"order_status","language":"en"}
+{"id":"status-012","text":"Has order 123 been paid","label":"order_status","language":"en"}
+{"id":"status-013","text":"Track my order","label":"order_status","language":"en"}
+{"id":"status-014","text":"Is the order processing","label":"order_status","language":"en"}
+{"id":"status-015","text":"Order 123 status","label":"order_status","language":"en"}
+{"id":"clarify-001","text":"就这个吧","label":"clarify","language":"zh"}
+{"id":"clarify-002","text":"感觉A还行","label":"clarify","language":"zh"}
+{"id":"clarify-003","text":"我再看看","label":"clarify","language":"zh"}
+{"id":"clarify-004","text":"可以买","label":"clarify","language":"zh"}
+{"id":"clarify-005","text":"这个怎么样","label":"clarify","language":"zh"}
+{"id":"clarify-006","text":"先这样","label":"clarify","language":"zh"}
+{"id":"clarify-007","text":"方案A不错","label":"clarify","language":"zh"}
+{"id":"clarify-008","text":"我考虑一下","label":"clarify","language":"zh"}
+{"id":"clarify-009","text":"这个可以吗","label":"clarify","language":"zh"}
+{"id":"clarify-010","text":"暂时不用了","label":"clarify","language":"zh"}
+{"id":"clarify-011","text":"This one looks good","label":"clarify","language":"en"}
+{"id":"clarify-012","text":"Maybe plan A","label":"clarify","language":"en"}
+{"id":"clarify-013","text":"Let me think","label":"clarify","language":"en"}
+{"id":"clarify-014","text":"Can I buy this","label":"clarify","language":"en"}
+{"id":"clarify-015","text":"I will look again","label":"clarify","language":"en"}

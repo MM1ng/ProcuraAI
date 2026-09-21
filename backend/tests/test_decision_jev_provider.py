@@ -18,6 +18,9 @@ def _install_fake_sdk(monkeypatch, response=None, error=None):
     class Client:
         captured_question = None
 
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
         def __enter__(self):
             return self
 

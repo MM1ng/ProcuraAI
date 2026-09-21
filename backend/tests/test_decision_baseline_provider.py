@@ -26,5 +26,7 @@ def test_baseline_provider_adapts_current_rules_to_decision_result(text, label):
 
 def test_registry_only_exposes_registered_provider():
     assert get_provider("baseline").name == "baseline"
+    assert get_provider("jev").name == "jev"
+    assert get_provider("von").name == "von"
     with pytest.raises(ValueError, match="Unknown decision provider"):
-        get_provider("jev")
+        get_provider("reflex")

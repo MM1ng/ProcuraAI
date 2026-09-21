@@ -1,5 +1,7 @@
 import json
 
+import app.decision.benchmark as benchmark
+from app.decision.base import DecisionProviderPredictionError
 from app.decision.benchmark import dataset_sha256, load_intent_gold_set, run_intent_benchmark, write_result
 from app.decision.schemas import IntentLabel
 from app.services import order_service
@@ -36,3 +38,20 @@ def test_three_dataset_results_use_distinct_filenames(tmp_path):
     assert dataset_sha256(__import__("app.decision.benchmark", fromlist=["dataset_path"]).dataset_path("test")) == (
         run_intent_benchmark("baseline", "test")["dataset_sha256"]
     )
+
+
+def test_provider_prediction_failures_are_reported_without_relabeling_cases(monkeypatch):
+    class FailingProvider:
+        name = "failing"
+
+        def classify_intent(self, *_args, **_kwargs):
+            raise DecisionProviderPredictionError("network failure")
+
+    monkeypatch.setattr(benchmark, "get_provider", lambda _: FailingProvider())
+    result = benchmark.run_intent_benchmark("failing", "hard")
+    assert result["attempted_samples"] == 48
+    assert result["successful_predictions"] == 0
+    assert result["failed_predictions"] == 48
+    assert result["provider_failure_rate"] == 1.0
+    assert result["provider_failures"] == 48
+    assert result["provider_failure_details"][0]["error_type"] == "DecisionProviderPredictionError"

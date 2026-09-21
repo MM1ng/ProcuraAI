@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from app.core.config import DATA_DIR
+from app.decision.base import DecisionProviderPredictionError, DecisionProviderUnavailableError
 from app.decision.metrics import calculate_metrics
 from app.decision.registry import get_provider
 from app.decision.schemas import IntentGoldCase
@@ -37,14 +38,33 @@ def load_intent_gold_set(path: Path = GOLD_SET_PATH) -> list[IntentGoldCase]:
 def run_intent_benchmark(provider_name: str, dataset_name: str = "dev") -> dict[str, Any]:
     path = dataset_path(dataset_name)
     provider, cases = get_provider(provider_name), load_intent_gold_set(path)
-    results = [provider.classify_intent(case.text, case.context) for case in cases]
+    successful_cases = []
+    results = []
+    failures: list[dict[str, str]] = []
+    for case in cases:
+        try:
+            result = provider.classify_intent(case.text, case.context)
+        except DecisionProviderPredictionError as exc:
+            failures.append({"case_id": case.id, "error_type": type(exc).__name__})
+            continue
+        successful_cases.append(case)
+        results.append(result)
     metrics = calculate_metrics(
-        [case.label.value for case in cases], [result.label.value for result in results],
+        [case.label.value for case in successful_cases], [result.label.value for result in results],
         [result.latency_ms for result in results],
     )
+    provider_runtime = getattr(provider, "runtime_metadata", lambda: {
+        "provider": provider.name, "model": None, "remote": None, "device": None,
+        "sdk_version": None, "request_count": len(results), "input_chars": None, "cost": None,
+    })()
     return {
         "task": "intent", "provider": provider.name, "dataset_name": dataset_name,
-        "dataset_size": len(cases), "dataset_sha256": dataset_sha256(path), **metrics,
+        "dataset_size": len(cases), "dataset_sha256": dataset_sha256(path),
+        "attempted_samples": len(cases), "successful_predictions": len(results),
+        "failed_predictions": len(failures), "provider_failures": len(failures),
+        "provider_failure_details": failures,
+        "provider_failure_rate": len(failures) / len(cases) if cases else 0.0,
+        "provider_runtime": provider_runtime, **metrics,
     }
 
 
@@ -62,7 +82,10 @@ def main() -> None:
     parser.add_argument("--dataset", choices=sorted(DATASET_PATHS), default="dev")
     parser.add_argument("--output-dir", type=Path, default=RESULTS_DIR)
     args = parser.parse_args()
-    result = run_intent_benchmark(args.provider, args.dataset)
+    try:
+        result = run_intent_benchmark(args.provider, args.dataset)
+    except DecisionProviderUnavailableError as exc:
+        parser.error(str(exc))
     path = write_result(result, args.output_dir)
     print(json.dumps({**result, "output_path": str(path)}, ensure_ascii=False, indent=2))
 

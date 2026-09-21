@@ -66,6 +66,20 @@ without fabricated confidence/probabilities, and register its explicit name in
 `app/decision/registry.py`. Do not wire a benchmark provider into production
 routing without a separately approved integration task.
 
+### Optional Jev and Von providers
+
+`jev` and `von` are offline benchmark providers only. Both consume the same
+eight-label decision definition in `app/decision/tasks/intent.py`; neither is
+imported by production intent routing. Install the recorded dependencies with
+`pip install -r requirements.txt` in a compatible virtual environment.
+
+Jev uses the official `typesafe-sdk` and requires `TYPESAFE_API_KEY`. It uses
+the SDK's `Choice` primitive and exposes only fields actually returned by the
+SDK. Von uses `von-sdk`, requires `VON_ENABLED=true`, and lets its SDK own local
+model loading; its package depends on Torch, Transformers, and Accelerate.
+Neither provider ever falls back to Baseline. Missing credentials, SDKs, or
+model availability are reported as explicit provider-unavailable errors.
+
 ## Main Endpoints / 主要接口
 
 - `GET /health` - Health check / 健康检查

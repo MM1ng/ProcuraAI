@@ -5,6 +5,14 @@ from typing import Any, Protocol
 from app.decision.schemas import DecisionResult
 
 
+class DecisionProviderUnavailableError(RuntimeError):
+    """The configured provider cannot be used in this environment."""
+
+
+class DecisionProviderPredictionError(RuntimeError):
+    """One provider request failed; benchmarks record, never relabel, this case."""
+
+
 class DecisionProvider(Protocol):
     """Minimal interface for an offline benchmark provider."""
 

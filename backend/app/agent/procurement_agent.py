@@ -7,7 +7,7 @@ from app.agent.plan_generator import generate_plan_explanation, generate_procure
 from app.agent.plan_variants import generate_plan_options
 from app.agent.router import transaction_intent
 from app.decision.gateway import dispatch_jev_shadow
-from app.decision.shadow import authoritative_intent_label
+from app.decision.shadow import resolve_authoritative_intent
 from app.agent.prompts import ERROR_MESSAGES, PLAN_RESPONSE_TEMPLATES
 from app.agent.session_state import get_session_state, save_session_state
 from app.observability.langfuse_client import LangfuseClient
@@ -246,7 +246,7 @@ def run_procurement_agent(
         dispatch_jev_shadow(
             text=message,
             trace_id=trace_id,
-            authoritative_label=authoritative_intent_label(message, intent, response_type),
+            authoritative_decision=resolve_authoritative_intent(message, intent, response_type),
         )
 
         if response_type == "product_results":

@@ -35,7 +35,7 @@ def test_production_workflow_only_imports_the_audit_only_shadow_decision_entrypo
 
     agent_source = (root / "agent/procurement_agent.py").read_text(encoding="utf-8")
     assert "from app.decision.gateway import dispatch_jev_shadow" in agent_source
-    assert "from app.decision.shadow import authoritative_intent_label" in agent_source
+    assert "from app.decision.shadow import resolve_authoritative_intent" in agent_source
     for forbidden_module in (
         "app.decision.benchmark",
         "app.decision.registry",

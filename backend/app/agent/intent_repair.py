@@ -34,18 +34,22 @@ def _find_quantity(raw: str) -> int | None:
     return None
 
 def _find_budget(raw: str) -> float | None:
-    m = re.search(r"预算\s*(\d+[\d.]*)\s*(?:美元|元|\$)?", raw)
+    m = re.search(r"预算\s*(\d+[\d.]*)\s*(万|w(?![A-Za-z]))?\s*(?:美元|元|\$)?", raw, flags=re.IGNORECASE)
     if m:
-        return float(m.group(1))
-    m = re.search(r"budget\s*(?:of\s*)?\$?(\d+[\d.]*)", raw.lower())
+        amount = float(m.group(1))
+        return amount * 10_000 if m.group(2) else amount
+    m = re.search(r"budget\s*(?:of\s*)?\$?(\d+[\d.]*)\s*(w(?![A-Za-z]))?", raw.lower())
     if m:
-        return float(m.group(1))
-    m = re.search(r"\$(\d+[\d.]*)", raw)
+        amount = float(m.group(1))
+        return amount * 10_000 if m.group(2) else amount
+    m = re.search(r"\$(\d+[\d.]*)\s*(w(?![A-Za-z]))?", raw, flags=re.IGNORECASE)
     if m:
-        return float(m.group(1))
-    m = re.search(r"under\s*\$?(\d+[\d.]*)", raw.lower())
+        amount = float(m.group(1))
+        return amount * 10_000 if m.group(2) else amount
+    m = re.search(r"under\s*\$?(\d+[\d.]*)\s*(w(?![A-Za-z]))?", raw.lower())
     if m:
-        return float(m.group(1))
+        amount = float(m.group(1))
+        return amount * 10_000 if m.group(2) else amount
     return None
 
 def _resolve_category(text: str) -> str | None:

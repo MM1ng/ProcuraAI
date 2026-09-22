@@ -92,14 +92,15 @@ def _extract_people_count(text: str) -> int:
 
 def _extract_budget(text: str) -> float | None:
     patterns = [
-        r"(?:budget|under|below|less than|within|maximum|max)\D{0,20}\$?\s*([0-9][0-9,]*(?:\.[0-9]+)?)",
-        r"预算\D{0,20}([0-9][0-9,]*(?:\.[0-9]+)?)\s*(?:美元|美金|usd|USD)?\s*(?:以内|以下|内)?",
-        r"\$([0-9][0-9,]*(?:\.[0-9]+)?)",
+        r"(?:budget|under|below|less than|within|maximum|max)\D{0,20}\$?\s*([0-9][0-9,]*(?:\.[0-9]+)?)(?:\s*(万|w(?![A-Za-z])))?",
+        r"预算\D{0,20}([0-9][0-9,]*(?:\.[0-9]+)?)(?:\s*(万|w(?![A-Za-z])))?\s*(?:元|美元|美金|usd)?\s*(?:以内|以下|内)?",
+        r"\$\s*([0-9][0-9,]*(?:\.[0-9]+)?)(?:\s*(万|w(?![A-Za-z])))?",
     ]
     for pattern in patterns:
         match = re.search(pattern, text, flags=re.IGNORECASE)
         if match:
-            return float(match.group(1).replace(",", ""))
+            amount = float(match.group(1).replace(",", ""))
+            return amount * 10_000 if match.group(2) else amount
     return None
 
 
@@ -460,9 +461,15 @@ def _intent_from_llm_json(
 ) -> dict[str, Any]:
     fallback = _parse_purchase_request_rules(message, previous_intent)
     people_count = _as_int_or_none(payload.get("people_count")) or fallback.get("people_count")
+    extracted_budget = _extract_budget(message)
     budget = _as_float_or_none(payload.get("budget"))
     if _explicitly_removes_budget(message):
         budget = None
+        budget_source = "explicit"
+    elif extracted_budget is not None:
+        # Preserve explicit user input such as "预算10w" rather than trusting
+        # a model that may have parsed only the numeric prefix (10).
+        budget = extracted_budget
         budget_source = "explicit"
     elif budget is not None:
         budget_source = "explicit"

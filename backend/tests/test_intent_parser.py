@@ -34,6 +34,31 @@ def test_parse_purchase_request_extracts_chinese_rating_and_delivery_preferences
     assert intent["max_delivery_days"] == 5
 
 
+def test_parse_purchase_request_interprets_wan_budget_suffixes():
+    assert intent_parser._extract_budget("预算10w采购显示器") == 100_000
+    assert intent_parser._extract_budget("预算10万元采购显示器") == 100_000
+    assert intent_parser._extract_budget("预算1.5w采购显示器") == 15_000
+
+
+def test_explicit_wan_budget_overrides_llm_numeric_prefix(monkeypatch):
+    monkeypatch.setattr(
+        intent_parser,
+        "safe_llm_invoke",
+        lambda prompt, purpose: {
+            "content": '{"people_count": 1, "budget": 10, "categories": ["monitor"]}',
+            "model_provider": "test",
+            "model_name": "test",
+            "used_mock_llm": False,
+            "error": None,
+        },
+    )
+
+    intent = parse_purchase_request("预算10w采购显示器")
+
+    assert intent["budget"] == 100_000
+    assert intent["budget_source"] == "explicit"
+
+
 def test_parse_purchase_request_supports_followup_cheaper_revisions():
     intent = parse_purchase_request(
         "Make this procurement plan cheaper but keep rating above 4.2."

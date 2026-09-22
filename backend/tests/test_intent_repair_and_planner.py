@@ -43,6 +43,11 @@ def test_case3_budget_1000():
     print("  PASS: case3")
 
 
+def test_repair_intent_interprets_wan_budget_suffix():
+    result = repair_intent({"intent": "recommendation", "categories": ["显示器"]}, "预算10w采购显示器")
+    assert result.get("budget") == 100_000
+
+
 def test_case4_english_brand_budget():
     """Case 4: English brand + budget search"""
     payload = {"intent": "search", "brand": "dell"}

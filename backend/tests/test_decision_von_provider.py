@@ -50,6 +50,9 @@ def test_von_disabled_or_sdk_unavailable_is_explicit(monkeypatch):
     with pytest.raises(DecisionProviderUnavailableError, match="VON_ENABLED"):
         VonProvider().classify_intent("message")
     monkeypatch.setenv("VON_ENABLED", "true")
-    monkeypatch.delitem(sys.modules, "von", raising=False)
+    # D02.2 may install the real SDK in the project venv.  A None sentinel
+    # keeps this unit test on its intended unavailable-SDK path without a
+    # local model import or download.
+    monkeypatch.setitem(sys.modules, "von", None)
     with pytest.raises(DecisionProviderUnavailableError, match="von-sdk"):
         VonProvider().classify_intent("message")

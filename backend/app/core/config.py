@@ -73,6 +73,10 @@ class Settings:
     use_mock_llm: bool = _bool_env("USE_MOCK_LLM", False)
     use_mock_payment: bool = _bool_env("USE_MOCK_PAYMENT", True)
     query_rewrite_enabled: bool = _bool_env("QUERY_REWRITE_ENABLED", True)
+    jev_shadow_enabled: bool = _bool_env("JEV_SHADOW_ENABLED", False)
+    jev_shadow_timeout_ms: int = _int_env("JEV_SHADOW_TIMEOUT_MS", 1200)
+    jev_shadow_sample_rate: float = _float_env("JEV_SHADOW_SAMPLE_RATE", 1.0)
+    jev_shadow_log_probabilities: bool = _bool_env("JEV_SHADOW_LOG_PROBABILITIES", True)
     frontend_base_url: str = os.getenv("FRONTEND_BASE_URL", "http://localhost:3000")
 
     @property

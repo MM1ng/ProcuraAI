@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import threading
 import time
 from contextlib import contextmanager
@@ -28,6 +29,7 @@ from app.decision.shadow_observation import isolated_shadow_observation_storage
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEV_DATASET = PROJECT_ROOT / "backend" / "evaluation" / "decision" / "intent_dev.jsonl"
 DEFAULT_REPORT_PATH = Path(__file__).with_name("shadow_observation_report.json")
+DEFAULT_RECORDS_PATH = Path(__file__).with_name("shadow_observation_records.jsonl")
 
 
 @dataclass(frozen=True)
@@ -79,9 +81,13 @@ class ShadowObservationResult:
     production_observability_unchanged: bool
     completed_trace_count: int
     collector_event_count: int
+    provider_error_type_distribution: dict[str, int]
+    records: list[dict[str, Any]]
 
     def as_report(self) -> dict[str, Any]:
-        return asdict(self)
+        report = asdict(self)
+        report.pop("records")
+        return report
 
 
 class ShadowObservationRunner:
@@ -118,13 +124,14 @@ class ShadowObservationRunner:
         finally:
             procurement_agent.dispatch_jev_shadow = original_dispatch
 
-    def run_cases(self, cases: Sequence[ReplayCase]) -> ShadowObservationResult:
+    def run_cases(self, cases: Sequence[ReplayCase], *, retried: bool = False) -> ShadowObservationResult:
         production_orders = PROJECT_ROOT / "data" / "orders.json"
         production_observability = PROJECT_ROOT / "data" / "observability_logs.json"
         orders_before = production_orders.read_bytes()
         observability_before = production_observability.read_bytes()
         harness_errors: list[dict[str, str]] = []
         completed_trace_ids: set[str] = set()
+        records: list[dict[str, Any]] = []
 
         with isolated_shadow_observation_storage():
             with self._patched_agent_dispatch():
@@ -143,6 +150,7 @@ class ShadowObservationRunner:
                         harness_errors.append({"case_id": case.case_id, "trace_id": trace_id})
                     else:
                         completed_trace_ids.add(trace_id)
+                        records.append(_record_for_case(case.case_id, event, retried=retried))
 
                 # Every expected audit has completed its forward call. Gateway
                 # provider threads that outlive a timeout only release capacity;
@@ -161,14 +169,17 @@ class ShadowObservationRunner:
                 "Controlled Shadow observation modified production persistence: "
                 f"orders_unchanged={orders_unchanged}, observability_unchanged={observability_unchanged}"
             )
+        summary = summarize_shadow_events(self.collector.events)
         return ShadowObservationResult(
             candidate_requests=len(cases),
             harness_errors=harness_errors,
-            summary=summarize_shadow_events(self.collector.events),
+            summary=summary,
             production_orders_unchanged=orders_unchanged,
             production_observability_unchanged=observability_unchanged,
             completed_trace_count=len(completed_trace_ids),
             collector_event_count=len(self.collector.events),
+            provider_error_type_distribution=_provider_error_type_distribution(records),
+            records=records,
         )
 
 
@@ -179,17 +190,93 @@ def load_dev_cases(dataset_path: Path = DEV_DATASET) -> list[ReplayCase]:
     ]
 
 
+def _record_for_case(case_id: str, event: dict[str, Any], *, retried: bool) -> dict[str, Any]:
+    """Persist only audit-safe, case-joinable fields; never replay text."""
+    fields = (
+        "trace_id", "event", "authoritative_label", "authoritative_label_resolution",
+        "shadow_label", "agreement", "transaction_escalation_disagreement",
+        "transaction_deescalation_disagreement", "provider_success", "provider_error_type",
+        "shadow_latency_ms",
+    )
+    return {"case_id": case_id, "retried": retried, **{field: event.get(field) for field in fields}}
+
+
+def _provider_error_type_distribution(records: Sequence[dict[str, Any]]) -> dict[str, int]:
+    distribution: dict[str, int] = {}
+    for record in records:
+        if record.get("provider_success") is not False:
+            continue
+        error_type = str(record.get("provider_error_type") or "unknown")
+        distribution[error_type] = distribution.get(error_type, 0) + 1
+    return dict(sorted(distribution.items()))
+
+
+def load_records(records_path: Path) -> list[dict[str, Any]]:
+    if not records_path.exists():
+        return []
+    return [json.loads(line) for line in records_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def merge_records(existing: Sequence[dict[str, Any]], replayed: Sequence[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Keep one canonical row per DEV case; successful retry replaces failure."""
+    by_case = {str(record["case_id"]): dict(record) for record in existing}
+    for record in replayed:
+        case_id = str(record["case_id"])
+        prior = by_case.get(case_id)
+        if prior is None or record.get("provider_success") is True or prior.get("provider_success") is not True:
+            by_case[case_id] = dict(record)
+    return [by_case[case_id] for case_id in sorted(by_case)]
+
+
+def write_records(records_path: Path, records: Sequence[dict[str, Any]]) -> None:
+    records_path.write_text(
+        "".join(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n" for record in records),
+        encoding="utf-8",
+    )
+
+
+def summarize_records(records: Sequence[dict[str, Any]]) -> dict[str, int | float]:
+    """Summarize one canonical record per case after an optional retry merge."""
+    successes = [record for record in records if record.get("provider_success") is True]
+    failures = [record for record in records if record.get("provider_success") is False]
+    latencies = [float(record["shadow_latency_ms"]) for record in successes if record.get("shadow_latency_ms") is not None]
+    ordered = sorted(latencies)
+    percentile = lambda fraction: round(ordered[max(math.ceil(len(ordered) * fraction) - 1, 0)], 2) if ordered else 0.0
+    agreements = sum(record.get("agreement") is True for record in successes)
+    return {
+        "record_count": len(records), "shadow_successes": len(successes), "shadow_failures": len(failures),
+        "agreement_count": agreements, "agreement_rate": round(agreements / len(successes), 4) if successes else 0.0,
+        "latency_mean_ms": round(sum(latencies) / len(latencies), 2) if latencies else 0.0,
+        "latency_p50_ms": percentile(0.5), "latency_p95_ms": percentile(0.95),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run the D03.3R controlled Jev Shadow observation.")
     parser.add_argument("--limit", type=int, default=None, help="Limit DEV cases for a controlled smoke run.")
     parser.add_argument("--report-path", type=Path, default=DEFAULT_REPORT_PATH)
+    parser.add_argument("--records-path", type=Path, default=DEFAULT_RECORDS_PATH)
+    parser.add_argument("--only-case-ids", nargs="+", default=None, help="Replay only these DEV case ids.")
+    parser.add_argument("--merge-into", type=Path, default=None, help="Merge a retry into an existing records JSONL file.")
     args = parser.parse_args()
     cases = load_dev_cases()
     if args.limit is not None:
         cases = cases[:max(args.limit, 0)]
-    result = ShadowObservationRunner().run_cases(cases)
-    args.report_path.write_text(json.dumps(result.as_report(), ensure_ascii=False, indent=2), encoding="utf-8")
-    print(json.dumps(result.as_report(), ensure_ascii=False, indent=2))
+    if args.only_case_ids is not None:
+        selected = set(args.only_case_ids)
+        cases = [case for case in cases if case.case_id in selected]
+        missing = selected - {case.case_id for case in cases}
+        if missing:
+            parser.error("Unknown DEV case ids: " + ", ".join(sorted(missing)))
+    result = ShadowObservationRunner().run_cases(cases, retried=args.merge_into is not None)
+    merged_records = merge_records(load_records(args.merge_into), result.records) if args.merge_into else result.records
+    write_records(args.records_path, merged_records)
+    report = result.as_report()
+    report["record_count"] = len(merged_records)
+    report["provider_error_type_distribution"] = _provider_error_type_distribution(merged_records)
+    report["merged_summary"] = summarize_records(merged_records)
+    args.report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(json.dumps(report, ensure_ascii=False, indent=2))
     if result.harness_errors:
         raise SystemExit(1)
 

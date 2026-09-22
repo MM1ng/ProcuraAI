@@ -7,6 +7,7 @@ from unittest.mock import Mock
 import pytest
 
 import app.agent.procurement_agent as agent
+import app.scripts.audit_shadow_disagreements as audit_module
 import app.scripts.run_shadow_observation as runner_module
 from app.decision.gateway import ShadowConfig
 from app.decision.schemas import DecisionResult, IntentLabel
@@ -99,3 +100,35 @@ def test_mini_replay_keeps_production_data_unchanged(monkeypatch):
     assert result.collector_event_count == 2
     assert result.production_orders_unchanged is True
     assert result.production_observability_unchanged is True
+    assert all(set(record) == {
+        "case_id", "retried", "trace_id", "event", "authoritative_label",
+        "authoritative_label_resolution", "shadow_label", "agreement",
+        "transaction_escalation_disagreement", "transaction_deescalation_disagreement",
+        "provider_success", "provider_error_type", "shadow_latency_ms",
+    } for record in result.records)
+
+
+def test_merge_replaces_a_failed_case_with_a_successful_retry():
+    failed = {"case_id": "case-1", "provider_success": False, "provider_error_type": "timeout", "retried": False}
+    success = {"case_id": "case-1", "provider_success": True, "provider_error_type": None, "retried": True}
+    assert runner_module.merge_records([failed], [success]) == [success]
+    assert runner_module._provider_error_type_distribution([failed, success]) == {"timeout": 1}
+    assert runner_module.summarize_records([success]) == {
+        "record_count": 1, "shadow_successes": 1, "shadow_failures": 0,
+        "agreement_count": 0, "agreement_rate": 0.0,
+        "latency_mean_ms": 0.0, "latency_p50_ms": 0.0, "latency_p95_ms": 0.0,
+    }
+
+
+def test_audit_distinguishes_router_miss_from_jev_upgrade_against_truth():
+    records = [
+        {"case_id": "router-miss", "provider_success": True, "agreement": False, "authoritative_label": "recommend", "shadow_label": "payment", "transaction_escalation_disagreement": True, "transaction_deescalation_disagreement": False},
+        {"case_id": "jev-upgrade", "provider_success": True, "agreement": False, "authoritative_label": "recommend", "shadow_label": "payment", "transaction_escalation_disagreement": True, "transaction_deescalation_disagreement": False},
+    ]
+    report = audit_module.audit_records(records, {"router-miss": "payment", "jev-upgrade": "recommend"})
+    assert report["jev_transaction_upgrade_vs_truth_count"] == 1
+    assert report["escalation_classification_counts"] == {
+        "jev_equals_truth_router_miss": 1,
+        "router_equals_truth_jev_genuine_upgrade": 1,
+    }
+    assert report["deescalation_shadow_x_truth_cross_table"] == {}

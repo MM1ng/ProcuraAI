@@ -1,0 +1,94 @@
+{
+  "successful_record_count": 118,
+  "escalation_cases": [
+    {
+      "case_id": "confirm-005",
+      "truth_label": "confirm_order",
+      "router_label": "recommend",
+      "shadow_label": "confirm_order",
+      "classification": "jev_equals_truth_router_miss"
+    },
+    {
+      "case_id": "payment-001",
+      "truth_label": "payment",
+      "router_label": "recommend",
+      "shadow_label": "payment",
+      "classification": "jev_equals_truth_router_miss"
+    },
+    {
+      "case_id": "payment-004",
+      "truth_label": "payment",
+      "router_label": "recommend",
+      "shadow_label": "payment",
+      "classification": "jev_equals_truth_router_miss"
+    },
+    {
+      "case_id": "payment-005",
+      "truth_label": "payment",
+      "router_label": "recommend",
+      "shadow_label": "payment",
+      "classification": "jev_equals_truth_router_miss"
+    },
+    {
+      "case_id": "payment-006",
+      "truth_label": "payment",
+      "router_label": "recommend",
+      "shadow_label": "payment",
+      "classification": "jev_equals_truth_router_miss"
+    },
+    {
+      "case_id": "payment-007",
+      "truth_label": "payment",
+      "router_label": "recommend",
+      "shadow_label": "payment",
+      "classification": "jev_equals_truth_router_miss"
+    },
+    {
+      "case_id": "payment-009",
+      "truth_label": "payment",
+      "router_label": "recommend",
+      "shadow_label": "payment",
+      "classification": "jev_equals_truth_router_miss"
+    },
+    {
+      "case_id": "payment-010",
+      "truth_label": "payment",
+      "router_label": "recommend",
+      "shadow_label": "payment",
+      "classification": "jev_equals_truth_router_miss"
+    },
+    {
+      "case_id": "payment-013",
+      "truth_label": "payment",
+      "router_label": "recommend",
+      "shadow_label": "payment",
+      "classification": "jev_equals_truth_router_miss"
+    },
+    {
+      "case_id": "payment-014",
+      "truth_label": "payment",
+      "router_label": "recommend",
+      "shadow_label": "payment",
+      "classification": "jev_equals_truth_router_miss"
+    }
+  ],
+  "escalation_classification_counts": {
+    "jev_equals_truth_router_miss": 10
+  },
+  "deescalation_cases": [],
+  "deescalation_count": 0,
+  "deescalation_shadow_x_truth_cross_table": {},
+  "disagreement_shadow_x_truth_cross_table": {
+    "clarify x clarify": 14,
+    "clarify x payment": 1,
+    "compare_plan x compare_plan": 5,
+    "confirm_order x confirm_order": 1,
+    "explain_plan x explain_plan": 13,
+    "modify_plan x modify_plan": 11,
+    "order_status x explain_plan": 2,
+    "order_status x order_status": 15,
+    "payment x payment": 9,
+    "recommend x recommend": 1
+  },
+  "jev_transaction_upgrade_vs_truth_count": 0
+}

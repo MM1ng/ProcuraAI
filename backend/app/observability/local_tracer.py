@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import json
+import os
+import tempfile
+import threading
 import time
 import uuid
 from datetime import datetime, timezone
@@ -11,6 +14,7 @@ from app.core.config import DATA_DIR
 
 
 TRACE_FILE = DATA_DIR / "observability_logs.json"
+_TRACE_FILE_LOCK = threading.RLock()
 
 
 def new_trace_id() -> str:
@@ -25,26 +29,58 @@ def elapsed_ms(start_ms: float) -> float:
     return round(now_ms() - start_ms, 2)
 
 
-def _read_traces() -> list[dict[str, Any]]:
+def _read_traces_unlocked() -> list[dict[str, Any]]:
     if not TRACE_FILE.exists():
         return []
     content = TRACE_FILE.read_text(encoding="utf-8").strip()
     return json.loads(content) if content else []
 
 
+def _read_traces() -> list[dict[str, Any]]:
+    """Read one coherent local trace document within this ProcuraAI process."""
+    with _TRACE_FILE_LOCK:
+        return _read_traces_unlocked()
+
+
+def _write_traces_atomically(traces: list[dict[str, Any]]) -> None:
+    """Replace the trace document only after its full JSON representation exists."""
+    TRACE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=TRACE_FILE.parent,
+            prefix=f".{TRACE_FILE.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as temporary_file:
+            temporary_path = Path(temporary_file.name)
+            json.dump(traces, temporary_file, indent=2)
+            temporary_file.flush()
+            os.fsync(temporary_file.fileno())
+        os.replace(temporary_path, TRACE_FILE)
+    except Exception:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
+        raise
+
+
 def log_observability_event(event: dict[str, Any]) -> dict[str, Any]:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    traces = _read_traces()
-    row = {
-        "log_id": len(traces) + 1,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "error": None,
-        "payment_status": None,
-        **event,
-    }
-    traces.append(row)
-    TRACE_FILE.write_text(json.dumps(traces, indent=2), encoding="utf-8")
-    return row
+    # This only covers the local read-modify-write sequence.  Callers perform
+    # no provider, Langfuse, or other network work while this lock is held.
+    with _TRACE_FILE_LOCK:
+        traces = _read_traces_unlocked()
+        row = {
+            "log_id": len(traces) + 1,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "error": None,
+            "payment_status": None,
+            **event,
+        }
+        traces.append(row)
+        _write_traces_atomically(traces)
+        return row
 
 
 def list_traces(limit: int = 50) -> list[dict[str, Any]]:

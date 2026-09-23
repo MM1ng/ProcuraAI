@@ -9,10 +9,20 @@ from app.core.config import get_settings
 settings = get_settings()
 
 
+def _uses_multimodal_api(model_name: str) -> bool:
+    """Return whether a DashScope model must use the multimodal endpoint."""
+    return model_name.strip().lower().startswith("qwen3.8-")
+
+
 def get_llm_model():
     if settings.LLM_PROVIDER.lower() == "tongyi":
         if not settings.DASHSCOPE_API_KEY:
             return None
+
+        if _uses_multimodal_api(settings.QWEN_MODEL):
+            from dashscope import MultiModalConversation
+
+            return MultiModalConversation
 
         from dashscope import Generation
 
@@ -92,7 +102,39 @@ def _extract_dashscope_content(response: Any) -> str:
             content = message.get("content") if isinstance(message, dict) else None
             if isinstance(content, str) and content:
                 return content
+            if isinstance(content, list):
+                text_parts = [
+                    part.get("text")
+                    for part in content
+                    if isinstance(part, dict) and isinstance(part.get("text"), str)
+                ]
+                if text_parts:
+                    return "".join(text_parts)
     raise ValueError(f"DashScope response did not contain text content: {getattr(response, 'message', '')}")
+
+
+def _call_dashscope(llm: Any, prompt: str, *, stream: bool = False) -> Any:
+    common_args = {
+        "model": settings.QWEN_MODEL,
+        "api_key": settings.DASHSCOPE_API_KEY,
+        "top_p": settings.QWEN_TOP_P,
+        "max_tokens": settings.QWEN_MAX_TOKENS,
+        "timeout": settings.QWEN_TIMEOUT_SECONDS,
+        "enable_thinking": settings.QWEN_ENABLE_THINKING,
+    }
+    if _uses_multimodal_api(settings.QWEN_MODEL):
+        multimodal_args = {
+            "messages": [{"role": "user", "content": [{"text": prompt}]}],
+            "result_format": "message",
+            **common_args,
+        }
+        if stream:
+            multimodal_args.update({"stream": True, "incremental_output": True})
+        return llm.call(**multimodal_args)
+    text_args = {"prompt": prompt, **common_args}
+    if stream:
+        text_args.update({"stream": True, "incremental_output": True})
+    return llm.call(**text_args)
 
 
 def safe_llm_invoke(prompt: str, purpose: str = "general", language: str = "en") -> dict[str, Any]:
@@ -122,15 +164,7 @@ def safe_llm_invoke(prompt: str, purpose: str = "general", language: str = "en")
     last_error: Exception | None = None
     for attempt in range(2):
         try:
-            response = llm.call(
-                model=settings.QWEN_MODEL,
-                prompt=prompt,
-                api_key=settings.DASHSCOPE_API_KEY,
-                top_p=settings.QWEN_TOP_P,
-                max_tokens=settings.QWEN_MAX_TOKENS,
-                timeout=settings.QWEN_TIMEOUT_SECONDS,
-                enable_thinking=settings.QWEN_ENABLE_THINKING,
-            )
+            response = _call_dashscope(llm, prompt)
             content = _extract_dashscope_content(response)
             return {
                 "content": content,
@@ -169,17 +203,7 @@ async def safe_llm_stream(prompt: str, purpose: str = "general", language: str =
         return
 
     try:
-        stream = llm.call(
-            model=settings.QWEN_MODEL,
-            prompt=prompt,
-            api_key=settings.DASHSCOPE_API_KEY,
-            top_p=settings.QWEN_TOP_P,
-            max_tokens=settings.QWEN_MAX_TOKENS,
-            timeout=settings.QWEN_TIMEOUT_SECONDS,
-            enable_thinking=settings.QWEN_ENABLE_THINKING,
-            stream=True,
-            incremental_output=True,
-        )
+        stream = _call_dashscope(llm, prompt, stream=True)
         for chunk in stream:
             delta = _extract_dashscope_content(chunk)
             if delta:

@@ -89,6 +89,38 @@ def test_safe_llm_invoke_prefers_tongyi_even_when_mock_fallback_is_enabled(monke
     assert result["used_mock_llm"] is False
 
 
+def test_safe_llm_invoke_uses_multimodal_api_for_qwen38(monkeypatch):
+    class DummyMultiModalConversation:
+        @staticmethod
+        def call(**kwargs):
+            assert kwargs["model"] == "qwen3.8-flash"
+            assert kwargs["messages"] == [{"role": "user", "content": [{"text": "hello"}]}]
+            assert kwargs["result_format"] == "message"
+            assert "stream" not in kwargs
+            assert "incremental_output" not in kwargs
+            return SimpleNamespace(
+                output={
+                    "choices": [
+                        {"message": {"content": [{"text": "multimodal answer"}]}},
+                    ]
+                }
+            )
+
+    monkeypatch.setattr(
+        llm_service,
+        "settings",
+        _settings(DASHSCOPE_API_KEY="dash-test", QWEN_MODEL="qwen3.8-flash"),
+    )
+    monkeypatch.setattr(llm_service, "get_llm_model", lambda: DummyMultiModalConversation)
+
+    result = llm_service.safe_llm_invoke("hello", purpose="llm_test")
+
+    assert result["content"] == "multimodal answer"
+    assert result["model_provider"] == "tongyi"
+    assert result["model_name"] == "qwen3.8-flash"
+    assert result["used_mock_llm"] is False
+
+
 def test_safe_llm_invoke_falls_back_to_mock_on_tongyi_error(monkeypatch):
     class FailingDashScope:
         @staticmethod

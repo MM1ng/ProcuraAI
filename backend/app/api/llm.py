@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from pydantic import BaseModel
-from fastapi import APIRouter
+from fastapi import APIRouter, Header, Response
 
-from app.services.llm_service import safe_llm_invoke, settings
+from app.services.llm_service import mock_llm_response, settings
+from app.services.debug_access import require_llm_debug
 
 
 router = APIRouter(prefix="/api/llm", tags=["llm"])
@@ -27,5 +28,21 @@ def llm_status() -> dict[str, object]:
 
 
 @router.post("/test")
-def llm_test(request: LLMTestRequest) -> dict[str, object]:
-    return safe_llm_invoke(request.message, purpose="llm_test")
+def llm_test(
+    request: LLMTestRequest,
+    response: Response,
+    x_llm_test_token: str | None = Header(default=None),
+) -> dict[str, object]:
+    require_llm_debug(x_llm_test_token)
+    response.headers["Cache-Control"] = "no-store"
+    # Never use safe_llm_invoke: USE_MOCK_LLM is a fallback, not a provider ban.
+    return {
+        "content": mock_llm_response(request.message, purpose="llm_test"),
+        "model_provider": "mock",
+        "model_name": settings.QWEN_MODEL,
+        "used_mock_llm": True,
+        "error": None,
+        "fallback_reason": "authorized_local_debug_mock",
+        "latency_ms": 0,
+        "retry_count": 0,
+    }

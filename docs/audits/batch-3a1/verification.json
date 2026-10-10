@@ -1,0 +1,799 @@
+{
+  "schema_version": 1,
+  "freeze_date_local": "2026-10-10",
+  "audited_code_commit": "5c4c466f813a43500e56f9090ee8b84d847132c2",
+  "original_baseline": "c047b9d1ee1b67c1e340e15e5122fb4fb26d1025",
+  "method": "Independent XML child-element counts; Git blob byte SHA256; AST source function and new-test literal parametrization checks. No pytest or product imports.",
+  "junit": [
+    {
+      "file": "red-actual.xml",
+      "counts": {
+        "pass": 0,
+        "fail": 26,
+        "error": 0,
+        "skip": 0
+      },
+      "case_count": 26,
+      "declared": {
+        "tests": "26",
+        "failures": "26",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "declared_matches": true,
+      "new_test_exact_parametrized_names_match": true,
+      "unknown_test_functions": [],
+      "sha256": "E1D8E84D8B0A761C590E628DC877FFC505AFBEAEDF5A7E459474D90E452EBD02",
+      "names": [
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[None-None]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[None-fixture-observability-admin-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[-fixture-observability-admin-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[   -fixture-observability-admin-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[fixture-observability-admin-only-None]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[fixture-observability-admin-only-wrong]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[fixture-observability-admin-only-fixture-llm-debug-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_normal_anonymous_caller_cannot_read_shared_traces"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_admin_can_read_real_isolated_traces"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[None-development-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[false-development-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[garbage-development-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-production-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-prod-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-staging-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true--fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-None-fixture-llm-debug-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development--fixture-llm-debug-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-   -fixture-llm-debug-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-None-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-wrong-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-fixture-observability-admin-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_authorized_debug_is_local_mock_even_when_mock_flag_false[development]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_authorized_debug_is_local_mock_even_when_mock_flag_false[test]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_business_caller_not_debug_authority"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_admin_comparison_uses_constant_time"
+        ]
+      ]
+    },
+    {
+      "file": "green.xml",
+      "counts": {
+        "pass": 26,
+        "fail": 0,
+        "error": 0,
+        "skip": 0
+      },
+      "case_count": 26,
+      "declared": {
+        "tests": "26",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "declared_matches": true,
+      "new_test_exact_parametrized_names_match": true,
+      "unknown_test_functions": [],
+      "sha256": "A0D075C5535AD6B57696509991FAF8996FA5E939C69DF309C90A2D3369046085",
+      "names": [
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[None-None]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[None-fixture-observability-admin-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[-fixture-observability-admin-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[   -fixture-observability-admin-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[fixture-observability-admin-only-None]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[fixture-observability-admin-only-wrong]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[fixture-observability-admin-only-fixture-llm-debug-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_normal_anonymous_caller_cannot_read_shared_traces"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_admin_can_read_real_isolated_traces"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[None-development-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[false-development-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[garbage-development-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-production-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-prod-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-staging-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true--fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-None-fixture-llm-debug-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development--fixture-llm-debug-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-   -fixture-llm-debug-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-None-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-wrong-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-fixture-observability-admin-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_authorized_debug_is_local_mock_even_when_mock_flag_false[development]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_authorized_debug_is_local_mock_even_when_mock_flag_false[test]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_business_caller_not_debug_authority"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_admin_comparison_uses_constant_time"
+        ]
+      ]
+    },
+    {
+      "file": "regression.xml",
+      "counts": {
+        "pass": 77,
+        "fail": 0,
+        "error": 0,
+        "skip": 0
+      },
+      "case_count": 77,
+      "declared": {
+        "tests": "77",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "declared_matches": true,
+      "new_test_exact_parametrized_names_match": true,
+      "unknown_test_functions": [],
+      "sha256": "85366C45D7BE50A136A8FF06706CF0425D91AC88FF849321D67033C60A93EC50",
+      "names": [
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[None-None]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[None-fixture-observability-admin-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[-fixture-observability-admin-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[   -fixture-observability-admin-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[fixture-observability-admin-only-None]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[fixture-observability-admin-only-wrong]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[fixture-observability-admin-only-fixture-llm-debug-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_normal_anonymous_caller_cannot_read_shared_traces"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_admin_can_read_real_isolated_traces"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[None-development-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[false-development-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[garbage-development-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-production-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-prod-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-staging-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true--fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-None-fixture-llm-debug-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development--fixture-llm-debug-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-   -fixture-llm-debug-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-None-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-wrong-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-fixture-observability-admin-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_authorized_debug_is_local_mock_even_when_mock_flag_false[development]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_authorized_debug_is_local_mock_even_when_mock_flag_false[test]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_business_caller_not_debug_authority"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_admin_comparison_uses_constant_time"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_agent_rejects_tampered_original_without_rehash_or_save"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_orders_require_exact_display_binding[plan_id-None]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_orders_require_exact_display_binding[plan_id-wrong]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_orders_require_exact_display_binding[plan_hash-None]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_orders_require_exact_display_binding[plan_hash-wrong]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_orders_require_exact_display_binding[plan_version-None]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_orders_require_exact_display_binding[plan_version-999]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_stripping_all_chat_binding_does_not_become_cart"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_display_confirm_order_checkout_composition[default]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_display_confirm_order_checkout_composition[alternative]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_display_confirm_order_checkout_composition[optimized]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_old_confirmation_after_concurrent_selection_requires_reconfirmation"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_concurrent_confirmation_retries_create_one_order"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_drift_blocks_order_and_checkout[price-11-price_changed:p1]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_drift_blocks_order_and_checkout[stock-1-stock_changed:p1]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_drift_blocks_order_and_checkout[stock-19-stock_changed:p1]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_drift_blocks_order_and_checkout[delivery_days-7-delivery_changed:p1]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_safety_negatives_have_no_side_effects_with_valid_confirmation[\\u4e0d\\u8981\\u786e\\u8ba4\\u8fd9\\u4e2a\\u65b9\\u6848\\u5e76\\u4e0b\\u5355]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_safety_negatives_have_no_side_effects_with_valid_confirmation[\\u5982\\u679c\\u786e\\u8ba4\\u8fd9\\u4e2a\\u65b9\\u6848\\u5e76\\u4e0b\\u5355\\u4f1a\\u600e\\u6837\\uff1f]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_safety_negatives_have_no_side_effects_with_valid_confirmation[How do I pay?]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_safety_negatives_have_no_side_effects_with_valid_confirmation[What payment options are available?]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_agent_confirm_then_pay_reuses_same_order"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_independent_cart_requires_server_quote_and_keeps_guard"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_expired_snapshot_rejected_without_refresh"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_confirmation_cannot_be_forged_or_moved_to_another_session_or_user"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_unselected_option_cannot_trade_by_local_switch"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_update_between_agent_read_and_execution_is_rejected"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_quick_optimization_uses_registered_context_and_rejects_stale_binding"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_chat_explicit_confirmation_with_display_binding_issues_server_confirmation"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_selection_cannot_use_unseen_changed_alternative"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_expired_display_can_be_regenerated_and_reconfirmed"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_agent_requires_exact_binding_without_snapshot_mutation[plan_id-None]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_agent_requires_exact_binding_without_snapshot_mutation[plan_id-wrong]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_agent_requires_exact_binding_without_snapshot_mutation[plan_hash-None]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_agent_requires_exact_binding_without_snapshot_mutation[plan_hash-wrong]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_agent_requires_exact_binding_without_snapshot_mutation[plan_version-None]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_agent_requires_exact_binding_without_snapshot_mutation[plan_version-999]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_catalog_changes_during_order_rebuild_are_rejected"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_cart_quote_cannot_change_price_during_order_rebuild"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_cart_aggregated_stock_drift_blocks_checkout"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_real_planner_api_agent_order_checkout_chain[default]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_real_planner_api_agent_order_checkout_chain[alternative]"
+        ],
+        [
+          "tests.test_transaction_snapshot_batch1",
+          "test_real_planner_api_agent_order_checkout_chain[optimized]"
+        ],
+        [
+          "tests.test_caller_ownership_batch2",
+          "test_readonly_context_never_creates_actor"
+        ],
+        [
+          "tests.test_caller_ownership_batch2",
+          "test_cookie_origin_csrf_and_no_rotation"
+        ],
+        [
+          "tests.test_caller_ownership_batch2",
+          "test_other_actor_cannot_copy_full_binding_or_order"
+        ],
+        [
+          "tests.test_caller_ownership_batch2",
+          "test_client_user_id_cannot_remint_confirmation"
+        ],
+        [
+          "tests.test_caller_ownership_batch2",
+          "test_ownerless_order_is_unclaimable"
+        ],
+        [
+          "tests.test_caller_ownership_batch2",
+          "test_explicit_init_reuses_actor_and_invalid_cookie_cannot_switch"
+        ],
+        [
+          "tests.test_caller_ownership_batch2",
+          "test_anonymous_mode_and_host_fail_closed"
+        ],
+        [
+          "tests.test_caller_ownership_batch2",
+          "test_copied_session_denied_at_every_plan_entry"
+        ]
+      ]
+    },
+    {
+      "file": "red.xml",
+      "counts": {
+        "pass": 0,
+        "fail": 0,
+        "error": 26,
+        "skip": 0
+      },
+      "case_count": 26,
+      "declared": {
+        "tests": "26",
+        "failures": "0",
+        "errors": "26",
+        "skipped": "0"
+      },
+      "declared_matches": true,
+      "new_test_exact_parametrized_names_match": true,
+      "unknown_test_functions": [],
+      "sha256": "E9DF63E1EBF5CF6CA25299CFC69DC3C9E8AC7731BD0EFC5892D290F17A60701B",
+      "names": [
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[None-None]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[None-fixture-observability-admin-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[-fixture-observability-admin-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[   -fixture-observability-admin-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[fixture-observability-admin-only-None]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[fixture-observability-admin-only-wrong]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_traces_denied_before_read[fixture-observability-admin-only-fixture-llm-debug-only]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_normal_anonymous_caller_cannot_read_shared_traces"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_admin_can_read_real_isolated_traces"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[None-development-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[false-development-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[garbage-development-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-production-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-prod-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-staging-fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true--fixture-llm-debug-only-fixture-llm-debug-only-404]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-None-fixture-llm-debug-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development--fixture-llm-debug-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-   -fixture-llm-debug-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-None-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-wrong-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-fixture-observability-admin-only-403]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_authorized_debug_is_local_mock_even_when_mock_flag_false[development]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_authorized_debug_is_local_mock_even_when_mock_flag_false[test]"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_business_caller_not_debug_authority"
+        ],
+        [
+          "tests.test_debug_access_batch3a1",
+          "test_admin_comparison_uses_constant_time"
+        ]
+      ]
+    }
+  ],
+  "red_green_names_identical": true,
+  "sources": {
+    "backend/app/api/observability.py": {
+      "commit_blob_sha256": "4CD33883EE0D710B930701EF397CFDA11E6E3CA560C19BE8C507E18186F761E5",
+      "working_file_sha256": "C6E60EBA3AB801AB64AB6E44F2D49FFB427E0918F1C794FA450B36D16606204B",
+      "exact_bytes_match": false,
+      "lf_normalized_match": true
+    },
+    "backend/app/api/llm.py": {
+      "commit_blob_sha256": "9CF29AC78319E98A875AC073A3C54F9E815023BBCF1D495BB9C74F0C99266FB0",
+      "working_file_sha256": "4D384EB6C736132C7083268BC7618D93C718CF59363F2D308F40A1162C78EE75",
+      "exact_bytes_match": false,
+      "lf_normalized_match": true
+    },
+    "backend/app/services/debug_access.py": {
+      "commit_blob_sha256": "F2A1D96BB7A783403D39232F2DDAAD5A40109D534E1B4A2E47660E6B5863A629",
+      "working_file_sha256": "F2A1D96BB7A783403D39232F2DDAAD5A40109D534E1B4A2E47660E6B5863A629",
+      "exact_bytes_match": true,
+      "lf_normalized_match": true
+    },
+    "backend/tests/test_debug_access_batch3a1.py": {
+      "commit_blob_sha256": "6C5997CF6AC6D7C34D24EC700A0B2B4FA0CB5895CB2703CABEAB492EB1B23C42",
+      "working_file_sha256": "6C5997CF6AC6D7C34D24EC700A0B2B4FA0CB5895CB2703CABEAB492EB1B23C42",
+      "exact_bytes_match": true,
+      "lf_normalized_match": true
+    }
+  },
+  "test_record_sha_matches_git_blob": true,
+  "provenance": {
+    "historical_worktree_head": "c047b9d1ee1b67c1e340e15e5122fb4fb26d1025 (execution record)",
+    "code_commit_created_after_runs": true,
+    "new_test_hash_link": "VERIFIED_RECORDED_HASH_EQUALS_FIXED_COMMIT_BLOB",
+    "same_test_file_selected_both_runs": "VERIFIED_EXECUTION_COMMANDS_AND_XML_NAMES",
+    "separate_contemporaneous_test_hash_per_run": "NOT_VERIFIED_NOT_PRESENT",
+    "complete_product_bytes_during_each_run": "NOT_VERIFIED_NO_PER_RUN_TREE_OR_SOURCE_SNAPSHOT",
+    "red_code_is_fixed_audited_commit": false,
+    "red_code_note": "Red is explicitly pre-patch, not a passing validation of the final commit",
+    "exit_codes": "PRESENT_IN_EXECUTION_RECORD_CONSISTENT_WITH_XML_NOT_INDEPENDENT_RAW_PROCESS_LOG_IN_FOLDER",
+    "protection_before_after": "NOT_VERIFIED_SEPARATE_RAW_BEFORE_AND_AFTER_RECORDS_NOT_PRESENT",
+    "protected_current_record_matches": {
+      "backend/procurement.db": {
+        "recorded": "9856E4632942E002678A35C94E15E1F6E935E6E9A521F8A7A8D8ED579300734D",
+        "current": "9856E4632942E002678A35C94E15E1F6E935E6E9A521F8A7A8D8ED579300734D",
+        "current_matches_record": true,
+        "historical_before_after_independent_raw_files_present": false
+      },
+      "data/decision_runtime.sqlite3": {
+        "recorded": "1597CB1A6D68AF6EBA86C266A44FACD77E759D2F42B96C21F87D5B6645224AD1",
+        "current": "1597CB1A6D68AF6EBA86C266A44FACD77E759D2F42B96C21F87D5B6645224AD1",
+        "current_matches_record": true,
+        "historical_before_after_independent_raw_files_present": false
+      },
+      "data/observability_logs.json": {
+        "recorded": "FDB7F9BBEA816EF4EA5CCE565BBC1F271F37D61DA6C367AEA2CD833BD0C517EC",
+        "current": "FDB7F9BBEA816EF4EA5CCE565BBC1F271F37D61DA6C367AEA2CD833BD0C517EC",
+        "current_matches_record": true,
+        "historical_before_after_independent_raw_files_present": false
+      },
+      "data/orders.json": {
+        "recorded": "87E5D051A264534646DC7926B1C405EE90E916E7C83E72414EBC542B3B25D6D5",
+        "current": "87E5D051A264534646DC7926B1C405EE90E916E7C83E72414EBC542B3B25D6D5",
+        "current_matches_record": true,
+        "historical_before_after_independent_raw_files_present": false
+      },
+      "data/transaction_identity/registry.sqlite3": {
+        "recorded": "27C4981242F95AB3189FE6C6401926D630783F252C40417A32E16303A59E36BF",
+        "current": "27C4981242F95AB3189FE6C6401926D630783F252C40417A32E16303A59E36BF",
+        "current_matches_record": true,
+        "historical_before_after_independent_raw_files_present": false
+      }
+    }
+  },
+  "raw_hashes": {
+    "execution.json": "2B225F4065864FD82F90DC139932188186FDD0A8E38FD2F3525F987D6EB2C16C",
+    "green.xml": "A0D075C5535AD6B57696509991FAF8996FA5E939C69DF309C90A2D3369046085",
+    "red-actual.xml": "E1D8E84D8B0A761C590E628DC877FFC505AFBEAEDF5A7E459474D90E452EBD02",
+    "red.xml": "E9DF63E1EBF5CF6CA25299CFC69DC3C9E8AC7731BD0EFC5892D290F17A60701B",
+    "regression.xml": "85366C45D7BE50A136A8FF06706CF0425D91AC88FF849321D67033C60A93EC50",
+    "REPORT.md": "F54BF2BF00AC97C61532818FD8436DB4C8E65863E8853B5D8A90EE26E94B2619"
+  },
+  "no_tests_rerun": true,
+  "no_product_changed": true
+}

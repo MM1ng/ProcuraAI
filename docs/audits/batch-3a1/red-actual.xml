@@ -1,0 +1,1045 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="26" skipped="0" tests="26" time="2.379" timestamp="2026-10-10T11:25:15.104026+08:00" hostname="[HOST_REDACTED]"><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[None-None]" time="0.037"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call(limit=50)].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3C310A0&gt;, &lt;Mock id='2649255563040'&gt;, &lt;Mock id='2649255228432'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3EFCB90&gt;
+configured = None, supplied = None
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+&gt;       reader.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649255563040'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call(limit=50)].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[None-fixture-observability-admin-only]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call(limit=50)].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3EFE0C0&gt;, &lt;Mock id='2649255564240'&gt;, &lt;Mock id='2649255571008'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3EFCD70&gt;
+configured = None, supplied = 'fixture-observability-admin-only'
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+&gt;       reader.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649255564240'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call(limit=50)].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[-fixture-observability-admin-only]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call(limit=50)].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3C1D070&gt;, &lt;Mock id='2649255919248'&gt;, &lt;Mock id='2649255910560'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3EFCD40&gt;
+configured = '', supplied = 'fixture-observability-admin-only'
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+&gt;       reader.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649255919248'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call(limit=50)].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[   -fixture-observability-admin-only]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call(limit=50)].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3C1FB60&gt;, &lt;Mock id='2649252638752'&gt;, &lt;Mock id='2649252630688'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3C32AB0&gt;
+configured = '   ', supplied = 'fixture-observability-admin-only'
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+&gt;       reader.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649252638752'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call(limit=50)].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[fixture-observability-admin-only-None]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call(limit=50)].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3BF7A40&gt;, &lt;Mock id='2649255566448'&gt;, &lt;Mock id='2649255566928'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3EFE180&gt;
+configured = 'fixture-observability-admin-only', supplied = None
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+&gt;       reader.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649255566448'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call(limit=50)].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[fixture-observability-admin-only-wrong]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call(limit=50)].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3C1F950&gt;, &lt;Mock id='2649252179808'&gt;, &lt;Mock id='2649255915312'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3EFE150&gt;
+configured = 'fixture-observability-admin-only', supplied = 'wrong'
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+&gt;       reader.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649252179808'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call(limit=50)].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[fixture-observability-admin-only-fixture-llm-debug-only]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call(limit=50)].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3FD8F80&gt;, &lt;Mock id='2649256463008'&gt;, &lt;Mock id='2649256473328'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3F52720&gt;
+configured = 'fixture-observability-admin-only'
+supplied = 'fixture-llm-debug-only'
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+&gt;       reader.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256463008'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call(limit=50)].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_normal_anonymous_caller_cannot_read_shared_traces" time="0.094"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call(limit=50)].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3C1D4C0&gt;, &lt;Mock id='2649252635488'&gt;, &lt;Mock id='2649256468768'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3FDBA40&gt;
+
+    def test_normal_anonymous_caller_cannot_read_shared_traces(boundary, monkeypatch):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", ADMIN)
+        init = client.post("/api/caller/init", headers={"Origin": ORIGIN})
+        assert init.status_code == 200
+        response = client.get("/api/observability/traces")
+&gt;       reader.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649252635488'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call(limit=50)].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_admin_can_read_real_isolated_traces" time="0.010"><failure message="KeyError: 'cache-control'">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3F53F20&gt;, &lt;Mock id='2649255918528'&gt;, &lt;Mock id='2649255918048'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3F533E0&gt;
+
+    def test_admin_can_read_real_isolated_traces(boundary, monkeypatch):
+        client, reader, forbidden, rows = boundary
+        monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", ADMIN)
+        response = client.get("/api/observability/traces?limit=1",
+                              headers={"X-Observability-Token": ADMIN})
+        assert response.status_code == 200
+        assert response.json() == {"items": [rows[-1]], "total": 1}
+&gt;       assert response.headers["cache-control"] == "no-store"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_debug_access_batch3a1.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Headers({'content-length': '73', 'content-type': 'application/json'})
+key = 'cache-control'
+
+    def __getitem__(self, key: str) -&gt; str:
+        """
+        Return a single header value.
+    
+        If there are multiple headers with the same key, then we concatenate
+        them with commas. See: https://tools.ietf.org/html/rfc7230#section-3.2.2
+        """
+        normalized_key = key.lower().encode(self.encoding)
+    
+        items = [
+            header_value.decode(self.encoding)
+            for _, header_key, header_value in self._list
+            if header_key == normalized_key
+        ]
+    
+        if items:
+            return ", ".join(items)
+    
+&gt;       raise KeyError(key)
+E       KeyError: 'cache-control'
+
+..\.venv\Lib\site-packages\httpx2\_models.py:325: KeyError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[None-development-fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3EFD760&gt;, &lt;Mock id='2649255560160'&gt;, &lt;Mock id='2649255563424'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3EFC7D0&gt;
+enabled = None, environment = 'development'
+configured = 'fixture-llm-debug-only', supplied = 'fixture-llm-debug-only'
+status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649255563424'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[false-development-fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3FDA480&gt;, &lt;Mock id='2649256465024'&gt;, &lt;Mock id='2649256474480'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3C33440&gt;
+enabled = 'false', environment = 'development'
+configured = 'fixture-llm-debug-only', supplied = 'fixture-llm-debug-only'
+status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256474480'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[garbage-development-fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D4002AE0&gt;, &lt;Mock id='2649256639856'&gt;, &lt;Mock id='2649256625120'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D4003D10&gt;
+enabled = 'garbage', environment = 'development'
+configured = 'fixture-llm-debug-only', supplied = 'fixture-llm-debug-only'
+status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256625120'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-production-fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3FD61E0&gt;, &lt;Mock id='2649256456272'&gt;, &lt;Mock id='2649256456320'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3FD62A0&gt;
+enabled = 'true', environment = 'production'
+configured = 'fixture-llm-debug-only', supplied = 'fixture-llm-debug-only'
+status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256456320'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-prod-fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3FD5B50&gt;, &lt;Mock id='2649256447536'&gt;, &lt;Mock id='2649256449120'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3FD74A0&gt;
+enabled = 'true', environment = 'prod', configured = 'fixture-llm-debug-only'
+supplied = 'fixture-llm-debug-only', status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256449120'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-staging-fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.009"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D4001F40&gt;, &lt;Mock id='2649256631984'&gt;, &lt;Mock id='2649256639088'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3FD5160&gt;
+enabled = 'true', environment = 'staging', configured = 'fixture-llm-debug-only'
+supplied = 'fixture-llm-debug-only', status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256639088'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true--fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3FDA9F0&gt;, &lt;Mock id='2649256469968'&gt;, &lt;Mock id='2649256464640'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D4000680&gt;
+enabled = 'true', environment = '', configured = 'fixture-llm-debug-only'
+supplied = 'fixture-llm-debug-only', status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256464640'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-development-None-fixture-llm-debug-only-403]" time="0.011"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3FEAF30&gt;, &lt;Mock id='2649256534400'&gt;, &lt;Mock id='2649256533632'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3FDAD80&gt;
+enabled = 'true', environment = 'development', configured = None
+supplied = 'fixture-llm-debug-only', status = 403
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256533632'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-development--fixture-llm-debug-only-403]" time="0.009"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268B41462D0&gt;, &lt;Mock id='2648721089616'&gt;, &lt;Mock id='2648721088176'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268B4145070&gt;
+enabled = 'true', environment = 'development', configured = ''
+supplied = 'fixture-llm-debug-only', status = 403
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2648721088176'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-development-   -fixture-llm-debug-only-403]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3C1CF80&gt;, &lt;Mock id='2649255911808'&gt;, &lt;Mock id='2649255912288'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268B41473E0&gt;
+enabled = 'true', environment = 'development', configured = '   '
+supplied = 'fixture-llm-debug-only', status = 403
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649255912288'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-None-403]" time="0.009"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3FDB920&gt;, &lt;Mock id='2649256475152'&gt;, &lt;Mock id='2649256473856'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3F53650&gt;
+enabled = 'true', environment = 'development'
+configured = 'fixture-llm-debug-only', supplied = None, status = 403
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256473856'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-wrong-403]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3C17B30&gt;, &lt;Mock id='2649256475344'&gt;, &lt;Mock id='2649256628768'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3FDBD10&gt;
+enabled = 'true', environment = 'development'
+configured = 'fixture-llm-debug-only', supplied = 'wrong', status = 403
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256628768'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-fixture-observability-admin-only-403]" time="0.010"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D4003950&gt;, &lt;Mock id='2649256626464'&gt;, &lt;Mock id='2649256637312'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D4002F30&gt;
+enabled = 'true', environment = 'development'
+configured = 'fixture-llm-debug-only'
+supplied = 'fixture-observability-admin-only', status = 403
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256637312'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_authorized_debug_is_local_mock_even_when_mock_flag_false[development]" time="0.009"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3FD9FA0&gt;, &lt;Mock id='2649256634768'&gt;, &lt;Mock id='2649256471792'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D40001D0&gt;
+environment = 'development'
+
+    @pytest.mark.parametrize("environment", ["development", "test"])
+    def test_authorized_debug_is_local_mock_even_when_mock_flag_false(boundary, monkeypatch, environment):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        monkeypatch.setenv("LLM_TEST_ENABLED", "true")
+        monkeypatch.setenv("LLM_TEST_TOKEN", DEBUG)
+        monkeypatch.setenv("USE_MOCK_LLM", "false")
+        response = client.post("/api/llm/test", json={"message": "test"},
+                               headers={"X-LLM-Test-Token": DEBUG})
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256471792'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_authorized_debug_is_local_mock_even_when_mock_flag_false[test]" time="0.009"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3FEABA0&gt;, &lt;Mock id='2649256527440'&gt;, &lt;Mock id='2649256536128'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3C1E750&gt;
+environment = 'test'
+
+    @pytest.mark.parametrize("environment", ["development", "test"])
+    def test_authorized_debug_is_local_mock_even_when_mock_flag_false(boundary, monkeypatch, environment):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        monkeypatch.setenv("LLM_TEST_ENABLED", "true")
+        monkeypatch.setenv("LLM_TEST_TOKEN", DEBUG)
+        monkeypatch.setenv("USE_MOCK_LLM", "false")
+        response = client.post("/api/llm/test", json={"message": "test"},
+                               headers={"X-LLM-Test-Token": DEBUG})
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256536128'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_business_caller_not_debug_authority" time="0.084"><failure message="AssertionError: Expected 'mock' to not have been called. Called 1 times.&#10;Calls: [call('test', purpose='llm_test')].">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3FD4560&gt;, &lt;Mock id='2649256451184'&gt;, &lt;Mock id='2649256448832'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3FD5940&gt;
+
+    def test_business_caller_not_debug_authority(boundary, monkeypatch):
+        client, _, forbidden, _ = boundary
+        monkeypatch.setenv("LLM_TEST_ENABLED", "true")
+        monkeypatch.setenv("LLM_TEST_TOKEN", DEBUG)
+        init = client.post("/api/caller/init", headers={"Origin": ORIGIN})
+        assert init.status_code == 200
+        response = client.post("/api/llm/test", json={"message": "test"},
+                               headers={"Origin": ORIGIN, "X-CSRF-Token": init.json()["csrf_token"]})
+&gt;       forbidden.assert_not_called()
+
+tests\test_debug_access_batch3a1.py:146: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Mock id='2649256448832'&gt;
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+&gt;           raise AssertionError(msg)
+E           AssertionError: Expected 'mock' to not have been called. Called 1 times.
+E           Calls: [call('test', purpose='llm_test')].
+
+[USER_HOME]\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\unittest\mock.py:910: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_admin_comparison_uses_constant_time" time="0.006"><failure message="ImportError: cannot import name 'debug_access' from 'app.services' ([REPO_ROOT]\backend\app\services\__init__.py)">boundary = (&lt;starlette.testclient.TestClient object at 0x00000268D3FD7D40&gt;, &lt;Mock id='2649256449552'&gt;, &lt;Mock id='2649256451616'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000268D3FD67B0&gt;
+
+    def test_admin_comparison_uses_constant_time(boundary, monkeypatch):
+        # Import during execution so the same source can run red before helper exists.
+&gt;       from app.services import debug_access
+E       ImportError: cannot import name 'debug_access' from 'app.services' ([REPO_ROOT]\backend\app\services\__init__.py)
+
+tests\test_debug_access_batch3a1.py:153: ImportError</failure></testcase></testsuite></testsuites>

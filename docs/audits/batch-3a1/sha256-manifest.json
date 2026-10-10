@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "audited_code_commit": "5c4c466f813a43500e56f9090ee8b84d847132c2",
+  "evidence_branch": "audit/batch-3a1-evidence",
+  "hash_algorithm": "SHA-256",
+  "raw_originals_unchanged": true,
+  "raw_originals_directory": ".codex-batch3a1-20261010 (outside repository)",
+  "raw_original_sha256": {
+    "execution.json": "2B225F4065864FD82F90DC139932188186FDD0A8E38FD2F3525F987D6EB2C16C",
+    "green.xml": "A0D075C5535AD6B57696509991FAF8996FA5E939C69DF309C90A2D3369046085",
+    "red-actual.xml": "E1D8E84D8B0A761C590E628DC877FFC505AFBEAEDF5A7E459474D90E452EBD02",
+    "red.xml": "E9DF63E1EBF5CF6CA25299CFC69DC3C9E8AC7731BD0EFC5892D290F17A60701B",
+    "regression.xml": "85366C45D7BE50A136A8FF06706CF0425D91AC88FF849321D67033C60A93EC50",
+    "REPORT.md": "F54BF2BF00AC97C61532818FD8436DB4C8E65863E8853B5D8A90EE26E94B2619"
+  },
+  "public_file_sha256": {
+    "execution.json": "EC457526C88C8AE8B96EB4D2BC5C0184C9D045954187DA897A483829CCCD00CA",
+    "FREEZE_REVIEW.md": "0DB5D23C028B4AEE6AB481EF277AE4315D41B2DCBFF20F51A38BD5D9041331C2",
+    "green.xml": "F910475F82809A08DD0B52421F486D355C639D42D920120FA25D1D509B16B60C",
+    "initial-setup.xml": "B37DEF8670EB12C39CF9EEC3258288226368A3968F54CD67EDC076E243075EF7",
+    "red-actual.xml": "7149DF7C43E26E58EAD14248E9E0182249854CC76EE20F49B3B9E7694046BF07",
+    "regression.xml": "24F1BAEFFF24AF359587411131990F3392198D4BE74727F5B3EBD57C9AA82D0F",
+    "REPORT.md": "DF931CE09AC171B62BA630E587F33330DB750A62570FE609A9510FC382F22353",
+    "verification.json": "401CA87E399BD303404184FA1EB9AAE8104E6931A4BC051398FB2E9DC3FF6E8E"
+  },
+  "raw_to_public_mapping": {
+    "execution.json": "execution.json",
+    "REPORT.md": "REPORT.md",
+    "red-actual.xml": "red-actual.xml",
+    "green.xml": "green.xml",
+    "regression.xml": "regression.xml",
+    "red.xml": "initial-setup.xml"
+  },
+  "redaction_fidelity": [
+    {
+      "raw": "red-actual.xml",
+      "public": "red-actual.xml",
+      "all_xml_attributes_elements_failure_text_equal_after_declared_redaction": true,
+      "cases": 26
+    },
+    {
+      "raw": "green.xml",
+      "public": "green.xml",
+      "all_xml_attributes_elements_failure_text_equal_after_declared_redaction": true,
+      "cases": 26
+    },
+    {
+      "raw": "regression.xml",
+      "public": "regression.xml",
+      "all_xml_attributes_elements_failure_text_equal_after_declared_redaction": true,
+      "cases": 77
+    },
+    {
+      "raw": "red.xml",
+      "public": "initial-setup.xml",
+      "all_xml_attributes_elements_failure_text_equal_after_declared_redaction": true,
+      "cases": 26
+    }
+  ],
+  "execution_only_declared_paths_redacted": true,
+  "sensitive_pattern_findings": [],
+  "synthetic_strings_review": "Fixture tokens and private-a/private-b confirmed literal synthetic data in fixed test source; not actual credentials/traces",
+  "manifest_self_hash_included": false,
+  "verification_note": "These are byte hashes of UTF-8 LF public files, not historical attestation. Manifest identity is pinned by evidence commit.",
+  "historical_provenance_status": "PARTIAL_NOT_FULLY_VERIFIED"
+}

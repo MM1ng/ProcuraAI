@@ -1,0 +1,50 @@
+{
+  "baseline": "c047b9d1ee1b67c1e340e15e5122fb4fb26d1025",
+  "cwd": "[REPO_ROOT]\\backend",
+  "same_red_green_test_sha256": "6C5997CF6AC6D7C34D24EC700A0B2B4FA0CB5895CB2703CABEAB492EB1B23C42",
+  "runs": [
+    {
+      "phase": "initial_setup",
+      "passed": 0,
+      "failed": 0,
+      "errors": 26,
+      "exit_code": 1,
+      "command": "$env:JEV_SHADOW_ENABLED='false'; $env:JEV_DECISION_ENABLED='false'; $env:JEV_DECISION_TRAFFIC_PERCENT='0'; $env:PYTHONDONTWRITEBYTECODE='1'; & '..\\.venv\\Scripts\\python.exe' -B -m pytest tests/test_debug_access_batch3a1.py -q -p no:cacheprovider --basetemp='[WORKSPACE_ROOT]\\.codex-batch3a1-20261010\\red-tmp' --junitxml='[WORKSPACE_ROOT]\\.codex-batch3a1-20261010\\red.xml'"
+    },
+    {
+      "phase": "red",
+      "passed": 0,
+      "failed": 26,
+      "errors": 0,
+      "exit_code": 1,
+      "command": "$env:JEV_SHADOW_ENABLED='false'; $env:JEV_DECISION_ENABLED='false'; $env:JEV_DECISION_TRAFFIC_PERCENT='0'; $env:PYTHONDONTWRITEBYTECODE='1'; & '..\\.venv\\Scripts\\python.exe' -B -m pytest tests/test_debug_access_batch3a1.py -q -p no:cacheprovider --basetemp='[WORKSPACE_ROOT]\\.codex-batch3a1-20261010\\red-actual-tmp' --junitxml='[WORKSPACE_ROOT]\\.codex-batch3a1-20261010\\red-actual.xml'"
+    },
+    {
+      "phase": "green",
+      "passed": 26,
+      "failed": 0,
+      "errors": 0,
+      "exit_code": 0,
+      "command": "$env:JEV_SHADOW_ENABLED='false'; $env:JEV_DECISION_ENABLED='false'; $env:JEV_DECISION_TRAFFIC_PERCENT='0'; $env:PYTHONDONTWRITEBYTECODE='1'; & '..\\.venv\\Scripts\\python.exe' -B -m pytest tests/test_debug_access_batch3a1.py -q -p no:cacheprovider --basetemp='[WORKSPACE_ROOT]\\.codex-batch3a1-20261010\\green-tmp' --junitxml='[WORKSPACE_ROOT]\\.codex-batch3a1-20261010\\green.xml'"
+    },
+    {
+      "phase": "regression",
+      "passed": 77,
+      "failed": 0,
+      "errors": 0,
+      "exit_code": 0,
+      "command": "$env:JEV_SHADOW_ENABLED='false'; $env:JEV_DECISION_ENABLED='false'; $env:JEV_DECISION_TRAFFIC_PERCENT='0'; $env:PYTHONDONTWRITEBYTECODE='1'; & '..\\.venv\\Scripts\\python.exe' -B -m pytest tests/test_debug_access_batch3a1.py tests/test_transaction_snapshot_batch1.py tests/test_caller_ownership_batch2.py::test_readonly_context_never_creates_actor tests/test_caller_ownership_batch2.py::test_cookie_origin_csrf_and_no_rotation tests/test_caller_ownership_batch2.py::test_other_actor_cannot_copy_full_binding_or_order tests/test_caller_ownership_batch2.py::test_client_user_id_cannot_remint_confirmation tests/test_caller_ownership_batch2.py::test_ownerless_order_is_unclaimable tests/test_caller_ownership_batch2.py::test_explicit_init_reuses_actor_and_invalid_cookie_cannot_switch tests/test_caller_ownership_batch2.py::test_anonymous_mode_and_host_fail_closed tests/test_caller_ownership_batch2.py::test_copied_session_denied_at_every_plan_entry -q -p no:cacheprovider --basetemp='[WORKSPACE_ROOT]\\.codex-batch3a1-20261010\\regression-tmp' --junitxml='[WORKSPACE_ROOT]\\.codex-batch3a1-20261010\\regression.xml'"
+    }
+  ],
+  "protected_sha256_before_and_after": {
+    "backend/procurement.db": "9856E4632942E002678A35C94E15E1F6E935E6E9A521F8A7A8D8ED579300734D",
+    "data/decision_runtime.sqlite3": "1597CB1A6D68AF6EBA86C266A44FACD77E759D2F42B96C21F87D5B6645224AD1",
+    "data/observability_logs.json": "FDB7F9BBEA816EF4EA5CCE565BBC1F271F37D61DA6C367AEA2CD833BD0C517EC",
+    "data/orders.json": "87E5D051A264534646DC7926B1C405EE90E916E7C83E72414EBC542B3B25D6D5",
+    "data/transaction_identity/registry.sqlite3": "27C4981242F95AB3189FE6C6401926D630783F252C40417A32E16303A59E36BF"
+  },
+  "commit_created": false,
+  "pr_created": false,
+  "service_restart": false,
+  "independent_review": "PENDING"
+}

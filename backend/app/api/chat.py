@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import StreamingResponse
 
 from typing import Any
@@ -13,11 +13,23 @@ from app.agent.plan_variants import generate_plan_options
 from app.agent.procurement_agent import run_procurement_agent
 from app.observability.local_tracer import new_trace_id
 from app.rag.retriever import retrieve_products
-from app.schemas.chat import ChatRequest, ChatResponse, ProcurementPlanRequest, QuickOptimizationRequest
+from app.schemas.chat import ChatRequest, ChatResponse, ProcurementPlanRequest, QuickOptimizationRequest, PlanBindingRequest, PlanSelectRequest
+from app.agent.session_state import save_session_state, get_session_state, create_session, require_session_owner
+from app.services.confirmed_transaction import issue_confirmation, select_registered_plan, require_snapshot, SnapshotInvalid
+from app.services.transaction_lock import TRANSACTION_LOCK
 from app.services.llm_service import safe_llm_stream, settings
 
 
 router = APIRouter(prefix="/api", tags=["agent"])
+
+@router.post("/chat/session")
+def new_session():
+    return {"session_id": create_session()}
+
+@router.get("/chat/session/{session_id}")
+def existing_session(session_id: str):
+    require_session_owner(session_id)
+    return {"session_id": session_id}
 
 
 @router.post("/chat", response_model=ChatResponse)
@@ -30,6 +42,8 @@ def chat(request: ChatRequest, raw_request: Request) -> ChatResponse | Streaming
         previous_plan=request.previous_plan,
         language=request.language,
         skip_plan_explanation=wants_stream,
+        plan_id=request.plan_id, plan_hash=request.plan_hash, plan_version=request.plan_version,
+        confirmation_id=request.confirmation_id,
     )
     if wants_stream and result.get("type") in ("product_results", "recommendation_plan"):
         prompt = build_plan_explanation_prompt(
@@ -93,6 +107,19 @@ def _answer_for_optimization(action: str, plan: dict[str, Any], language: str = 
 
 @router.post("/chat/optimize", response_model=ChatResponse)
 def quick_optimize(request: QuickOptimizationRequest) -> ChatResponse:
+    with TRANSACTION_LOCK:
+        try:
+            current = require_snapshot(request.session_id, request.current_plan.get("plan_id"),
+                                       request.current_plan.get("plan_hash"), request.current_plan.get("plan_version"))
+            # Client intent and item content cannot replace registered state.
+            request.current_plan = current
+            request.parsed_intent = get_session_state(request.session_id)["parsed_intent"]
+            return _quick_optimize(request)
+        except SnapshotInvalid as exc:
+            raise HTTPException(status_code=409, detail=exc.detail) from exc
+
+
+def _quick_optimize(request: QuickOptimizationRequest) -> ChatResponse:
     intent = dict(request.parsed_intent)
     intent["raw_message"] = request.message or intent.get("raw_message") or request.action
     if request.action == "make_cheaper":
@@ -147,13 +174,15 @@ def quick_optimize(request: QuickOptimizationRequest) -> ChatResponse:
     answer = _answer_for_optimization(request.action, plan, request.language)
     plan["recommendation_reason"] = answer
     plan["recommendation_summary"] = answer
+    registered = save_session_state(request.session_id, intent, plan, retrieved_products[:12], trace_id, plan_options)
+    plan, plan_options = registered["recommended_plan"], registered["plan_options"]
     return ChatResponse.model_validate(
         {
             "session_id": request.session_id,
             "parsed_intent": intent,
             "recommended_plan": plan,
             "plan_options": plan_options,
-            "selected_plan_id": plan.get("plan_option_id"),
+            "selected_plan_id": plan.get("plan_id"),
             "answer": answer,
             "trace_id": trace_id,
             "retrieved_products": retrieved_products[:12],
@@ -167,16 +196,40 @@ def quick_optimize(request: QuickOptimizationRequest) -> ChatResponse:
     )
 
 
+@router.post("/chat/confirm")
+def confirm_plan(request: PlanBindingRequest):
+    try:
+        token = issue_confirmation(request.session_id, request.plan_id, request.plan_hash,
+                                   request.plan_version)
+        return {"confirmation_id": token}
+    except SnapshotInvalid as exc:
+        raise HTTPException(status_code=409, detail=exc.detail) from exc
+
+
+@router.post("/chat/select")
+def select_plan(request: PlanSelectRequest):
+    try:
+        state = select_registered_plan(request.session_id, request.plan_id, request.plan_hash,
+                                       request.plan_version, request.selected_plan_id,
+                                       request.selected_plan_hash, request.selected_plan_version)
+        return {"recommended_plan": state["recommended_plan"], "plan_options": state["plan_options"],
+                "selected_plan_id": state["plan_id"]}
+    except SnapshotInvalid as exc:
+        raise HTTPException(status_code=409, detail=exc.detail) from exc
+
+
 @router.post("/procurement/plan")
 def procurement_plan(request: ProcurementPlanRequest) -> dict:
+    require_session_owner(request.session_id)
     if request.parsed_intent:
         intent = request.parsed_intent
         message = request.message or intent.get("raw_message", "procurement plan")
         products = retrieve_products(message, intent, top_k=30)
+        state = save_session_state(request.session_id, intent, generate_procurement_plan(products, intent), products[:12], new_trace_id())
         return {
             "session_id": request.session_id,
             "parsed_intent": intent,
-            "recommended_plan": generate_procurement_plan(products, intent),
+            "recommended_plan": state["recommended_plan"],
             "retrieved_products": products[:12],
         }
     message = request.message or "Recommend office equipment for a team of 10 people."

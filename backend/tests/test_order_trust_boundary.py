@@ -20,9 +20,12 @@ def catalog(monkeypatch, tmp_path):
 
 
 def post_order(plan):
-    return TestClient(app, raise_server_exceptions=False).post(
-        "/api/orders", json={"user_id": "test-user", "plan": plan}
-    )
+    client = TestClient(app, raise_server_exceptions=False)
+    selection = {key: value for key, value in plan.items() if key not in {"plan_id", "plan_option_id"}}
+    quote = client.post("/api/orders/cart/quote", json={"user_id": "test-user", "plan": selection})
+    if quote.status_code != 200:
+        return quote
+    return client.post("/api/orders/cart", json={"user_id": "test-user", "cart_token": quote.json()["cart_token"]})
 
 
 @pytest.mark.parametrize("forgery", [

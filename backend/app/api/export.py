@@ -3,17 +3,21 @@ from __future__ import annotations
 from io import BytesIO
 from typing import Any
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from openpyxl import Workbook
 from pydantic import BaseModel
+from app.services.history_service import get_history_record
+from app.services.confirmed_transaction import require_snapshot, SnapshotInvalid
 
 
 router = APIRouter(prefix="/api/export", tags=["export"])
 
 
 class ExcelExportRequest(BaseModel):
-    plan: dict[str, Any]
+    model_config = {"extra": "forbid"}
+    plan: dict[str, Any] | None = None
+    history_id: str | None = None
 
 
 HEADERS = [
@@ -73,7 +77,20 @@ def build_procurement_workbook(plan: dict[str, Any]) -> BytesIO:
 
 @router.post("/excel")
 def export_excel(request: ExcelExportRequest) -> StreamingResponse:
-    output = build_procurement_workbook(request.plan)
+    if request.history_id and request.plan is None:
+        record = get_history_record(request.history_id)
+        if not record:
+            raise HTTPException(status_code=404, detail="History record not found")
+        plan = record["selected_plan"]
+    elif request.plan is not None and request.history_id is None:
+        p = request.plan
+        try:
+            plan = require_snapshot(p.get("session_id"), p.get("plan_id"), p.get("plan_hash"), p.get("plan_version"))
+        except SnapshotInvalid as exc:
+            raise HTTPException(status_code=409, detail=exc.detail) from exc
+    else:
+        raise HTTPException(status_code=422, detail="Specify exactly one owned history or server plan.")
+    output = build_procurement_workbook(plan)
     return StreamingResponse(
         output,
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

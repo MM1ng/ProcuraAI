@@ -10,6 +10,7 @@ from app.schemas.payment import (
     StripeCheckoutResponse,
 )
 from app.services.payment_service import create_checkout
+from app.services.confirmed_transaction import SnapshotInvalid
 from app.services.plan_execution_guard import PlanNotExecutableError
 from app.services.stripe_payment_service import (
     PaymentProviderError,
@@ -18,9 +19,23 @@ from app.services.stripe_payment_service import (
     handle_stripe_webhook,
 )
 from app.services.order_service import get_order, get_order_by_stripe_session_id, update_order
+from app.services.caller_identity import require_owner
 
 
 router = APIRouter(prefix="/api/payments", tags=["payments"])
+
+@router.get("/return-status")
+def payment_return_status(order_id: str | None = None, session_id: str | None = None) -> dict:
+    """Read persisted owned state only; return navigation has no payment authority."""
+    if any(value is not None and not value.strip() for value in (order_id, session_id)) or not (order_id or session_id):
+        raise HTTPException(status_code=400, detail="An existing order or checkout reference is required.")
+    order = get_order(order_id) if order_id else get_order_by_stripe_session_id(session_id)
+    if not order:
+        raise HTTPException(status_code=400, detail="Payment outcome is unavailable.")
+    require_owner(order)
+    if session_id is not None and session_id != order.get("stripe_session_id"):
+        raise HTTPException(status_code=400, detail="Checkout reference mismatch.")
+    return order
 
 
 @router.get("/status")
@@ -38,7 +53,7 @@ def payment_status() -> dict[str, object]:
 def create_checkout_session(request: CheckoutSessionRequest) -> CheckoutSessionResponse:
     try:
         session = create_checkout(order_id=request.order_id)
-    except PlanNotExecutableError as exc:
+    except (PlanNotExecutableError, SnapshotInvalid) as exc:
         raise HTTPException(status_code=409, detail=exc.detail) from exc
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
@@ -49,7 +64,7 @@ def create_checkout_session(request: CheckoutSessionRequest) -> CheckoutSessionR
 def create_stripe_checkout(request: StripeCheckoutRequest) -> StripeCheckoutResponse:
     try:
         session = create_procurement_checkout_session(plan_id=None, order_id=request.order_id)
-    except PlanNotExecutableError as exc:
+    except (PlanNotExecutableError, SnapshotInvalid) as exc:
         raise HTTPException(status_code=409, detail=exc.detail) from exc
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
@@ -91,8 +106,11 @@ def mock_payment_success(payload: dict) -> dict:
         raise HTTPException(status_code=404, detail=f"Order {order_id} not found")
 
     stored_session_id = order.get("stripe_session_id")
-    if stored_session_id and not str(stored_session_id).startswith("mock_"):
+    require_owner(order)
+    if not isinstance(stored_session_id, str) or not stored_session_id.startswith("mock_"):
         raise HTTPException(status_code=403, detail="Real checkout sessions require Stripe verification.")
+    if payload.get("session_id") != stored_session_id:
+        raise HTTPException(status_code=400, detail="An existing bound mock checkout is required.")
 
     if order.get("status") == "paid":
         return {

@@ -15,6 +15,7 @@ export type PlanItem = {
 export type QuickOptimizationAction = "make_cheaper" | "improve_quality" | "faster_delivery" | "prefer_dell" | "regenerate";
 
 export type ProcurementPlan = {
+  plan_id?: string; plan_hash?: string; plan_version?: number; session_id?: string; created_at?: string;
   items: PlanItem[]; selected_items?: PlanItem[];
   total_amount: number; total?: number;
   previous_total_amount?: number | null; savings_amount?: number | null;
@@ -50,7 +51,7 @@ export type RetrievalEvidence = {
   constraints_relaxed?: boolean; retrieval_mode?: string;
 };
 
-export type ChatResponseType = "product_results" | "recommendation_plan" | "order" | "payment" | null;
+export type ChatResponseType = "product_results" | "recommendation_plan" | "order" | "payment" | "order_status" | "clarify" | null;
 
 export type ChatResponse = {
   session_id: string; parsed_intent: Record<string, unknown>;
@@ -65,6 +66,9 @@ export type ChatResponse = {
   order_id?: string | null;
   order_status?: string | null;
   checkout_url?: string | null;
+  error_code?: string | null;
+  snapshot_drift?: string[] | null;
+  transaction_gate_reason?: string | null;
 };
 
 export type ProcurementHistoryRecord = {

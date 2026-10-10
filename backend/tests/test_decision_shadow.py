@@ -158,7 +158,8 @@ def test_timeout_retains_slot_until_provider_call_really_ends():
         config=timeout_config, capacity_gate=gate, provider_factory=BlockingProvider, emit=emitted.append,
     )
     assert started.wait(1)
-    _wait_for(lambda: any(event.get("provider_error_type") == "timeout" for event in emitted))
+    time.sleep(0.03)
+    assert emitted == []
     assert gate.current_in_flight() == 1
     assert not dispatch_jev_shadow(
         text="second", trace_id="timeout-second", authoritative_decision=EXACT_RECOMMEND,
@@ -168,6 +169,12 @@ def test_timeout_retains_slot_until_provider_call_really_ends():
 
     release.set()
     _wait_for(lambda: gate.current_in_flight() == 0)
+    _wait_for(lambda: any(event.get("provider_error_type") == "timeout" for event in emitted))
+    timeout_event = next(event for event in emitted if event.get("trace_id") == "timeout-first")
+    assert timeout_event["shadow_timeout_ms"] == 10
+    assert timeout_event["provider_call_elapsed_ms"] >= 10
+    assert timeout_event["provider_final_error_type"] is None
+    assert timeout_event["provider_retry_count"] is None
     assert dispatch_jev_shadow(
         text="third", trace_id="timeout-third", authoritative_decision=EXACT_RECOMMEND,
         config=timeout_config, capacity_gate=gate,
@@ -175,6 +182,79 @@ def test_timeout_retains_slot_until_provider_call_really_ends():
         emit=emitted.append,
     )
     _wait_for(lambda: any(event.get("trace_id") == "timeout-third" for event in emitted))
+
+
+def test_completed_provider_failure_records_elapsed_time_and_final_exception():
+    emitted = []
+
+    class ErrorProvider:
+        def classify_intent(self, _text):
+            time.sleep(0.02)
+            raise TimeoutError("private timeout details")
+
+    assert dispatch_jev_shadow(
+        text="request", trace_id="completed-error", authoritative_decision=EXACT_RECOMMEND,
+        config=ShadowConfig(True, 100, 1.0, True, 1),
+        capacity_gate=ShadowCapacityGate(1), provider_factory=ErrorProvider, emit=emitted.append,
+    )
+    _wait_for(lambda: len(emitted) == 1)
+    event = emitted[0]
+    assert event["provider_error_type"] == "TimeoutError"
+    assert event["provider_final_error_type"] == "TimeoutError"
+    assert event["provider_call_elapsed_ms"] >= 15
+    assert event["provider_retry_count"] is None
+    assert "private timeout details" not in str(event)
+
+
+def test_shadow_summary_includes_completed_call_telemetry_without_counting_extra_attempts():
+    from app.decision.shadow_metrics import summarize_shadow_events
+
+    summary = summarize_shadow_events([
+        {
+            "event": "decision_shadow",
+            "shadow_attempted": True,
+            "shadow_skipped": False,
+            "provider_success": False,
+            "provider_error_type": "timeout",
+            "provider_final_error_type": "DecisionProviderPredictionError",
+            "provider_call_elapsed_ms": 8300.0,
+            "provider_retry_count": 2,
+            "shadow_timeout_ms": 6000,
+        }
+    ])
+    assert summary["provider_call_completed_count"] == 1
+    assert summary["provider_call_latency_p95_ms"] == 8300.0
+    assert summary["provider_retry_count_total"] == 2
+    assert summary["provider_final_error_types"] == {"DecisionProviderPredictionError": 1}
+    assert summary["shadow_attempts"] == 1
+
+
+def test_default_shadow_provider_uses_budget_below_shadow_deadline(monkeypatch):
+    import app.decision.gateway as gateway_module
+
+    emitted = []
+    constructed = []
+
+    class BoundedProvider:
+        def __init__(self, *, timeout_seconds, max_retries):
+            constructed.append((timeout_seconds, max_retries))
+            self.last_call_metrics = {
+                "provider_call_elapsed_ms": 20.0,
+                "provider_retry_count": 0,
+                "provider_final_error_type": None,
+            }
+
+        def classify_intent(self, _text):
+            return _result()
+
+    monkeypatch.setattr(gateway_module, "JevProvider", BoundedProvider)
+    assert dispatch_jev_shadow(
+        text="request", trace_id="bounded-shadow-provider", authoritative_decision=EXACT_RECOMMEND,
+        config=ShadowConfig(True, 6000, 1.0, True, 2), emit=emitted.append,
+    )
+    _wait_for(lambda: len(emitted) == 1)
+    assert constructed == [(5.5, 0)]
+    assert emitted[0]["provider_success"] is True
 
 
 def test_success_failure_and_invalid_response_are_audit_only_and_safe():

@@ -16,6 +16,14 @@ import CartDrawer from "./CartDrawer";
 type ChatLine = { role: "user" | "agent"; content: string; streaming?: boolean; retrievalEvidence?: RetrievalEvidence };
 const STREAM_CHUNK = 3;
 const STREAM_MS = 18;
+const SESSION_STORAGE_KEY = "procuraai.chat.session_id";
+let volatileSessionId: string | null = null;
+
+function getChatSessionId(): string {
+  const stored = volatileSessionId || window.localStorage.getItem(SESSION_STORAGE_KEY);
+  if (!stored) throw new Error("请先开始匿名会话。");
+  return stored;
+}
 const quickActions: Array<{ action: QuickOptimizationAction; label: string }> = [
   { action: "make_cheaper", label: "Make Cheaper" }, { action: "improve_quality", label: "Improve Quality" },
   { action: "faster_delivery", label: "Faster Delivery" }, { action: "prefer_dell", label: "Prefer Dell" },
@@ -58,10 +66,46 @@ export default function ChatPanel() {
   const [order, setOrder] = useState<Order | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus | null>(null);
   const [hist, setHist] = useState<ProcurementHistoryRecord[]>([]);
+  const [activeHistoryId, setActiveHistoryId] = useState<string | null>(null);
   const [lastReq, setLastReq] = useState("");
   const [histLoading, setHistLoading] = useState(false);
   const [opt, setOpt] = useState<QuickOptimizationAction | null>(null);
   const [co, setCo] = useState<string | null>(null);
+  const [callerReady, setCallerReady] = useState(false);
+  const [callerError, setCallerError] = useState<string | null>(null);
+  const [starting, setStarting] = useState(false);
+  async function startAnonymousSession() {
+    setStarting(true);
+    try {
+      await api.initializeCaller();
+      const created = await api.createChatSession();
+      volatileSessionId = created.session_id;
+      localStorage.setItem(SESSION_STORAGE_KEY, created.session_id);
+      setResult(null); setOrder(null); setChat([]); setCo(null); setActiveHistoryId(null);
+      setCallerReady(true); setCallerError(null);
+    } catch (e) { setCallerReady(false); setCallerError(e instanceof Error ? e.message : "匿名会话当前不可用。"); }
+    finally { setStarting(false); }
+  }
+  useEffect(() => {
+    function unavailable() {
+      setCallerReady(false); setResult(null); setOrder(null); setChat([]); setCo(null); setHist([]); setActiveHistoryId(null); setLastReq("");
+      volatileSessionId = null;
+      localStorage.removeItem(SESSION_STORAGE_KEY); localStorage.removeItem("currentPlan");
+      setCallerError("当前匿名凭据或资源归属无法核验；系统未切换身份。");
+    }
+    window.addEventListener("procuraai-caller-unavailable", unavailable);
+    return () => window.removeEventListener("procuraai-caller-unavailable", unavailable);
+  }, []);
+  useEffect(() => {
+    api.callerContext().then(async () => {
+      const saved = localStorage.getItem(SESSION_STORAGE_KEY);
+      if (saved) {
+        await api.existingChatSession(saved);
+        volatileSessionId = saved;
+        setCallerReady(true);
+      }
+    }).catch(e => { setCallerReady(false); setCallerError(e instanceof Error ? e.message : "匿名会话当前不可用。"); });
+  }, []);
   function getBudgetSourceLabel() {
     const source = result?.parsed_intent?.["budget_source"];
     if (source === "explicit") return t("chat.budgetExplicit");
@@ -99,13 +143,13 @@ export default function ChatPanel() {
   }
 
   async function submit(msg = input) {
-    if (!msg.trim()) return;
+    if (!msg.trim() || !callerReady) return;
     setLoading(true);
     const um = msg.trim(); setInput(""); setLastReq(um);
     setChat(c => [...c, { role: "user", content: um }]);
     try {
-      const r = await api.chat(um, "demo-session-001", language);
-      setResult(r);
+      const r = await api.chat(um, getChatSessionId(), language, result?.recommended_plan);
+      setResult(r); setActiveHistoryId(null);
       localStorage.setItem("currentPlan", JSON.stringify(r.recommended_plan));
       await stream(r.answer, r.retrieval_evidence);
       if (r.checkout_url) {
@@ -115,13 +159,16 @@ export default function ChatPanel() {
     finally { setLoading(false); }
   }
 
-  function pid(p?: { plan_option_id?: string; plan_id?: string } | null) { return p?.plan_option_id || p?.plan_id || ""; }
+  function pid(p?: { plan_option_id?: string; plan_id?: string } | null) { return p?.plan_id || ""; }
 
   async function createOrder(plan = result?.recommended_plan) {
-    if (!plan) return null;
+    if (!plan || !result) return null;
     if (!isPlanSelectable(plan)) { message.warning("Over-budget plans require approval."); return null; }
     setCreating(true);
-    try { const o = await api.createOrder(plan); setOrder(o); message.success(t("chat.orderCreated", { orderId: o.order_id })); return o; }
+    try {
+      const o = await api.createOrder(plan, { sessionId: result.session_id });
+      setOrder(o); message.success(t("chat.orderCreated", { orderId: o.order_id })); return o;
+    }
     catch (e) { message.error(e instanceof Error ? e.message : "Failed"); return null; }
     finally { setCreating(false); }
   }
@@ -131,7 +178,7 @@ export default function ChatPanel() {
     setOpt(a);
     try {
       const r = await api.optimizePlan({ action: a, session_id: result.session_id, language, parsed_intent: result.parsed_intent, current_plan: result.recommended_plan, message: lastReq });
-      setResult(r); setOrder(null);
+      setResult(r); setOrder(null); setActiveHistoryId(null);
       localStorage.setItem("currentPlan", JSON.stringify(r.recommended_plan));
       await stream(r.answer, r.retrieval_evidence);
     } catch (e) { message.error(e instanceof Error ? e.message : t("chat.requestFailed")); }
@@ -140,7 +187,7 @@ export default function ChatPanel() {
 
   async function xlsx() {
     if (!result?.recommended_plan) return;
-    try { const b = await api.exportExcel(result.recommended_plan); const u = window.URL.createObjectURL(b); const a = document.createElement("a"); a.href = u; a.download = "plan.xlsx"; a.click(); window.URL.revokeObjectURL(u); }
+    try { const b = activeHistoryId ? await api.exportHistoryExcel(activeHistoryId) : await api.exportExcel(result.recommended_plan); const u = window.URL.createObjectURL(b); const a = document.createElement("a"); a.href = u; a.download = "plan.xlsx"; a.click(); window.URL.revokeObjectURL(u); }
     catch (e) { message.error(e instanceof Error ? e.message : "Export failed"); }
   }
 
@@ -178,20 +225,26 @@ export default function ChatPanel() {
   async function restoreHist(id: string) {
     const r = await api.historyDetail(id);
     const tid = typeof r.trace?.trace_id === "string" ? r.trace.trace_id : r.id;
-    const restored: ChatResponse = { session_id: "demo-session-001", parsed_intent: r.parsed_intent, recommended_plan: r.selected_plan || r.procurement_plan, plan_options: [], selected_plan_id: null, answer: r.reasoning_summary || "", trace_id: tid, retrieved_products: [], model_provider: typeof r.trace?.model_provider === "string" ? r.trace.model_provider : "history", model_name: typeof r.trace?.model_name === "string" ? r.trace.model_name : "restored", used_mock_llm: Boolean(r.trace?.used_mock_llm), used_previous_context: false, previous_trace_id: null };
-    setResult(restored); setOrder((r.order_draft as Order | null) || null); setLastReq(r.original_request);
+    const restored: ChatResponse = { session_id: getChatSessionId(), parsed_intent: r.parsed_intent, recommended_plan: r.selected_plan || r.procurement_plan, plan_options: [], selected_plan_id: null, answer: r.reasoning_summary || "", trace_id: tid, retrieved_products: [], model_provider: typeof r.trace?.model_provider === "string" ? r.trace.model_provider : "history", model_name: typeof r.trace?.model_name === "string" ? r.trace.model_name : "restored", used_mock_llm: Boolean(r.trace?.used_mock_llm), used_previous_context: false, previous_trace_id: null };
+    setResult(restored); setOrder((r.order_draft as Order | null) || null); setLastReq(r.original_request); setActiveHistoryId(id);
     setChat([{ role: "user", content: r.original_request || "" }, { role: "agent", content: r.reasoning_summary || "" }]);
     localStorage.setItem("currentPlan", JSON.stringify(restored.recommended_plan));
   }
 
   async function delHist(id: string) { await api.deleteHistory(id); setHist(c => c.filter(i => i.id !== id)); message.success("Deleted"); }
 
-  function selPlan(oid: string) {
+  async function selPlan(oid: string) {
     if (!result?.plan_options?.length) return;
     const o = result.plan_options.find(x => x.id === oid);
     if (!o || !isPlanSelectable(o.plan)) { message.warning("Over budget."); return; }
-    setResult({ ...result, recommended_plan: o.plan, selected_plan_id: o.id }); setOrder(null);
-    localStorage.setItem("currentPlan", JSON.stringify(o.plan));
+    if (!o.plan.plan_id) { message.error("Please generate the plan again."); return; }
+    setOpt("regenerate");
+    try {
+      const selected = await api.selectPlan(result.recommended_plan, result.session_id, o.plan);
+      setResult({ ...result, ...selected, recommendation_plan: selected.recommended_plan }); setOrder(null); setActiveHistoryId(null);
+      localStorage.setItem("currentPlan", JSON.stringify(selected.recommended_plan));
+    } catch (e) { message.error(e instanceof Error ? e.message : "Selection failed. Please confirm the plan again."); }
+    finally { setOpt(null); }
   }
 
   // Cart
@@ -228,6 +281,17 @@ export default function ChatPanel() {
 
   return (
     <>
+      <Card size="small" style={{ marginBottom: 16 }}>
+        <Space direction="vertical">
+          <Typography.Text>匿名浏览器会话有效期为 24 小时。凭据过期或清除后无法恢复此前订单；系统不会自动切换身份。</Typography.Text>
+          {callerError ? <Typography.Text type="warning" role="status">{callerError}</Typography.Text> : null}
+          {callerError ? <Button onClick={async () => {
+            try { await api.clearInvalidCaller(); setCallerError("已清除失效凭据。请单独点击开始匿名会话；旧资源不会归入新身份。"); }
+            catch (e) { message.error(e instanceof Error ? e.message : "无法清除失效凭据"); }
+          }}>清除失效匿名凭据</Button> : null}
+          <Button onClick={startAnonymousSession} loading={starting}>{callerReady ? "开始新聊天（保留当前匿名身份）" : "开始匿名会话"}</Button>
+        </Space>
+      </Card>
       <div className="two-column">
         <Space direction="vertical" size={16} style={{ width: "100%" }}>
           {result?.checkout_url && result?.type === "order" ? (
@@ -254,8 +318,8 @@ export default function ChatPanel() {
               </div>
               {renderStructured()}
               <div className="composer">
-                <Input.TextArea value={input} onChange={e => setInput(e.target.value)} onPressEnter={e => { if (!e.shiftKey) { e.preventDefault(); submit(); } }} autoSize={{ minRows: 2, maxRows: 5 }} disabled={loading} />
-                <Button type="primary" shape="circle" icon={<SendOutlined />} loading={loading} disabled={loading || !input.trim()} onClick={() => submit()} />
+                <Input.TextArea aria-label="采购需求" value={input} onChange={e => setInput(e.target.value)} onPressEnter={e => { if (!e.shiftKey) { e.preventDefault(); submit(); } }} autoSize={{ minRows: 2, maxRows: 5 }} disabled={loading || !callerReady} />
+                <Button aria-label="发送采购需求" type="primary" shape="circle" icon={<SendOutlined />} loading={loading} disabled={loading || !callerReady || !input.trim()} onClick={() => submit()} />
               </div>
               <Space wrap>
                 <Button icon={<ShoppingCartOutlined />} onClick={() => setCartOpen(true)}>Cart ({cart.length})</Button>
@@ -282,7 +346,7 @@ export default function ChatPanel() {
             {result ? <Space direction="vertical" size={12} style={{ width: "100%" }}><Descriptions column={1} size="small" bordered><Descriptions.Item label="Team Size">{vf("people_count")}</Descriptions.Item><Descriptions.Item label="Categories">{vf("categories")}</Descriptions.Item><Descriptions.Item label="Budget">{vf("budget")}</Descriptions.Item><Descriptions.Item label="Budget Source">{getBudgetSourceLabel()}</Descriptions.Item><Descriptions.Item label="Rating">{pv("min_rating")}</Descriptions.Item><Descriptions.Item label="Delivery">{pv("max_delivery_days")}</Descriptions.Item><Descriptions.Item label="Intent">{vf("revision_intent")}</Descriptions.Item></Descriptions></Space> : <Typography.Text code>{"{}"}</Typography.Text>}
           </Card>
           <RetrievalEvidencePanel evidence={result?.retrieval_evidence} />
-          {result?.plan_options?.length ? <Card title="Compare Plans"><Space direction="vertical" size={12} style={{ width: "100%" }}>{result.plan_options.map(o => { const s = isPlanSelectable(o.plan); const sel = result.selected_plan_id === o.id; return <Card key={o.id} size="small" type="inner" title={<Space wrap><Typography.Text strong>{o.name}</Typography.Text><Tag color={sc(o.strategy)}>{o.description}</Tag><Tag color={s && o.plan.budget !== undefined && o.plan.budget !== null ? "green" : (o.plan.budget === undefined || o.plan.budget === null) ? "blue" : "red"}>{budgetStatusLabel(o.plan)}</Tag></Space>} extra={<Space><Button type={sel ? "primary" : "default"} size="small" disabled={!s} onClick={() => selPlan(o.id)}>{sel ? "Selected" : s ? "Select" : "Over Budget"}</Button>{sel && s ? <Button type="primary" size="small" icon={<CreditCardOutlined />} loading={co === pid(o.plan)} onClick={() => payPlan(o.plan)}>Pay</Button> : null}</Space>}><Space size={18} wrap><Statistic title="Total" value={o.plan.total_amount} precision={2} prefix="$" />{!s && o.plan.budget !== undefined && o.plan.budget !== null ? <Statistic title="Over Budget" value={o.plan.budget_gap || 0} precision={2} prefix="+$" /> : null}<Statistic title="Items" value={o.plan.items.length} /><Statistic title="Avg Rating" value={o.plan.avg_rating ?? 0} precision={1} /></Space></Card>; })}</Space></Card> : null}
+          {result?.plan_options?.length ? <Card title="Compare Plans"><Space direction="vertical" size={12} style={{ width: "100%" }}>{result.plan_options.map(o => { const s = isPlanSelectable(o.plan); const sel = result.selected_plan_id === o.plan.plan_id; return <Card key={o.id} size="small" type="inner" title={<Space wrap><Typography.Text strong>{o.name}</Typography.Text><Tag color={sc(o.strategy)}>{o.description}</Tag><Tag color={s && o.plan.budget !== undefined && o.plan.budget !== null ? "green" : (o.plan.budget === undefined || o.plan.budget === null) ? "blue" : "red"}>{budgetStatusLabel(o.plan)}</Tag></Space>} extra={<Space><Button type={sel ? "primary" : "default"} size="small" disabled={!s || Boolean(opt) || creating || Boolean(co)} onClick={() => selPlan(o.id)}>{sel ? "Selected" : s ? "Select" : "Over Budget"}</Button>{sel && s ? <Button type="primary" size="small" icon={<CreditCardOutlined />} loading={co === pid(o.plan)} onClick={() => payPlan(o.plan)}>Pay</Button> : null}</Space>}><Space size={18} wrap><Statistic title="Total" value={o.plan.total_amount} precision={2} prefix="$" />{!s && o.plan.budget !== undefined && o.plan.budget !== null ? <Statistic title="Over Budget" value={o.plan.budget_gap || 0} precision={2} prefix="+$" /> : null}<Statistic title="Items" value={o.plan.items.length} /><Statistic title="Avg Rating" value={o.plan.avg_rating ?? 0} precision={1} /></Space></Card>; })}</Space></Card> : null}
           {result?.recommended_plan ? <Card title="Quick Optimization" size="small"><Space wrap>{quickActions.map(a => <Button key={a.action} icon={a.action === "regenerate" ? <RedoOutlined /> : <ThunderboltOutlined />} loading={opt === a.action} disabled={Boolean(opt)} onClick={() => optimize(a.action)}>{a.label}</Button>)}<Button icon={<DownloadOutlined />} onClick={xlsx}>Export Excel</Button></Space></Card> : null}
           {rt !== "recommendation_plan" ? <ProcurementPlanCard plan={result?.recommended_plan} products={result?.retrieved_products || []} onExportExcel={xlsx} /> : null}
         </Space>

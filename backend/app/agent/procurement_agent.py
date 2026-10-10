@@ -5,18 +5,25 @@ from typing import Any
 from app.agent.intent_parser import parse_purchase_request
 from app.agent.plan_generator import generate_plan_explanation, generate_procurement_plan
 from app.agent.plan_variants import generate_plan_options
-from app.agent.router import transaction_intent
-from app.decision.gateway import dispatch_jev_shadow
+from app.agent.router import transaction_intent, order_status_reference
+from app.decision.contracts import decision_context
+from app.decision.gateway import dispatch_jev_shadow, resolve_jev_decision
 from app.decision.shadow import resolve_authoritative_intent
 from app.agent.prompts import ERROR_MESSAGES, PLAN_RESPONSE_TEMPLATES
-from app.agent.session_state import get_session_state, save_session_state
+from app.agent.session_state import get_session_state, save_session_state, validate_plan_snapshot, with_plan_snapshot
 from app.observability.langfuse_client import LangfuseClient
 from app.observability.local_tracer import elapsed_ms, log_observability_event, new_trace_id, now_ms
 from app.rag.query_rewriter import rewrite_query, should_rewrite
 from app.rag.retriever import RetrievalResult, retrieve_products, retrieve_products_with_evidence
 from app.services.llm_service import settings
+# Compatibility names remain available to existing agent extensions; actual
+# chat transactions use the bound, idempotent service below.
 from app.services.order_service import create_order_from_plan, save_order
+from app.services.order_service import get_order, list_orders
+from app.services.confirmed_transaction import create_confirmed_order, require_confirmed_order_for_payment, SnapshotInvalid
 from app.tools.stripe_ai_tools import create_checkout_for_selected_plan
+from app.services.caller_identity import require_caller
+from app.agent.session_state import require_session_owner
 
 _ORIGINAL_RETRIEVE_PRODUCTS = retrieve_products
 
@@ -76,6 +83,7 @@ def _determine_response_type(
     intent: dict[str, Any],
     plan: dict[str, Any],
     message: str,
+    decision_label: str | None = None,
 ) -> str | None:
     """Determine response type from parsed intent and plan context.
 
@@ -90,6 +98,8 @@ def _determine_response_type(
     categories = intent.get("categories") or []
     budget = intent.get("budget")
 
+    if decision_label == "order_status":
+        return "order_status"
     transaction = transaction_intent(message)
     if transaction == "confirm_order":
         return "order"  # Preserve the public response schema.
@@ -185,6 +195,11 @@ def run_procurement_agent(
     previous_plan: dict[str, Any] | None = None,
     language: str = "en",
     skip_plan_explanation: bool = False,
+    plan_id: str | None = None,
+    plan_hash: str | None = None,
+    plan_version: int | None = None,
+    confirmation_id: str | None = None,
+    user_id: str | None = None,
 ) -> dict[str, Any]:
     language = _language(language)
     start = now_ms()
@@ -195,52 +210,166 @@ def run_procurement_agent(
     model_name = settings.QWEN_MODEL
     used_mock_llm = True
     llm_error: str | None = None
+    caller = require_caller()
+    require_session_owner(session_id, caller)
+    user_id = caller.actor_id
     session_state = get_session_state(session_id)
+    entry_transaction = transaction_intent(message) in {"confirm_order", "payment"}
+    entry_order_status, status_reference = order_status_reference(message)
+    status_order = None
     if previous_intent is None and session_state:
         previous_intent = session_state.get("parsed_intent")
     if previous_plan is None and session_state:
         previous_plan = session_state.get("recommended_plan")
     used_previous_context = bool(previous_intent or previous_plan)
 
+    decision_contract = None
+    block_for_missing_authority = False
+    error_code = None
+    snapshot_drift: list[str] | None = None
+    transaction_gate_reason = None
     try:
-        intent = parse_purchase_request(message, previous_intent)
+        # Read requests never invoke the procurement parser or rewrite loop.
+        intent = dict(previous_intent or {}) if entry_order_status else parse_purchase_request(message, previous_intent)
         if intent.get("response_language") in ("zh", "en"):
             language = intent["response_language"]
-        tool_calls.append({"name": "parse_purchase_request", "status": "success"})
+        tool_calls.append({"name": "readonly_order_status" if entry_order_status else "parse_purchase_request", "status": "success"})
         model_provider = str(intent.get("model_provider") or model_provider)
         model_name = str(intent.get("model_name") or model_name)
         used_mock_llm = bool(intent.get("used_mock_llm"))
         llm_error = intent.get("llm_error")
 
+        baseline_decision = resolve_authoritative_intent(message, intent, None)
+        decision_contract = resolve_jev_decision(
+            text=message,
+            fallback_label=baseline_decision.label,
+            context={"previous_intent": previous_intent or {}, "has_previous_plan": bool(previous_plan)},
+            cohort_key=session_id,
+        )
+        effective_label = decision_contract.label.value
+        is_transactional = effective_label in {"confirm_order", "payment", "cancel", "order_status"}
+        explicit_transaction = transaction_intent(message)
+        original_snapshot_errors = []
+        if entry_transaction and session_state:
+            _, original_snapshot_errors = validate_plan_snapshot(session_id, plan_id, plan_hash, plan_version)
+            if original_snapshot_errors:
+                error_code = "PLAN_SNAPSHOT_INVALID"
+                snapshot_drift = original_snapshot_errors
+                transaction_gate_reason = "snapshot_drift"
+        missing_server_snapshot = explicit_transaction in {"confirm_order", "payment"} and not session_state
+        authority_safety_block = decision_contract.decision_source == "safety_block"
+        unsupported_cancel = explicit_transaction == "cancel"
+        unsupported_order_status = entry_order_status or effective_label == "order_status"
+        if entry_order_status:
+            if status_reference:
+                candidate = get_order(status_reference)
+                if candidate and candidate.get("owner_actor_id") == caller.actor_id:
+                    status_order = candidate
+            else:
+                candidates = [o for o in list_orders() if o.get("owner_actor_id") == caller.actor_id
+                              and (o.get("confirmation_binding") or {}).get("session_id") == session_id]
+                if len(candidates) == 1:
+                    status_order = candidates[0]
+        uncertain_route = effective_label in {"clarify", "unknown"}
+        has_retrieval_context = any((
+            bool(intent.get("categories")),
+            intent.get("budget") is not None,
+            bool(intent.get("constraints")),
+            bool(intent.get("preferences")),
+            bool((previous_intent or {}).get("categories")),
+        ))
+        clarify_without_retrieval = uncertain_route and not has_retrieval_context
+        block_for_missing_authority = any((
+            missing_server_snapshot, authority_safety_block, unsupported_cancel,
+            unsupported_order_status, clarify_without_retrieval,
+            bool(original_snapshot_errors),
+        ))
+        retrieval_route_label = effective_label
+        if uncertain_route:
+            # An uncertain classifier result is not itself a reason to suppress
+            # ordinary retrieval. Preserve contextual rewrite for follow-ups.
+            retrieval_route_label = (
+                "modify_plan"
+                if previous_intent and previous_intent.get("categories")
+                else "recommend"
+            )
+
         # Query Rewrite: bridge multi-turn conversational wording and retrieval terms.
-        if should_rewrite(message, previous_intent):
-            rewritten = rewrite_query(message, previous_intent)
+        rewrite_enabled = False
+        if not entry_transaction and not is_transactional and not block_for_missing_authority:
+            try:
+                rewrite_enabled = should_rewrite(message, previous_intent, retrieval_route_label)
+            except TypeError:
+                rewrite_enabled = should_rewrite(message, previous_intent)
+        if rewrite_enabled:
+            try:
+                rewritten = rewrite_query(message, previous_intent, route_label=retrieval_route_label)
+            except TypeError:
+                rewritten = rewrite_query(message, previous_intent)
             retrieval_query = rewritten if rewritten and rewritten != message else message
         else:
             retrieval_query = message
 
-        retrieval_result = _retrieve_products_for_agent(retrieval_query, intent, top_k=30)
-        retrieved_products = retrieval_result.products
-        retrieval_evidence = retrieval_result.evidence
-        tool_calls.append({"name": "search_products", "status": "success", "count": len(retrieved_products)})
+        # Confirm/payment/status/cancel requests use the previously displayed
+        # snapshot. They must not silently retrieve and generate a replacement.
+        if block_for_missing_authority:
+            plan = (session_state or {}).get("recommended_plan") or {
+                "items": [], "selected_items": [], "total_amount": 0,
+                "budget_status": "unknown", "inventory_status": "unknown",
+                "constraint_satisfaction": "needs_review",
+            }
+            retrieved_products = []
+            retrieval_evidence = {
+                "snapshot_reused": False,
+                "transaction_block_reason": (
+                    "plan_session_missing" if missing_server_snapshot
+                    else "cancel_not_supported" if unsupported_cancel
+                    else "order_status_lookup_unavailable" if unsupported_order_status
+                    else "clarification_required" if clarify_without_retrieval
+                    else decision_contract.fallback_reason
+                ),
+            }
+            plan_options = []
+            tool_calls.append({
+                "name": "transaction_gate", "status": "blocked",
+                "reason": retrieval_evidence["transaction_block_reason"],
+            })
+        elif (entry_transaction or is_transactional) and session_state:
+            # The server-owned session snapshot is authoritative. A client
+            # supplied previous_plan is never allowed to replace it.
+            plan = session_state.get("recommended_plan") or {}
+            retrieved_products = session_state.get("retrieved_products", [])
+            retrieval_evidence = {"constraints_relaxed": bool(plan.get("constraints_relaxed")), "snapshot_reused": True}
+            plan_options = []
+        else:
+            retrieval_result = _retrieve_products_for_agent(retrieval_query, intent, top_k=30)
+            retrieved_products = retrieval_result.products
+            retrieval_evidence = retrieval_result.evidence
+            tool_calls.append({"name": "search_products", "status": "success", "count": len(retrieved_products)})
 
-        plan = generate_procurement_plan(retrieved_products, intent, previous_plan=previous_plan)
-        plan_options = (
-            generate_plan_options(retrieved_products, intent)
-            if intent.get("revision_intent") == "new_plan" else []
-        )
-        if plan_options:
-            default_option = select_default_plan_option(plan_options)
-            if default_option:
-                plan = default_option["plan"]
-        # Retrieval fallback is execution evidence, including for alternative plans.
-        for candidate in [plan, *(option["plan"] for option in plan_options)]:
-            candidate["constraints_relaxed"] = bool(
-                candidate.get("constraints_relaxed") or retrieval_evidence.get("constraints_relaxed")
+            plan = generate_procurement_plan(retrieved_products, intent, previous_plan=previous_plan)
+            plan_options = (
+                generate_plan_options(retrieved_products, intent)
+                if intent.get("revision_intent") == "new_plan" else []
             )
-        tool_calls.append({"name": "generate_procurement_plan", "status": "success"})
+            if plan_options:
+                default_option = select_default_plan_option(plan_options)
+                if default_option:
+                    plan = default_option["plan"]
+            # Retrieval fallback is execution evidence, including for alternative plans.
+            for candidate in [plan, *(option["plan"] for option in plan_options)]:
+                candidate["constraints_relaxed"] = bool(
+                    candidate.get("constraints_relaxed") or retrieval_evidence.get("constraints_relaxed")
+                )
+            tool_calls.append({"name": "generate_procurement_plan", "status": "success"})
 
-        response_type = _determine_response_type(intent, plan, message)
+        response_type = "clarify" if block_for_missing_authority else _determine_response_type(
+            intent, plan, message, effective_label
+        )
+        if response_type is None and uncertain_route:
+            response_type = "clarify"
+        if entry_order_status:
+            response_type = "order_status"
         # Audit-only Jev work is dispatched after the authoritative decision exists.
         # It never changes intent, response_type, plan, or transaction execution.
         dispatch_jev_shadow(
@@ -249,7 +378,32 @@ def run_procurement_agent(
             authoritative_decision=resolve_authoritative_intent(message, intent, response_type),
         )
 
-        if response_type == "product_results":
+        if entry_order_status:
+            if status_order:
+                answer = (f"订单 #{status_order['order_id']} 状态：{status_order['status']}。" if language == "zh"
+                          else f"Order #{status_order['order_id']} status: {status_order['status']}.")
+            else:
+                answer = ("未找到可查询的本人订单，请提供本人订单号。" if language == "zh"
+                          else "No owned order is available. Please provide your order ID.")
+            llm_timings = {"intent_parser_ms": None, "plan_explanation_ms": None}
+        elif block_for_missing_authority:
+            if original_snapshot_errors:
+                answer = "方案已变化或确认信息缺失，请重新生成方案并再次确认。" if language == "zh" else "The plan changed or confirmation is missing. Display the plan and confirm it again."
+            elif unsupported_cancel:
+                answer = "当前暂不支持取消订单，请联系业务人员处理。" if language == "zh" else "Order cancellation is not available yet. Please contact the support team."
+            elif unsupported_order_status:
+                answer = "当前无法查询订单状态，请提供订单号并联系业务人员核实。" if language == "zh" else "Order status lookup is not available yet. Please provide the order ID and contact support."
+            elif clarify_without_retrieval:
+                answer = "我还不能确定你的需求，请补充品类、数量或希望调整的方案内容。" if language == "zh" else "I need a little more detail. Please specify the product category, quantity, or what you want changed in the plan."
+            elif language == "zh":
+                answer = "当前无法安全确认此操作，因为没有可验证的服务端方案或决策结果。请重新生成方案后再确认。"
+            else:
+                answer = "I can't safely confirm this action because there is no verifiable server-side plan or decision. Please generate a plan again before confirming."
+            llm_timings = {"intent_parser_ms": intent.get("llm_latency_ms"), "plan_explanation_ms": None}
+        elif response_type == "clarify":
+            answer = "我还不能确定你的需求，请补充品类、数量或希望调整的方案内容。" if language == "zh" else "I need a little more detail. Please specify the product category, quantity, or what you want changed in the plan."
+            llm_timings = {"intent_parser_ms": intent.get("llm_latency_ms"), "plan_explanation_ms": None}
+        elif response_type == "product_results":
             answer = _summarize_search_message(retrieved_products, message, language)
             plan["recommendation_reason"] = answer
             plan["recommendation_summary"] = answer
@@ -271,6 +425,9 @@ def run_procurement_agent(
                 "intent_parser_ms": intent.get("llm_latency_ms"),
                 "plan_explanation_ms": explanation.get("latency_ms") if explanation else None,
             }
+        elif entry_transaction:
+            answer = "正在验证你确认的方案。" if language == "zh" else "Validating the plan you confirmed."
+            llm_timings = {"intent_parser_ms": intent.get("llm_latency_ms"), "plan_explanation_ms": None}
         else:
             # Always generate the structured itemized answer as the base response
             answer = _answer_from_plan(plan, language, intent, plan_options)
@@ -311,6 +468,29 @@ def run_procurement_agent(
         llm_timings, plan_options, response_type = {}, [], None
         tool_calls.append({"name": "agent_workflow", "status": "error", "error": error})
 
+    if decision_contract is None:
+        baseline_decision = resolve_authoritative_intent(message, intent, response_type)
+        decision_contract = resolve_jev_decision(text=message, fallback_label=baseline_decision.label, cohort_key=session_id)
+    if error is None and not entry_transaction and not entry_order_status and not block_for_missing_authority and response_type != "clarify":
+        registered = save_session_state(session_id, intent, plan, retrieved_products[:12], trace_id, plan_options)
+        if registered:
+            plan = registered["recommended_plan"]
+            plan_options = registered["plan_options"]
+        else:
+            plan = with_plan_snapshot(plan, session_id, trace_id)
+    decision_meta = decision_context(
+        contract=decision_contract,
+        transaction_gate=(
+            "block" if block_for_missing_authority
+            else "pass" if transaction_intent(message) != "recommend" else "block"
+        ),
+        plan_id=plan.get("plan_id"),
+        plan_hash=plan.get("plan_hash"),
+    )
+    if error_code:
+        decision_meta.update({"transaction_gate": "block", "error_code": error_code,
+                              "snapshot_drift": snapshot_drift, "transaction_gate_reason": transaction_gate_reason})
+
     event = {
         "trace_id": trace_id, "session_id": session_id, "language": language,
         "user_query": message, "parsed_intent": intent,
@@ -319,12 +499,12 @@ def run_procurement_agent(
         "model_provider": model_provider, "model_name": model_name,
         "used_mock_llm": used_mock_llm, "llm_error": llm_error, "llm_timings": llm_timings,
         "used_previous_context": used_previous_context,
+        **decision_meta,
         "previous_trace_id": session_state.get("trace_id") if session_state else None,
         "tool_calls": tool_calls, "latency_ms": elapsed_ms(start), "error": error,
     }
     log_observability_event(event)
     LangfuseClient().trace(**event)
-    save_session_state(session_id, intent, plan, retrieved_products[:12], trace_id)
 
     products = None
     if response_type == "product_results":
@@ -344,44 +524,78 @@ def run_procurement_agent(
     recommendation_plan = plan if response_type == "recommendation_plan" else None
 
     # Only explicit transaction commands may reach order/checkout side effects.
-    order_id = None
-    order_status = None
+    order_id = status_order.get("order_id") if status_order else None
+    order_status = status_order.get("status") if status_order else None
     checkout_url = None
     if (
         error is None
+        and not block_for_missing_authority
         and response_type in ("order", "payment")
+        and decision_contract.label.value in ("confirm_order", "payment")
         and transaction_intent(message) in ("confirm_order", "payment")
         and plan.get("items")
     ):
         try:
-            if plan_options:
-                first_valid = next((o for o in plan_options if o.get("plan", {}).get("budget_status") != "over_budget"), plan_options[0])
-                selected_plan = first_valid["plan"]
+            if not confirmation_id:
+                raise SnapshotInvalid(["confirmation_binding_invalid"])
+            if response_type == "order":
+                order = create_confirmed_order(session_id, plan_id, plan_hash, plan_version, confirmation_id, user_id)
             else:
-                selected_plan = plan
-            order = create_order_from_plan(selected_plan)
-            order = save_order(order)
+                order = require_confirmed_order_for_payment(session_id, plan_id, plan_hash, plan_version, confirmation_id)
             order_id = order.get("order_id", "")
             order_status = order.get("status", "pending_payment")
-            checkout = create_checkout_for_selected_plan(
-                plan_id=str(selected_plan.get("plan_option_id", selected_plan.get("budget_status", "plan_auto"))),
-                order_id=order_id,
-            )
-            checkout_url = checkout.get("checkout_url", "")
+            if response_type == "payment":
+                checkout = create_checkout_for_selected_plan(plan_id=str(order["plan_id"]), order_id=order_id)
+                checkout_url = checkout.get("checkout_url", "")
             if language == "zh":
-                answer += "\n\n已为您创建订单 #" + order_id + "，正在跳转支付..."
+                answer += "\n\n订单 #" + order_id + ("，正在跳转支付..." if checkout_url else " 已创建。")
             else:
-                answer += "\n\nOrder #" + order_id + " created. Redirecting to payment..."
+                answer += "\n\nOrder #" + order_id + (". Redirecting to payment..." if checkout_url else " created.")
             tool_calls.append({"name": "auto_checkout", "status": "success", "order_id": order_id})
         except Exception as exc:
             error = str(exc)
-            llm_error = _combine_llm_error(llm_error, error)
+            if isinstance(exc, SnapshotInvalid):
+                error_code = "PLAN_SNAPSHOT_INVALID"
+                snapshot_drift = exc.reasons
+                transaction_gate_reason = "snapshot_drift"
+            if error_code == "PLAN_SNAPSHOT_INVALID":
+                drift_message = (
+                    "方案已变化（价格、库存或配送条件可能更新）。为避免按旧信息下单，请重新生成方案并再次确认。"
+                    if language == "zh"
+                    else "The plan has changed (price, stock, or delivery details may have been updated). To avoid ordering from stale information, generate a new plan and confirm it again."
+                )
+                answer = f"{answer}\n\n{drift_message}".strip()
+                decision_meta["transaction_gate"] = "block"
+                decision_meta["transaction_gate_reason"] = transaction_gate_reason
+                decision_meta["error_code"] = error_code
+                decision_meta["snapshot_drift"] = snapshot_drift
+                log_observability_event({
+                    "event": "transaction_gate",
+                    "trace_id": trace_id,
+                    "session_id": session_id,
+                    "decision_source": decision_contract.decision_source,
+                    "transaction_gate": "block",
+                    "transaction_gate_reason": transaction_gate_reason,
+                    "error_code": error_code,
+                    "snapshot_drift": snapshot_drift,
+                    "plan_id": plan.get("plan_id"),
+                    "plan_hash": plan.get("plan_hash"),
+                })
+            else:
+                order_id = order_status = checkout_url = None
+                error_code = "TRANSACTION_PRECONDITION_REQUIRED"
+                transaction_gate_reason = "transaction_precondition_missing"
+                decision_meta.update({"transaction_gate": "block", "error_code": error_code,
+                                      "transaction_gate_reason": transaction_gate_reason})
+                answer = ("请先确认并创建本人可付款订单；已支付或已取消的订单不能再次付款。" if language == "zh"
+                          else "Please confirm and create an owned payable order first. Paid or cancelled orders cannot be paid again.")
+                llm_error = _combine_llm_error(llm_error, error)
             tool_calls.append({"name": "auto_checkout", "status": "error", "error": error})
 
     return {
         "session_id": session_id, "parsed_intent": intent,
         "recommended_plan": plan, "plan_options": plan_options,
-        "selected_plan_id": plan.get("plan_option_id") if plan_options else None,
+        "selected_plan_id": plan.get("plan_id"),
         "answer": answer, "trace_id": trace_id,
         "retrieved_products": retrieved_products[:12], "retrieval_evidence": retrieval_evidence,
         "model_provider": model_provider, "model_name": model_name,
@@ -391,6 +605,10 @@ def run_procurement_agent(
         "type": response_type, "products": products,
         "recommendation_plan": recommendation_plan, "actions": [],
         "order_id": order_id, "order_status": order_status, "checkout_url": checkout_url,
+        "error_code": error_code,
+        "snapshot_drift": snapshot_drift,
+        "transaction_gate_reason": transaction_gate_reason,
+        **decision_meta,
     }
 
 
@@ -403,7 +621,8 @@ def _answer_from_plan(
     language = _language(language)
     items = plan.get("items", [])
     total_amount = float(plan.get("total_amount", 0) or 0)
-    item_count = len(items)
+    product_line_count = len(items)
+    unit_count = sum(int(item.get("quantity", 0) or 0) for item in items)
 
     # Build item-level breakdown lines
     item_lines: list[str] = []
@@ -432,13 +651,13 @@ def _answer_from_plan(
 
     if language == "zh":
         summary = (
-            f"已为您生成采购方案：共 {item_count} 件商品，"
+            f"已为您生成采购方案：共 {product_line_count} 条商品明细，合计 {unit_count} 件，"
             f"总金额 ${total_amount:.2f}{rating_str}。"
             f"预算：{budget_label}，库存：{inventory_label}，约束：{constraint_label}。"
         )
     else:
         summary = (
-            f"I generated a procurement plan with {item_count} items, "
+            f"I generated a procurement plan with {product_line_count} product lines, {unit_count} units in total, "
             f"total ${total_amount:.2f}{rating_str}. "
             f"Budget: {budget_label}, Inventory: {inventory_label}, "
             f"Constraints: {constraint_label}."
@@ -454,13 +673,13 @@ def _answer_from_plan(
         parts.extend(item_lines)
 
     # Category summary
-    if len(cats) > 1:
+    if cats:
         cat_summaries = []
         if language == "zh":
-            cat_summaries = [f"{cat} {len(items)}件" for cat, items in sorted(cats.items())]
+            cat_summaries = [f"{cat} {sum(int(item.get('quantity', 0) or 0) for item in category_items)}件" for cat, category_items in sorted(cats.items())]
             parts.append("品类分布：" + " | ".join(cat_summaries))
         else:
-            cat_summaries = [f"{cat}: {len(items)} item(s)" for cat, items in sorted(cats.items())]
+            cat_summaries = [f"{cat}: {sum(int(item.get('quantity', 0) or 0) for item in category_items)} units" for cat, category_items in sorted(cats.items())]
             parts.append("Category breakdown: " + " | ".join(cat_summaries))
 
     # Delivery range

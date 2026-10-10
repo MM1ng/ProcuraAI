@@ -14,7 +14,9 @@ class IntentLabel(str, Enum):
     CONFIRM_ORDER = "confirm_order"
     PAYMENT = "payment"
     ORDER_STATUS = "order_status"
+    CANCEL = "cancel"
     CLARIFY = "clarify"
+    UNKNOWN = "unknown"
 
 
 class DecisionResult(BaseModel):

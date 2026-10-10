@@ -42,8 +42,10 @@ def evaluate_response_mock(plan: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def create_order(plan: dict[str, Any], user_id: str = "demo-user") -> dict[str, Any]:
-    return create_order_from_plan(plan, user_id=user_id)
+def create_order(plan: dict[str, Any], user_id: str | None = None) -> dict[str, Any]:
+    from app.services.caller_identity import require_caller
+    caller = require_caller()
+    return create_order_from_plan(plan, user_id=caller.actor_id)
 
 
 def create_stripe_checkout(order_id: str, amount: float) -> dict[str, str]:

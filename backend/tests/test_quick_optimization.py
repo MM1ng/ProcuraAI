@@ -1,9 +1,17 @@
 from fastapi.testclient import TestClient
 
 from main import app
+from app.agent.session_state import save_session_state
 
 
 client = TestClient(app)
+
+
+def registered_optimize(payload, products, monkeypatch):
+    monkeypatch.setattr("app.services.product_service.load_products_from_csv", lambda: products)
+    state = save_session_state(payload["session_id"], payload["parsed_intent"], payload["current_plan"], products, "displayed")
+    payload["current_plan"] = state["recommended_plan"]
+    return client.post("/api/chat/optimize", json=payload)
 
 
 def _plan(total: float = 200.0) -> dict:
@@ -74,9 +82,8 @@ def test_quick_optimization_returns_compatible_chat_response(monkeypatch):
 
     monkeypatch.setattr("app.api.chat.retrieve_products", lambda *_args, **_kwargs: products)
 
-    response = client.post(
-        "/api/chat/optimize",
-        json={
+    response = registered_optimize(
+        {
             "action": "make_cheaper",
             "session_id": "quick-test",
             "parsed_intent": {
@@ -87,7 +94,7 @@ def test_quick_optimization_returns_compatible_chat_response(monkeypatch):
                 "budget": 250,
             },
             "current_plan": _plan(),
-        },
+        }, products, monkeypatch,
     )
 
     assert response.status_code == 200
@@ -96,7 +103,7 @@ def test_quick_optimization_returns_compatible_chat_response(monkeypatch):
     assert payload["recommended_plan"]["total_amount"] == 140.0
     assert payload["recommended_plan"]["savings_amount"] == 60.0
     assert payload["plan_options"]
-    assert payload["selected_plan_id"] == payload["recommended_plan"]["plan_option_id"]
+    assert payload["selected_plan_id"] == payload["recommended_plan"]["plan_id"]
     assert payload["used_previous_context"] is True
 
 
@@ -154,9 +161,8 @@ def test_prefer_dell_keeps_compare_plan_options(monkeypatch):
 
     monkeypatch.setattr("app.api.chat.retrieve_products", lambda *_args, **_kwargs: products)
 
-    response = client.post(
-        "/api/chat/optimize",
-        json={
+    response = registered_optimize(
+        {
             "action": "prefer_dell",
             "session_id": "quick-test",
             "parsed_intent": {
@@ -173,7 +179,7 @@ def test_prefer_dell_keeps_compare_plan_options(monkeypatch):
                 "inventory_status": "valid",
                 "constraint_satisfaction": "satisfied",
             },
-        },
+        }, products, monkeypatch,
     )
 
     assert response.status_code == 200
@@ -185,4 +191,5 @@ def test_prefer_dell_keeps_compare_plan_options(monkeypatch):
         "plan_b",
         "plan_c",
     ]
-    assert payload["selected_plan_id"] == "quick_prefer_dell"
+    assert payload["selected_plan_id"] == payload["recommended_plan"]["plan_id"]
+    assert payload["recommended_plan"]["plan_option_id"] == "quick_prefer_dell"

@@ -8,6 +8,9 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from app.core.config import get_settings
 from app.services.order_service import get_order, get_order_by_stripe_session_id, mark_payment_event_processed, update_order
 from app.services.plan_execution_guard import PlanExecutionGuard
+from app.services.transaction_lock import transaction_locked
+from app.services.caller_identity import require_owner, VERIFIED_PROVIDER_EVENT, ORIGIN
+from app.services.confirmed_transaction import validate_order_confirmation
 
 
 OVER_BUDGET_ERROR = "Over-budget plans cannot be paid directly."
@@ -28,19 +31,29 @@ def _stripe_module():
 
 def _construct_event(payload: bytes, signature: str, secret: str) -> dict[str, Any]:
     stripe = _stripe_module()
-    return stripe.Webhook.construct_event(payload, signature, secret)
+    try:
+        event = stripe.Webhook.construct_event(payload, signature, secret)
+        if not isinstance(event, dict):
+            event = event.to_dict()
+        if not isinstance(event, dict):
+            raise TypeError("Invalid provider event")
+        return event
+    except Exception as exc:
+        raise ValueError("Invalid or unverifiable Stripe signature.") from exc
 
 
 def _plan_id(plan: dict[str, Any]) -> str:
-    return str(plan.get("plan_option_id") or plan.get("plan_id") or "")
+    return str(plan.get("plan_id") or plan.get("plan_option_id") or "")
 
 
 def _load_payable_plan(plan_id: str | None, order_id: str) -> tuple[dict[str, Any], dict[str, Any]]:
     order = get_order(order_id)
     if not order:
         raise ValueError("Order not found.")
+    require_owner(order)
     if order.get("status") not in PAYABLE_ORDER_STATUSES:
         raise ValueError("Order is not payable.")
+    validate_order_confirmation(order)
 
     plan = order.get("procurement_plan")
     if not isinstance(plan, dict) or not plan:
@@ -102,6 +115,7 @@ def _url_with_params(url: str, params: dict[str, str]) -> str:
     return urlunsplit((parts.scheme, parts.netloc, parts.path, encoded_query, parts.fragment))
 
 
+@transaction_locked
 def create_procurement_checkout_session(plan_id: str | None, order_id: str) -> dict[str, str]:
     order, plan = _load_payable_plan(plan_id, order_id)
     plan_id = _plan_id(plan)
@@ -114,9 +128,13 @@ def create_procurement_checkout_session(plan_id: str | None, order_id: str) -> d
         "total_amount": f"{total_amount:.2f}",
         "source": "procuraai",
     }
-    success_base_url = settings.stripe_success_url or f"{settings.frontend_base_url}/payment/success"
+    success_base_url = settings.stripe_success_url or f"{ORIGIN}/payment/success"
     success_url = _url_with_params(success_base_url, {"order_id": order_id})
-    cancel_url = settings.stripe_cancel_url or f"{settings.frontend_base_url}/payment/cancel?order_id={order_id}"
+    cancel_url = settings.stripe_cancel_url or f"{ORIGIN}/payment/cancel?order_id={order_id}"
+    for return_url in (success_base_url, cancel_url):
+        parsed = urlsplit(return_url)
+        if f"{parsed.scheme}://{parsed.netloc}" != ORIGIN:
+            raise ValueError("Payment return requires the configured loopback origin.")
 
     if settings.use_mock_payment or not settings.stripe_secret_key:
         session_id = f"mock_{uuid.uuid4().hex[:16]}"
@@ -149,8 +167,10 @@ class PaymentProviderError(RuntimeError):
     """Stripe confirmation could not be verified; callers must not mark paid."""
 
 
+@transaction_locked
 def confirm_order_payment(order: dict[str, Any], session_id: str | None = None) -> dict[str, Any]:
     """Confirm an existing order using only its server-bound Stripe session."""
+    require_owner(order)
     stored_session_id = order.get("stripe_session_id")
     if session_id is not None and session_id != stored_session_id:
         raise ValueError("Checkout session does not match this order.")
@@ -183,14 +203,15 @@ def confirm_order_payment(order: dict[str, Any], session_id: str | None = None) 
         raise ValueError("Invalid Stripe checkout metadata.")
     metadata_order_id = (metadata or {}).get("order_id")
     client_reference_id = session.get("client_reference_id")
+    if not (metadata_order_id or client_reference_id):
+        raise ValueError("Stripe checkout is missing its order reference.")
     for provider_order_id in (metadata_order_id, client_reference_id):
         if provider_order_id is not None and provider_order_id != order["order_id"]:
             raise ValueError("Stripe checkout session belongs to a different order.")
-    if "amount_total" in session:
-        amount_total = session["amount_total"]
-        if type(amount_total) is not int or amount_total != _amount_to_cents(order.get("total_amount")):
-            raise ValueError("Stripe payment amount does not match the order.")
-    if "currency" in session and session["currency"] != "usd":
+    amount_total = session.get("amount_total")
+    if type(amount_total) is not int or amount_total != _amount_to_cents(order.get("total_amount")):
+        raise ValueError("Stripe payment amount does not match the order.")
+    if session.get("currency") != "usd":
         raise ValueError("Stripe payment currency does not match the order.")
 
     updated = update_order(order["order_id"], {"status": "paid"})
@@ -199,6 +220,7 @@ def confirm_order_payment(order: dict[str, Any], session_id: str | None = None) 
     return updated
 
 
+@transaction_locked
 def handle_stripe_webhook(payload: bytes, signature: str | None) -> dict[str, Any]:
     settings = get_settings()
     if not settings.stripe_webhook_secret:
@@ -209,19 +231,46 @@ def handle_stripe_webhook(payload: bytes, signature: str | None) -> dict[str, An
     event = _construct_event(payload, signature, settings.stripe_webhook_secret)
     event_type = str(event.get("type") or "")
     status = EVENT_STATUS_BY_TYPE.get(event_type)
-    if not status:
+    if not status or event_type == "payment_intent.payment_failed":
         return {"received": True, "ignored": True}
 
-    event_object = (event.get("data") or {}).get("object") or {}
+    data = event.get("data")
+    if not isinstance(data, dict):
+        raise ValueError("Invalid checkout evidence.")
+    event_object = data.get("object") or {}
+    if not isinstance(event_object, dict):
+        raise ValueError("Invalid checkout evidence.")
     metadata = event_object.get("metadata") or {}
+    if not isinstance(event_object, dict) or not isinstance(metadata, dict):
+        raise ValueError("Invalid checkout evidence.")
+    if not isinstance(event.get("id"), str) or not event["id"]:
+        raise ValueError("Missing event ID.")
     order_id = metadata.get("order_id") or event_object.get("client_reference_id")
-    if not order_id and event_object.get("id"):
-        order = get_order_by_stripe_session_id(str(event_object.get("id")))
-        order_id = order.get("order_id") if order else None
     if not order_id:
         raise ValueError("Webhook event missing order_id metadata.")
 
-    order = mark_payment_event_processed(str(order_id), event.get("id"), status)
+    from app.services.order_service import get_order
+    stored = get_order(str(order_id))
+    if not stored or not stored.get("owner_actor_id"):
+        raise ValueError("Webhook order has no verified owner.")
+    checkout_id = stored.get("stripe_session_id")
+    if not isinstance(checkout_id, str) or not checkout_id or checkout_id.startswith("mock_") or checkout_id != event_object.get("id"):
+        raise ValueError("Webhook checkout binding mismatch.")
+    for reference in (metadata.get("order_id"), event_object.get("client_reference_id")):
+        if reference is not None and reference != stored["order_id"]:
+            raise ValueError("Webhook order reference mismatch.")
+    if event_type == "checkout.session.completed":
+        if event_object.get("payment_status") != "paid":
+            return {"received": True, "ignored": True}
+        if type(event_object.get("amount_total")) is not int or event_object["amount_total"] != _amount_to_cents(stored.get("total_amount")):
+            raise ValueError("Webhook amount mismatch.")
+        if event_object.get("currency") != "usd":
+            raise ValueError("Webhook currency mismatch.")
+    token = VERIFIED_PROVIDER_EVENT.set(True)
+    try:
+        order = mark_payment_event_processed(str(order_id), event.get("id"), status)
+    finally:
+        VERIFIED_PROVIDER_EVENT.reset(token)
     if not order:
         raise ValueError("Order not found.")
     return {"received": True, "order_id": str(order_id), "status": order.get("status")}

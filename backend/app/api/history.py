@@ -6,12 +6,14 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
 from app.services import history_service
+from app.services.confirmed_transaction import SnapshotInvalid
 
 
 router = APIRouter(prefix="/api/history", tags=["history"])
 
 
 class HistoryCreateRequest(BaseModel):
+    model_config = {"extra": "forbid"}
     original_request: str = ""
     parsed_intent: dict[str, Any] | None = None
     agent_understanding: dict[str, Any] | None = None
@@ -31,7 +33,12 @@ def get_history() -> dict[str, Any]:
 
 @router.post("")
 def save_history(request: HistoryCreateRequest) -> dict[str, Any]:
-    return history_service.create_history_record(request.model_dump())
+    try:
+        return history_service.create_history_record(request.model_dump())
+    except SnapshotInvalid as exc:
+        raise HTTPException(status_code=409, detail=exc.detail) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
 @router.get("/{history_id}")

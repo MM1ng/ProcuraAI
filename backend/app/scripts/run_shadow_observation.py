@@ -97,7 +97,7 @@ class ShadowObservationRunner:
         self,
         *,
         config: ShadowConfig | None = None,
-        provider_factory: Callable[[], JevProvider] = JevProvider,
+        provider_factory: Callable[[], JevProvider] | None = None,
         audit_forward: Callable[[dict[str, Any]], None] = emit_shadow_audit,
         wait_margin_seconds: float = 2.0,
     ) -> None:
@@ -105,6 +105,32 @@ class ShadowObservationRunner:
         self.provider_factory = provider_factory
         self.collector = ShadowEventCollector(audit_forward)
         self.wait_margin_seconds = wait_margin_seconds
+
+    def _provider_completion_wait_seconds(self) -> float:
+        """Allow the test harness to drain calls beyond the Shadow deadline."""
+        try:
+            if self.provider_factory is None:
+                # Default Shadow providers use one request bounded just below
+                # the Shadow deadline and have SDK retries disabled.
+                sdk_bound = max((self.config.timeout_ms - 500) / 1000, 0.1)
+            else:
+                from typesafe_sdk import RetryPolicy
+
+                retry = RetryPolicy()
+                request_timeout = JevProvider._timeout_seconds()
+                retry_budget = retry.timeout
+                backoff_budget = sum(
+                    min(retry.backoff_initial * (2 ** attempt), retry.backoff_max)
+                    for attempt in range(retry.max_retries)
+                )
+                sdk_bound = (retry_budget or 0.0) + request_timeout + backoff_budget
+        except Exception:
+            # Conservative fallback for injected test providers or an unavailable SDK.
+            sdk_bound = 40.0
+        return max(
+            self.config.timeout_ms / 1000 + self.wait_margin_seconds,
+            sdk_bound + self.wait_margin_seconds,
+        )
 
     @contextmanager
     def _patched_agent_dispatch(self) -> Iterator[None]:
@@ -144,13 +170,13 @@ class ShadowObservationRunner:
                     trace_id = str(result["trace_id"])
                     event = self.collector.wait_for_trace(
                         trace_id,
-                        self.config.timeout_ms / 1000 + self.wait_margin_seconds,
+                        self._provider_completion_wait_seconds(),
                     )
                     if event is None:
                         harness_errors.append({"case_id": case.case_id, "trace_id": trace_id})
                     else:
                         completed_trace_ids.add(trace_id)
-                        records.append(_record_for_case(case.case_id, event, retried=retried))
+                        records.append(_record_for_case(case.case_id, event, retried=retried, agent_result=result))
 
                 # Every expected audit has completed its forward call. Gateway
                 # provider threads that outlive a timeout only release capacity;
@@ -190,15 +216,34 @@ def load_dev_cases(dataset_path: Path = DEV_DATASET) -> list[ReplayCase]:
     ]
 
 
-def _record_for_case(case_id: str, event: dict[str, Any], *, retried: bool) -> dict[str, Any]:
+def _record_for_case(
+    case_id: str, event: dict[str, Any], *, retried: bool,
+    agent_result: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Persist only audit-safe, case-joinable fields; never replay text."""
     fields = (
         "trace_id", "event", "authoritative_label", "authoritative_label_resolution",
         "shadow_label", "agreement", "transaction_escalation_disagreement",
         "transaction_deescalation_disagreement", "provider_success", "provider_error_type",
-        "shadow_latency_ms",
+        "shadow_latency_ms", "shadow_timeout_ms", "provider_call_elapsed_ms",
+        "provider_retry_count", "provider_final_error_type",
+        "shadow_model",
     )
-    return {"case_id": case_id, "retried": retried, **{field: event.get(field) for field in fields}}
+    result = agent_result or {}
+    return {
+        "case_id": case_id, "retried": retried,
+        **{field: event.get(field) for field in fields},
+        "response_type": result.get("type"),
+        "baseline_model_provider": result.get("model_provider"),
+        "baseline_model_name": result.get("model_name"),
+        "baseline_used_mock_llm": result.get("used_mock_llm"),
+        "baseline_llm_error_present": bool(result.get("llm_error")),
+        "decision_source": result.get("decision_source"),
+        "fallback_used": result.get("fallback_used"),
+        "transaction_gate": result.get("transaction_gate"),
+        "order_created": bool(result.get("order_id")),
+        "checkout_created": bool(result.get("checkout_url")),
+    }
 
 
 def _provider_error_type_distribution(records: Sequence[dict[str, Any]]) -> dict[str, int]:

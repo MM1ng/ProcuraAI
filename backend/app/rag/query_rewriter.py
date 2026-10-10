@@ -50,8 +50,16 @@ def _contains_reference(message: str) -> bool:
     )
 
 
-def should_rewrite(message: str, previous_intent: dict[str, Any] | None) -> bool:
+def should_rewrite(
+    message: str,
+    previous_intent: dict[str, Any] | None,
+    route_label: str | None = None,
+) -> bool:
     if not getattr(settings, "query_rewrite_enabled", True):
+        return False
+    # Query rewrite is retrieval-only. Transaction, status, cancellation, and
+    # clarification routes must not mutate an executable or already-confirmed plan.
+    if route_label in {"confirm_order", "payment", "cancel", "order_status", "clarify", "unknown"}:
         return False
     if previous_intent:
         return True
@@ -83,8 +91,9 @@ def rewrite_query(
     message: str,
     previous_intent: dict[str, Any] | None,
     llm_invoke: Callable[..., dict[str, Any]] = safe_llm_invoke,
+    route_label: str | None = None,
 ) -> str:
-    if not should_rewrite(message, previous_intent):
+    if not should_rewrite(message, previous_intent, route_label):
         return message
 
     try:

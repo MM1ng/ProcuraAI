@@ -32,8 +32,23 @@ class OrderPlanSelection(BaseModel):
 
 
 class OrderCreateRequest(BaseModel):
-    user_id: str = "demo-user"
+    model_config = ConfigDict(extra="forbid")
     plan: OrderPlanSelection
+    session_id: str | None = None
+    plan_hash: str | None = None
+    confirmation_id: str | None = None
+    plan_id: str | None = None
+    plan_version: int | None = Field(default=None, strict=True, gt=0)
+
+
+class CartQuoteRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    plan: OrderPlanSelection
+
+
+class CartOrderRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    cart_token: str
 
 
 class OrderResponse(BaseModel):

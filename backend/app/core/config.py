@@ -73,11 +73,22 @@ class Settings:
     use_mock_llm: bool = _bool_env("USE_MOCK_LLM", False)
     use_mock_payment: bool = _bool_env("USE_MOCK_PAYMENT", True)
     query_rewrite_enabled: bool = _bool_env("QUERY_REWRITE_ENABLED", True)
+    # Shadow is enabled explicitly by the deployment environment. Keeping the
+    # code default off prevents tests and local tools from making remote calls.
     jev_shadow_enabled: bool = _bool_env("JEV_SHADOW_ENABLED", False)
     jev_shadow_timeout_ms: int = _int_env("JEV_SHADOW_TIMEOUT_MS", 1200)
-    jev_shadow_sample_rate: float = _float_env("JEV_SHADOW_SAMPLE_RATE", 1.0)
+    jev_shadow_sample_rate: float = field(default_factory=lambda: _float_env("JEV_SHADOW_SAMPLE_RATE", 1.0))
     jev_shadow_log_probabilities: bool = _bool_env("JEV_SHADOW_LOG_PROBABILITIES", True)
     jev_shadow_max_in_flight: int = _int_env("JEV_SHADOW_MAX_IN_FLIGHT", 4)
+    jev_timeout_ms: int = _int_env("JEV_TIMEOUT_MS", 1200)
+    jev_decision_enabled: bool = _bool_env("JEV_DECISION_ENABLED", False)
+    # Independent of Shadow sampling. A runtime enable with 0% still routes to baseline.
+    jev_decision_traffic_percent: float = field(default_factory=lambda: _float_env("JEV_DECISION_TRAFFIC_PERCENT", 0.0))
+    jev_fallback_enabled: bool = _bool_env("JEV_FALLBACK_ENABLED", True)
+    jev_max_in_flight: int = _int_env("JEV_MAX_INFLIGHT", 4)
+    jev_auto_rollback_error_threshold: int = _int_env("JEV_AUTO_ROLLBACK_ERROR_THRESHOLD", 3)
+    decision_control_token: str = field(default_factory=lambda: os.getenv("DECISION_CONTROL_TOKEN", ""))
+    decision_control_env: str = field(default_factory=lambda: os.getenv("APP_ENV", "").strip().lower())
     frontend_base_url: str = os.getenv("FRONTEND_BASE_URL", "http://localhost:3000")
 
     @property

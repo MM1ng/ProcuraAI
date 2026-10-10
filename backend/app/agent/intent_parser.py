@@ -79,7 +79,7 @@ CATEGORY_ALIASES = {
 def _extract_people_count(text: str) -> int:
     patterns = [
         r"(\d+)\s+(?:interns?|people|employees?|users?|staff|members?|teammates?)",
-        r"(\d+)\s*名?\s*(?:实习生|员工|用户|人员|人)",
+        r"(\d+)\s*(?:名|位)?\s*(?:新\s*)?(?:实习生|员工|用户|人员|人)",
         r"(?:team|group|department)\s+of\s+(\d+)",
         r"for\s+(\d+)",
     ]
@@ -263,8 +263,9 @@ Previous structured intent:
 {json.dumps(safe_previous, ensure_ascii=False, indent=2, default=str)}
 
 Guidelines:
-- Only inherit previous budget when the user explicitly says to keep it.
-- If the user does NOT mention a budget in the new message, set "budget" to null.
+- Budget precedence: explicit removal, then a current explicit amount, then explicitly preserved previous budget, otherwise null.
+- A direct people-count change followed by "其他品类和要求保持不变" or "其余要求不变" explicitly preserves the previous total budget; changing people count does not scale that budget.
+- Quoted, hypothetical, conditional, negative or question forms do not grant this preservation. Ordinary omission or an unrelated new request sets "budget" to null; never invent a missing previous budget.
 - When user mentions a new category (e.g. "keyboard"), extract only that category.
 - Do NOT inherit previous categories unless the user explicitly asks to continue.
 """
@@ -312,6 +313,15 @@ def _parse_json_object(content: Any) -> dict[str, Any]:
 
 
 def _wants_inherit_budget(text: str) -> bool:
+    # This is a complete positive modification, not an arbitrary "unchanged"
+    # substring. Keep legacy budget expressions below unchanged.
+    if re.fullmatch(
+        r"\s*(?:请)?(?:仅|只)?(?:将|把)?人数(?:改为|改成|调整为)\s*[1-9]\d*\s*人"
+        r"\s*[,，;；]\s*(?:其他|其它|其余)(?:品类(?:和|及))?"
+        r"(?:要求|条件|约束)(?:保持)?不变[。.]?\s*",
+        text,
+    ):
+        return True
     lowered = text.lower()
     patterns = [r"budget\s+(unchanged|same|keep|stay|as before|as previous)", r"(unchanged|same|keep|stay|continue).{0,30}budget"]
     if any(re.search(p, lowered) for p in patterns): return True
@@ -461,21 +471,9 @@ def _intent_from_llm_json(
 ) -> dict[str, Any]:
     fallback = _parse_purchase_request_rules(message, previous_intent)
     people_count = _as_int_or_none(payload.get("people_count")) or fallback.get("people_count")
-    extracted_budget = _extract_budget(message)
-    budget = _as_float_or_none(payload.get("budget"))
-    if _explicitly_removes_budget(message):
-        budget = None
-        budget_source = "explicit"
-    elif extracted_budget is not None:
-        # Preserve explicit user input such as "预算10w" rather than trusting
-        # a model that may have parsed only the numeric prefix (10).
-        budget = extracted_budget
-        budget_source = "explicit"
-    elif budget is not None:
-        budget_source = "explicit"
-    else:
-        budget = fallback.get("budget")
-        budget_source = fallback.get("budget_source", "none")
+    # Budget authority comes from the current text and its explicit retention
+    # instruction, not a model-supplied stale or invented numeric value.
+    budget, budget_source = _resolve_budget(message, _extract_budget(message), previous_intent)
     categories, category_trace = _normalize_categories_with_trace(payload.get("categories"))
     if not categories:
         categories = fallback.get("categories", [])
@@ -524,7 +522,7 @@ def _intent_from_llm_json(
         "quantity_per_category": quantity_by_category,
         "quantity_by_category": quantity_by_category,
         "preferences": [str(item) for item in preferences],
-        "constraint_sources": fallback.get("constraint_sources", {}),
+        "constraint_sources": {**fallback.get("constraint_sources", {}), "budget": budget_source},
         "constraints": [str(item) for item in constraints],
         "min_rating": min_rating,
         "max_delivery_days": max_delivery_days,

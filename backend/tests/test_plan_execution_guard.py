@@ -48,7 +48,11 @@ def execution_context(monkeypatch, tmp_path):
 
 
 def post_order(plan):
-    return TestClient(app, raise_server_exceptions=False).post("/api/orders", json={"plan": plan})
+    client = TestClient(app, raise_server_exceptions=False)
+    quote = client.post("/api/orders/cart/quote", json={"plan": plan})
+    if quote.status_code != 200:
+        return quote
+    return client.post("/api/orders/cart", json={"cart_token": quote.json()["cart_token"]})
 
 
 def assert_blocked(response, *reasons):
@@ -141,16 +145,15 @@ def test_valid_order_and_checkout_flow_preserves_canonical_amount(execution_cont
     assert order["total_amount"] == 50
     assert order["procurement_plan"]["inventory_status"] == "valid"
     assert order["procurement_plan"]["constraint_satisfaction"] == "satisfied"
-    monkeypatch.setattr(product_service, "load_products_from_csv", Mock(side_effect=AssertionError("No stock refresh")))
+    # Checkout revalidates the server quote and retains the confirmed amounts.
     checkout = TestClient(app).post("/api/payments/stripe/checkout", json={"order_id": order["order_id"]})
     assert checkout.status_code == 200
     execution_context.create.assert_called_once()
     assert execution_context.create.call_args.kwargs["metadata"]["total_amount"] == "50.00"
 
 
-def test_relaxed_retrieval_is_carried_into_all_agent_plans_and_blocks_order(execution_context, monkeypatch):
+def test_confirmation_without_server_snapshot_does_not_retrieve_or_place_order(execution_context, monkeypatch):
     import app.agent.procurement_agent as agent
-    from app.rag.retriever import RetrievalResult
 
     monkeypatch.setattr(agent, "get_session_state", lambda *_: None)
     monkeypatch.setattr(agent, "save_session_state", lambda *_: None)
@@ -161,15 +164,15 @@ def test_relaxed_retrieval_is_carried_into_all_agent_plans_and_blocks_order(exec
         "categories": ["Mouse"], "quantity_by_category": {"Mouse": 2}, "budget": 100,
         "revision_intent": "new_plan", "used_mock_llm": True,
     })
-    monkeypatch.setattr(agent, "_retrieve_products_for_agent", lambda *_, **__: RetrievalResult(
-        products=execution_context.products, evidence={"constraints_relaxed": True},
-    ))
+    retrieve = Mock(side_effect=AssertionError("confirmation must not retrieve a replacement plan"))
+    monkeypatch.setattr(agent, "_retrieve_products_for_agent", retrieve)
     checkout = Mock()
     monkeypatch.setattr(agent, "create_checkout_for_selected_plan", checkout)
     result = agent.run_procurement_agent("确认方案B并下单", "guard-test", skip_plan_explanation=True)
-    assert result["recommended_plan"]["constraints_relaxed"] is True
-    assert result["plan_options"]
-    assert all(option["plan"]["constraints_relaxed"] for option in result["plan_options"])
+    assert result["type"] == "clarify"
+    assert result["recommended_plan"]["items"] == []
+    assert result["plan_options"] == []
+    retrieve.assert_not_called()
     assert result["order_id"] is None
     assert order_service.list_orders() == []
     checkout.assert_not_called()

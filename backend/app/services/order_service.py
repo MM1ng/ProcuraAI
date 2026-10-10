@@ -12,9 +12,13 @@ from app.core.config import DATA_DIR
 from app.schemas.order import OrderPlanSelection
 from app.services import product_service
 from app.services.plan_execution_guard import PlanExecutionGuard
+from app.services.transaction_lock import transaction_locked
+from app.services.transaction_lock import require_writer_lease
+from app.services.caller_identity import require_order_write_owner, require_owner
+import os
 
 
-ORDERS_FILE = DATA_DIR / "orders.json"
+ORDERS_FILE = Path(os.getenv("PROCURA_ORDERS_FILE", str(DATA_DIR / "orders.json"))).resolve()
 
 
 def _read_orders() -> list[dict[str, Any]]:
@@ -24,6 +28,7 @@ def _read_orders() -> list[dict[str, Any]]:
 
 
 def _write_orders(orders: list[dict[str, Any]]) -> None:
+    require_writer_lease()
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     ORDERS_FILE.write_text(json.dumps(orders, indent=2), encoding="utf-8")
 
@@ -62,7 +67,7 @@ def create_order_from_plan(plan: dict[str, Any], user_id: str = "demo-user") -> 
         )
 
     total_amount = float(total)
-    plan_id = selection.plan_option_id or selection.plan_id or ""
+    plan_id = selection.plan_id or selection.plan_option_id or ""
     over_budget = selection.budget is not None and total > Decimal(str(selection.budget))
     budget_status = "no_budget_provided" if selection.budget is None else ("over_budget" if over_budget else "within_budget")
     quantities = Counter()
@@ -76,6 +81,7 @@ def create_order_from_plan(plan: dict[str, Any], user_id: str = "demo-user") -> 
     )
     # Rebuild rather than copying the original plan: checkout also reads this snapshot.
     snapshot = {
+        "plan_id": plan_id,
         "plan_option_id": plan_id,
         "items": [{key: value for key, value in item.items() if key != "order_item_id"} for item in order_items],
         "total": total_amount,
@@ -118,7 +124,9 @@ def create_order_from_plan(plan: dict[str, Any], user_id: str = "demo-user") -> 
     }
 
 
+@transaction_locked
 def save_order(order: dict[str, Any]) -> dict[str, Any]:
+    require_owner(order)
     orders = _read_orders()
     orders.append(order)
     _write_orders(orders)
@@ -143,7 +151,11 @@ def get_order_by_stripe_session_id(session_id: str) -> dict[str, Any] | None:
     return None
 
 
+@transaction_locked
 def update_order(order_id: str, updates: dict[str, Any]) -> dict[str, Any] | None:
+    require_order_write_owner(get_order(order_id))
+    if "owner_actor_id" in updates:
+        raise ValueError("Order ownership is immutable")
     orders = _read_orders()
     updated: dict[str, Any] | None = None
     for order in orders:
@@ -157,7 +169,9 @@ def update_order(order_id: str, updates: dict[str, Any]) -> dict[str, Any] | Non
     return updated
 
 
+@transaction_locked
 def mark_payment_event_processed(order_id: str, event_id: str | None, status: str) -> dict[str, Any] | None:
+    require_order_write_owner(get_order(order_id))
     orders = _read_orders()
     updated: dict[str, Any] | None = None
     for order in orders:
@@ -165,8 +179,9 @@ def mark_payment_event_processed(order_id: str, event_id: str | None, status: st
             continue
         processed = list(order.get("processed_payment_event_ids") or [])
         if event_id and event_id in processed:
-            updated = order
-            break
+            return order
+        if order.get("status") == "paid" and status != "paid":
+            return order
         order["status"] = status
         if event_id:
             processed.append(event_id)

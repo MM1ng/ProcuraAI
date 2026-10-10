@@ -27,10 +27,10 @@ export default function CheckoutPage() {
   }, [orderId]);
 
   async function handleMockPay() {
-    if (!orderId) return;
+    if (!orderId || !order?.stripe_session_id?.startsWith("mock_")) return;
     setPaying(true); setError(null);
     try {
-      const r = await api.mockPaymentSuccess(orderId);
+      const r = await api.mockPaymentSuccess(orderId, order.stripe_session_id);
       if (r.status === "paid") { setPaid(true); if (r.order) setOrder(r.order); }
     } catch (e) { setError(e instanceof Error ? e.message : "Payment failed"); }
     finally { setPaying(false); }
@@ -68,7 +68,7 @@ export default function CheckoutPage() {
           {error ? <Typography.Text type="danger">{error}</Typography.Text> : null}
           <div style={{ textAlign: "center", marginTop: 16 }}>
             <Space size={16}>
-              <Button type="primary" size="large" loading={paying} onClick={handleMockPay}>Simulate Payment Success</Button>
+              <Button type="primary" size="large" loading={paying} disabled={!order?.stripe_session_id?.startsWith("mock_")} onClick={handleMockPay}>测试：模拟本次支付完成</Button>
               <Button size="large" onClick={() => router.push("/chat")}>Back to Chat</Button>
             </Space>
           </div>

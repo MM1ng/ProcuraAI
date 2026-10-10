@@ -89,7 +89,7 @@ def test_atomic_write_failure_preserves_the_previous_valid_trace_document(monkey
     assert json.loads(trace_file.read_text(encoding="utf-8")) == [{"log_id": 1, "event": "existing"}]
 
 
-def test_controlled_transaction_replay_isolates_orders_and_observability(monkeypatch):
+def test_transaction_without_server_snapshot_is_blocked_and_isolates_storage(monkeypatch):
     production_orders_file = order_service.ORDERS_FILE
     production_observability_file = local_tracer.TRACE_FILE
     production_orders_before = production_orders_file.read_bytes()
@@ -131,12 +131,13 @@ def test_controlled_transaction_replay_isolates_orders_and_observability(monkeyp
     temporary_root: Path
     with isolated_shadow_observation_storage() as storage:
         temporary_root = storage.root
-        result = agent.run_procurement_agent("确认这个方案并下单", "controlled-replay", skip_plan_explanation=True)
-        temporary_orders = json.loads(storage.orders_file.read_text(encoding="utf-8"))
+        result = agent.run_procurement_agent("\u786e\u8ba4\u8fd9\u4e2a\u65b9\u6848\u5e76\u4e0b\u5355", "controlled-replay", skip_plan_explanation=True)
+        temporary_orders = json.loads(storage.orders_file.read_text(encoding="utf-8")) if storage.orders_file.exists() else []
         temporary_events = json.loads(storage.observability_file.read_text(encoding="utf-8"))
-        assert result["type"] == "order"
-        assert result["order_id"] == temporary_orders[0]["order_id"]
-        assert temporary_orders[0]["stripe_session_id"].startswith("mock_")
+        assert result["type"] == "clarify"
+        assert result["order_id"] is None
+        assert result["checkout_url"] is None
+        assert temporary_orders == []
         assert any(event.get("event") == "decision_shadow" for event in temporary_events)
         assert any(event.get("session_id") == "controlled-replay" for event in temporary_events)
 

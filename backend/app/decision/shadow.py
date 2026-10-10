@@ -8,7 +8,7 @@ from app.agent.router import route_intent, transaction_intent
 from app.decision.schemas import DecisionResult, IntentLabel
 
 
-TRANSACTION_LABELS = {IntentLabel.CONFIRM_ORDER, IntentLabel.PAYMENT}
+TRANSACTION_LABELS = {IntentLabel.CONFIRM_ORDER, IntentLabel.PAYMENT, IntentLabel.CANCEL}
 LOW_CONFIDENCE_THRESHOLD = 0.7
 Resolution = Literal["exact", "coarse", "fallback_clarify"]
 
@@ -38,6 +38,11 @@ def resolve_authoritative_intent(
         return AuthoritativeIntentDecision(IntentLabel.CONFIRM_ORDER, "exact", "transaction_intent")
     if transaction == "payment":
         return AuthoritativeIntentDecision(IntentLabel.PAYMENT, "exact", "transaction_intent")
+    if transaction == "cancel":
+        return AuthoritativeIntentDecision(IntentLabel.CANCEL, "exact", "transaction_intent")
+
+    if route_intent(message).get("route") == "order_status":
+        return AuthoritativeIntentDecision(IntentLabel.ORDER_STATUS, "exact", "router")
 
     revision_intent = str(intent.get("revision_intent") or "")
     if revision_intent in {"cheaper", "replace_product"}:
@@ -85,6 +90,10 @@ class ShadowAuditRecord:
     shadow_confidence: float | None
     shadow_probabilities: dict[str, float] | None
     shadow_latency_ms: float | None
+    shadow_timeout_ms: int | None
+    provider_call_elapsed_ms: float | None
+    provider_retry_count: int | None
+    provider_final_error_type: str | None
     shadow_model: str | None
     shadow_request_id: str | None
     provider_success: bool | None
@@ -107,6 +116,7 @@ def success_record(
     log_probabilities: bool,
     in_flight_at_dispatch: int,
     max_in_flight: int,
+    shadow_timeout_ms: int | None = None,
 ) -> ShadowAuditRecord:
     shadow_label = result.label
     authoritative_is_transaction = authoritative_decision.label in TRANSACTION_LABELS
@@ -133,6 +143,18 @@ def success_record(
         shadow_confidence=result.confidence,
         shadow_probabilities=result.probabilities if log_probabilities else None,
         shadow_latency_ms=result.latency_ms,
+        shadow_timeout_ms=shadow_timeout_ms,
+        provider_call_elapsed_ms=(
+            float(result.metadata["provider_call_elapsed_ms"])
+            if result.metadata.get("provider_call_elapsed_ms") is not None
+            else result.latency_ms
+        ),
+        provider_retry_count=(
+            int(result.metadata["provider_retry_count"])
+            if result.metadata.get("provider_retry_count") is not None
+            else None
+        ),
+        provider_final_error_type=None,
         shadow_model=result.model,
         shadow_request_id=str(result.metadata.get("request_id") or "") or None,
         provider_success=True,
@@ -148,6 +170,10 @@ def failure_record(
     error_type: str,
     in_flight_at_dispatch: int,
     max_in_flight: int,
+    shadow_timeout_ms: int | None = None,
+    provider_call_elapsed_ms: float | None = None,
+    provider_retry_count: int | None = None,
+    provider_final_error_type: str | None = None,
 ) -> ShadowAuditRecord:
     return ShadowAuditRecord(
         event="decision_shadow",
@@ -171,6 +197,10 @@ def failure_record(
         shadow_confidence=None,
         shadow_probabilities=None,
         shadow_latency_ms=None,
+        shadow_timeout_ms=shadow_timeout_ms,
+        provider_call_elapsed_ms=provider_call_elapsed_ms,
+        provider_retry_count=provider_retry_count,
+        provider_final_error_type=provider_final_error_type,
         shadow_model=None,
         shadow_request_id=None,
         provider_success=False,
@@ -209,6 +239,10 @@ def skip_record(
         shadow_confidence=None,
         shadow_probabilities=None,
         shadow_latency_ms=None,
+        shadow_timeout_ms=None,
+        provider_call_elapsed_ms=None,
+        provider_retry_count=None,
+        provider_final_error_type=None,
         shadow_model=None,
         shadow_request_id=None,
         provider_success=None,

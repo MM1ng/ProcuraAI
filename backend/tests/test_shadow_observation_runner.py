@@ -105,6 +105,12 @@ def test_mini_replay_keeps_production_data_unchanged(monkeypatch):
         "authoritative_label_resolution", "shadow_label", "agreement",
         "transaction_escalation_disagreement", "transaction_deescalation_disagreement",
         "provider_success", "provider_error_type", "shadow_latency_ms",
+        "shadow_timeout_ms", "provider_call_elapsed_ms", "provider_retry_count",
+            "provider_final_error_type", "shadow_model", "response_type",
+            "decision_source", "fallback_used", "transaction_gate",
+            "baseline_model_provider", "baseline_model_name",
+            "baseline_used_mock_llm", "baseline_llm_error_present",
+            "order_created", "checkout_created",
     } for record in result.records)
 
 

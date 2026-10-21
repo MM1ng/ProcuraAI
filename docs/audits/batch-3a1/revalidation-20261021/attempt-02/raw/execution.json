@@ -1,0 +1,170 @@
+{
+  "fixed_commit": "5c4c466f813a43500e56f9090ee8b84d847132c2",
+  "started_at": "2026-10-21T02:19:48.996722+00:00",
+  "python": "[ORIGINAL_REPO]\\.venv\\Scripts\\python.exe",
+  "runner_sha256": "8F89A0BDF620BE5E6B7E82E41B316819D8CBFE5736A3F09C2DBF7F7EAC21ADC4",
+  "runs": [
+    {
+      "phase": "green",
+      "started_at": "2026-10-21T02:19:49.247537+00:00",
+      "cwd": "[FIXED_SOURCE]\\backend",
+      "argv": [
+        "[ORIGINAL_REPO]\\.venv\\Scripts\\python.exe",
+        "-B",
+        "[VALIDATION_ROOT]\\validate.py",
+        "--child",
+        "green",
+        "tests/test_debug_access_batch3a1.py",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--log-file=[VALIDATION_ROOT]\\attempt-02\\runtime\\green\\pytest-internal.log",
+        "--basetemp=[VALIDATION_ROOT]\\attempt-02\\runtime\\green\\pytest",
+        "--junitxml=[VALIDATION_ROOT]\\attempt-02\\runtime\\green\\green.xml"
+      ],
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONUTF8": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+        "APP_ENV": "test",
+        "JEV_SHADOW_ENABLED": "false",
+        "JEV_DECISION_ENABLED": "false",
+        "JEV_DECISION_TRAFFIC_PERCENT": "0",
+        "USE_MOCK_LLM": "true",
+        "USE_MOCK_PAYMENT": "true",
+        "ALLOW_MOCK_PAYMENT": "false",
+        "QUERY_REWRITE_ENABLED": "false",
+        "LANGFUSE_ENABLED": "false"
+      },
+      "expected_cases": 26,
+      "timeout_seconds": 180,
+      "process_pid": 35924,
+      "process_exit_code": 97,
+      "finished_at": "2026-10-21T02:19:53.954380+00:00",
+      "elapsed_seconds": 4.703,
+      "source_unchanged": true,
+      "protected_unchanged": true,
+      "guard": {
+        "network_policy": "deny Python socket connect/DNS/send events",
+        "write_allow_root": "[VALIDATION_ROOT]\\attempt-02\\runtime\\green",
+        "blocked_attempts": [
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          },
+          {
+            "event": "socket.connect",
+            "detail": "network disabled"
+          }
+        ],
+        "sqlite_paths": [],
+        "pytest_return_code": 1,
+        "limitations": "Python audit hooks, not an OS firewall or hostile native-code sandbox"
+      },
+      "junit": {
+        "total": 26,
+        "fail": 26,
+        "error": 0,
+        "skip": 0,
+        "pass": 0
+      }
+    }
+  ]
+}

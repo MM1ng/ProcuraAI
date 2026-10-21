@@ -1,0 +1,13 @@
+test_broad_acl_denied (__main__.ProcessTests.test_broad_acl_denied) ... ok
+test_executable_mismatch_denied (__main__.ProcessTests.test_executable_mismatch_denied) ... ok
+test_extra_whoami_args_denied (__main__.ProcessTests.test_extra_whoami_args_denied) ... ok
+test_outside_acl_denied (__main__.ProcessTests.test_outside_acl_denied) ... ok
+test_python_denied (__main__.ProcessTests.test_python_denied) ... ok
+test_shell_denied (__main__.ProcessTests.test_shell_denied) ... ok
+test_windows_icacls_path_with_spaces (__main__.ProcessTests.test_windows_icacls_path_with_spaces) ... ok
+test_windows_none_executable_whoami (__main__.ProcessTests.test_windows_none_executable_whoami) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.003s
+
+OK

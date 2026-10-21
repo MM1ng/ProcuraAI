@@ -1,0 +1,41 @@
+.......F................F.                                               [100%]
+================================== FAILURES ===================================
+___________ test_normal_anonymous_caller_cannot_read_shared_traces ____________
+
+boundary = (<starlette.testclient.TestClient object at 0x000001A8761ED850>, <Mock id='1823047863088'>, <Mock id='1823047861216'>, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A875F2F2C0>
+
+    def test_normal_anonymous_caller_cannot_read_shared_traces(boundary, monkeypatch):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", ADMIN)
+        init = client.post("/api/caller/init", headers={"Origin": ORIGIN})
+>       assert init.status_code == 200
+E       assert 503 == 200
+E        +  where 503 = <Response [503 Service Unavailable]>.status_code
+
+tests\test_debug_access_batch3a1.py:65: AssertionError
+__________________ test_business_caller_not_debug_authority ___________________
+
+boundary = (<starlette.testclient.TestClient object at 0x000001A8763C5FD0>, <Mock id='1823049801248'>, <Mock id='1823049796880'>, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A8763C4710>
+
+    def test_business_caller_not_debug_authority(boundary, monkeypatch):
+        client, _, forbidden, _ = boundary
+        monkeypatch.setenv("LLM_TEST_ENABLED", "true")
+        monkeypatch.setenv("LLM_TEST_TOKEN", DEBUG)
+        init = client.post("/api/caller/init", headers={"Origin": ORIGIN})
+>       assert init.status_code == 200
+E       assert 503 == 200
+E        +  where 503 = <Response [503 Service Unavailable]>.status_code
+
+tests\test_debug_access_batch3a1.py:143: AssertionError
+============================== warnings summary ===============================
+..\..\..\work\ProcuraAI\.venv\Lib\site-packages\starlette\testclient.py:53
+  [ORIGINAL_REPO]\.venv\Lib\site-packages\starlette\testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_debug_access_batch3a1.py::test_normal_anonymous_caller_cannot_read_shared_traces
+FAILED tests/test_debug_access_batch3a1.py::test_business_caller_not_debug_authority
+2 failed, 24 passed, 1 warning in 2.18s

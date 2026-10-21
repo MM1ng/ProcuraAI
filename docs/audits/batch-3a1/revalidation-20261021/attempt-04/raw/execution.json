@@ -1,0 +1,5952 @@
+{
+  "fixed_commit": "5c4c466f813a43500e56f9090ee8b84d847132c2",
+  "started_at": "2026-10-21T02:38:00.397932+00:00",
+  "python": "[ORIGINAL_REPO]\\.venv\\Scripts\\python.exe",
+  "guard_selftest": {
+    "argv": [
+      "[ORIGINAL_REPO]\\.venv\\Scripts\\python.exe",
+      "-B",
+      "[VALIDATION_ROOT]\\test_ipc_guard.py",
+      "[VALIDATION_ROOT]\\attempt-04\\raw\\guard-selftest.json"
+    ],
+    "process_exit_code": 0,
+    "result": {
+      "tests_run": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "guard": {
+        "policy": "deny network except exact stdlib socketpair IPC",
+        "allowed_ipc_events": [
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56876
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56878
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56879
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56881
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56883
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56885
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56887
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56891
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56892
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56889
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56897
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56893
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56898
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56900
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56906
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56905
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56904
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "::1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "::1",
+              56910
+            ]
+          },
+          {
+            "event": "socket.bind",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              0
+            ]
+          },
+          {
+            "event": "socket.connect",
+            "reason": "exact_stdlib_socketpair_object_and_listener",
+            "address": [
+              "127.0.0.1",
+              56912
+            ]
+          }
+        ],
+        "denied_events": [
+          {
+            "event": "socket.bind",
+            "address": "('127.0.0.1', 0)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 49152)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.getaddrinfo",
+            "address": "443",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('203.0.113.1', 443)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('::1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.connect",
+            "address": "('127.0.0.1', 8000)",
+            "reason": "not_exact_stdlib_socketpair"
+          },
+          {
+            "event": "socket.sendto",
+            "address": "('127.0.0.1', 9)",
+            "reason": "not_exact_stdlib_socketpair"
+          }
+        ],
+        "limitations": "Trusted Python code audit; not an OS firewall/native-code sandbox"
+      }
+    }
+  },
+  "process_selftest": {
+    "argv": [
+      "[ORIGINAL_REPO]\\.venv\\Scripts\\python.exe",
+      "-B",
+      "[VALIDATION_ROOT]\\test_process_guard.py",
+      "[VALIDATION_ROOT]\\attempt-04\\raw\\process-selftest.json"
+    ],
+    "process_exit_code": 0,
+    "result": {
+      "tests_run": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "process_guard_sha256": "03C557B29CCCCA2A72F168FE9598174D9B55A507DD9DEB16493569E176CCF78B",
+  "process_selftest_sha256": "5894B3551D1F555C130811F8423E66FD1358489EFA99B81FADADAC9D1E7BCE24",
+  "guard_sha256": "7A0591DC693C02915383F7DA13D332F3A5BEC175D71BB013EA168E9D4B27BA8E",
+  "selftest_sha256": "DD82F37AFFBD5B6F037577F230CA082342A874716ED13F7CF84560F3E66C6F94",
+  "runner_sha256": "7CDA06122348DD1A9F5FD292E7063AC3F9A57D1F5F751551F357C8A685FF4B62",
+  "runs": [
+    {
+      "phase": "green",
+      "started_at": "2026-10-21T02:38:00.636222+00:00",
+      "cwd": "[FIXED_SOURCE]\\backend",
+      "argv": [
+        "[ORIGINAL_REPO]\\.venv\\Scripts\\python.exe",
+        "-B",
+        "[VALIDATION_ROOT]\\validate.py",
+        "--child",
+        "green",
+        "tests/test_debug_access_batch3a1.py",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--log-file=[VALIDATION_ROOT]\\attempt-04\\runtime\\green\\pytest-internal.log",
+        "--basetemp=[VALIDATION_ROOT]\\attempt-04\\runtime\\green\\pytest",
+        "--junitxml=[VALIDATION_ROOT]\\attempt-04\\runtime\\green\\green.xml"
+      ],
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONUTF8": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+        "APP_ENV": "test",
+        "JEV_SHADOW_ENABLED": "false",
+        "JEV_DECISION_ENABLED": "false",
+        "JEV_DECISION_TRAFFIC_PERCENT": "0",
+        "USE_MOCK_LLM": "true",
+        "USE_MOCK_PAYMENT": "true",
+        "ALLOW_MOCK_PAYMENT": "false",
+        "QUERY_REWRITE_ENABLED": "false",
+        "LANGFUSE_ENABLED": "false"
+      },
+      "expected_cases": 26,
+      "timeout_seconds": 180,
+      "process_pid": 4932,
+      "process_exit_code": 0,
+      "finished_at": "2026-10-21T02:38:03.799035+00:00",
+      "elapsed_seconds": 3.156,
+      "source_unchanged": true,
+      "protected_unchanged": true,
+      "guard": {
+        "network_policy": {
+          "policy": "deny network except exact stdlib socketpair IPC",
+          "allowed_ipc_events": [
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56914
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56916
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56918
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56920
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56922
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56924
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56926
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56928
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56930
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56932
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56934
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56936
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56938
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56940
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56942
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56944
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56946
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56948
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56950
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56952
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56954
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56956
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56958
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56963
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56965
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56967
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56969
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                56971
+              ]
+            }
+          ],
+          "denied_events": [],
+          "limitations": "Trusted Python code audit; not an OS firewall/native-code sandbox"
+        },
+        "write_allow_root": "[VALIDATION_ROOT]\\attempt-04\\runtime\\green",
+        "blocked_attempts": [],
+        "sqlite_paths": [
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\green\\pytest\\test_business_caller_not_debug0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\green\\pytest\\test_normal_anonymous_caller_c0\\identity\\registry.sqlite3"
+        ],
+        "pytest_return_code": 0,
+        "allowed_processes": [
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\green\\pytest\\test_normal_anonymous_caller_c0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\green\\pytest\\test_business_caller_not_debug0\\identity"
+          }
+        ],
+        "limitations": "Python audit hooks, not an OS firewall or hostile native-code sandbox"
+      },
+      "junit": {
+        "total": 26,
+        "fail": 0,
+        "error": 0,
+        "skip": 0,
+        "pass": 26
+      }
+    },
+    {
+      "phase": "regression",
+      "started_at": "2026-10-21T02:38:04.329563+00:00",
+      "cwd": "[FIXED_SOURCE]\\backend",
+      "argv": [
+        "[ORIGINAL_REPO]\\.venv\\Scripts\\python.exe",
+        "-B",
+        "[VALIDATION_ROOT]\\validate.py",
+        "--child",
+        "regression",
+        "tests/test_debug_access_batch3a1.py",
+        "tests/test_transaction_snapshot_batch1.py",
+        "tests/test_caller_ownership_batch2.py::test_readonly_context_never_creates_actor",
+        "tests/test_caller_ownership_batch2.py::test_cookie_origin_csrf_and_no_rotation",
+        "tests/test_caller_ownership_batch2.py::test_other_actor_cannot_copy_full_binding_or_order",
+        "tests/test_caller_ownership_batch2.py::test_client_user_id_cannot_remint_confirmation",
+        "tests/test_caller_ownership_batch2.py::test_ownerless_order_is_unclaimable",
+        "tests/test_caller_ownership_batch2.py::test_explicit_init_reuses_actor_and_invalid_cookie_cannot_switch",
+        "tests/test_caller_ownership_batch2.py::test_anonymous_mode_and_host_fail_closed",
+        "tests/test_caller_ownership_batch2.py::test_copied_session_denied_at_every_plan_entry",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--log-file=[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest-internal.log",
+        "--basetemp=[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest",
+        "--junitxml=[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\regression.xml"
+      ],
+      "environment": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONUTF8": "1",
+        "PYTHONIOENCODING": "utf-8",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+        "APP_ENV": "test",
+        "JEV_SHADOW_ENABLED": "false",
+        "JEV_DECISION_ENABLED": "false",
+        "JEV_DECISION_TRAFFIC_PERCENT": "0",
+        "USE_MOCK_LLM": "true",
+        "USE_MOCK_PAYMENT": "true",
+        "ALLOW_MOCK_PAYMENT": "false",
+        "QUERY_REWRITE_ENABLED": "false",
+        "LANGFUSE_ENABLED": "false"
+      },
+      "expected_cases": 77,
+      "timeout_seconds": 180,
+      "process_pid": 2648,
+      "process_exit_code": 0,
+      "finished_at": "2026-10-21T02:38:17.111660+00:00",
+      "elapsed_seconds": 12.782,
+      "source_unchanged": true,
+      "protected_unchanged": true,
+      "guard": {
+        "network_policy": {
+          "policy": "deny network except exact stdlib socketpair IPC",
+          "allowed_ipc_events": [
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                57745
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53414
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53416
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53418
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53420
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53422
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53424
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53426
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53635
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53637
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53639
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53641
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53643
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53645
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53647
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53649
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53651
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53653
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53655
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53657
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53659
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53661
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53663
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53665
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53667
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53669
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53671
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53673
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53675
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53677
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53681
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53683
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53789
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53791
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53793
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53795
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53797
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53799
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53801
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53803
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53805
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53807
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53809
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53811
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53813
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53815
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53817
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53819
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53821
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53823
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53825
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53927
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53929
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53931
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53933
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53935
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53937
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53939
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53941
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53943
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53945
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53947
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53949
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53951
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53953
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53955
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53957
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53959
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53961
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53963
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53965
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53967
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53969
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53971
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53973
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53975
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53977
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53979
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53981
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53983
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53986
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53985
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53989
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53991
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53993
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53995
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53997
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                53999
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54001
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54003
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54005
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54007
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54009
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54011
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54013
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54015
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54017
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54019
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54021
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54023
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54025
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54027
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54029
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54031
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54033
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54035
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54037
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54039
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54041
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54043
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54047
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54049
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54051
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54053
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54055
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54057
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54059
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54061
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54063
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54067
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54069
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54071
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54073
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54075
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54077
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54079
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54081
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54083
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54085
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54087
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54089
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54091
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54093
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54095
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54097
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54100
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54102
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54104
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54106
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54108
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54110
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54112
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54114
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54116
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54118
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54120
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54122
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54124
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54126
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54128
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54130
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54132
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54134
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54138
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54140
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54142
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54144
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54146
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54148
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54150
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54152
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54154
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54156
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54158
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54160
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54162
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54164
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54166
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54168
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54170
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54172
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54174
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54176
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54178
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54180
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54182
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54184
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54186
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54188
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54190
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54192
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54194
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54196
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54198
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54200
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54202
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54204
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54206
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54208
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54210
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54212
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54214
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54216
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54218
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54220
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54222
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54224
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54226
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54228
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54230
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54232
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54234
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54236
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54238
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54240
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54242
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54244
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54246
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54248
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54250
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54252
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54254
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54256
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54258
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54260
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54262
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54264
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54266
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54268
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54270
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54272
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54274
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54276
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54278
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54280
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54282
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54284
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54286
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54288
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54290
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54292
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54294
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54296
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54298
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54300
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54302
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54304
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54306
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54308
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54310
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54312
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54314
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54316
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54318
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54320
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54322
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54324
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54326
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54328
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54330
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54332
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54334
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54336
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54338
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54340
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54342
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54344
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54346
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54348
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54350
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54352
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54354
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54356
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54358
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54360
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54362
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54364
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54366
+              ]
+            },
+            {
+              "event": "socket.bind",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                0
+              ]
+            },
+            {
+              "event": "socket.connect",
+              "reason": "exact_stdlib_socketpair_object_and_listener",
+              "address": [
+                "127.0.0.1",
+                54368
+              ]
+            }
+          ],
+          "denied_events": [],
+          "limitations": "Trusted Python code audit; not an OS firewall/native-code sandbox"
+        },
+        "write_allow_root": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression",
+        "blocked_attempts": [],
+        "sqlite_paths": [
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_confirm_then_pay_re0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_confirm_then_pay_re0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_rejects_tampered_or0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_rejects_tampered_or0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind1\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind1\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind2\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind2\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind3\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind3\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind4\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind4\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind5\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind5\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_anonymous_mode_and_host_f0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_business_caller_not_debug0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_cart_aggregated_stock_dri0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_cart_quote_cannot_change_0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_catalog_changes_during_or0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_catalog_changes_during_or0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_chat_explicit_confirmatio0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_chat_explicit_confirmatio0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_client_user_id_cannot_rem0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_client_user_id_cannot_rem0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_concurrent_confirmation_r0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_concurrent_confirmation_r0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_confirmation_cannot_be_fo0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_confirmation_cannot_be_fo0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_cookie_origin_csrf_and_no0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_copied_session_denied_at_0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_copied_session_denied_at_0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_display_confirm_order_che0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_display_confirm_order_che0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_display_confirm_order_che1\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_display_confirm_order_che1\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_display_confirm_order_che2\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_display_confirm_order_che2\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_drift_blocks_order_and_ch0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_drift_blocks_order_and_ch0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_drift_blocks_order_and_ch1\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_drift_blocks_order_and_ch1\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_drift_blocks_order_and_ch2\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_drift_blocks_order_and_ch2\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_drift_blocks_order_and_ch3\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_drift_blocks_order_and_ch3\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_expired_display_can_be_re0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_expired_display_can_be_re0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_expired_snapshot_rejected0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_expired_snapshot_rejected0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_explicit_init_reuses_acto0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_independent_cart_requires0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_normal_anonymous_caller_c0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_old_confirmation_after_co0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_old_confirmation_after_co0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp1\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp1\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp2\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp2\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp3\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp3\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp4\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp4\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp5\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp5\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_other_actor_cannot_copy_f0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_other_actor_cannot_copy_f0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_ownerless_order_is_unclai0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_quick_optimization_uses_r0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_quick_optimization_uses_r0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_real_planner_api_agent_or0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_real_planner_api_agent_or0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_real_planner_api_agent_or1\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_real_planner_api_agent_or1\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_real_planner_api_agent_or2\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_real_planner_api_agent_or2\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_safety_negatives_have_no_0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_safety_negatives_have_no_0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_safety_negatives_have_no_1\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_safety_negatives_have_no_1\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_safety_negatives_have_no_2\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_safety_negatives_have_no_2\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_safety_negatives_have_no_3\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_safety_negatives_have_no_3\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_selection_cannot_use_unse0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_selection_cannot_use_unse0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_stripping_all_chat_bindin0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_stripping_all_chat_bindin0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_unselected_option_cannot_0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_unselected_option_cannot_0\\identity\\registry.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_update_between_agent_read0\\decision-runtime.sqlite3",
+          "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_update_between_agent_read0\\identity\\registry.sqlite3"
+        ],
+        "pytest_return_code": 0,
+        "allowed_processes": [
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_normal_anonymous_caller_c0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_business_caller_not_debug0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_rejects_tampered_or0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp1\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp2\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp3\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp4\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_orders_require_exact_disp5\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_stripping_all_chat_bindin0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_display_confirm_order_che0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_display_confirm_order_che1\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_display_confirm_order_che2\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_old_confirmation_after_co0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_concurrent_confirmation_r0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_drift_blocks_order_and_ch0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_drift_blocks_order_and_ch1\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_drift_blocks_order_and_ch2\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_drift_blocks_order_and_ch3\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_safety_negatives_have_no_0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_safety_negatives_have_no_1\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_safety_negatives_have_no_2\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_safety_negatives_have_no_3\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_confirm_then_pay_re0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_independent_cart_requires0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_expired_snapshot_rejected0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_confirmation_cannot_be_fo0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_unselected_option_cannot_0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_update_between_agent_read0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_quick_optimization_uses_r0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_chat_explicit_confirmatio0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_selection_cannot_use_unse0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_expired_display_can_be_re0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind1\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind2\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind3\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind4\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_agent_requires_exact_bind5\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_catalog_changes_during_or0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_cart_quote_cannot_change_0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_cart_aggregated_stock_dri0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_real_planner_api_agent_or0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_real_planner_api_agent_or1\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_real_planner_api_agent_or2\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_cookie_origin_csrf_and_no0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_other_actor_cannot_copy_f0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_client_user_id_cannot_rem0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_ownerless_order_is_unclai0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_explicit_init_reuses_acto0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_anonymous_mode_and_host_f0\\identity"
+          },
+          {
+            "name": "whoami",
+            "purpose": "identity ACL setup; stdout not published"
+          },
+          {
+            "name": "icacls",
+            "purpose": "ACL only under isolated runtime",
+            "path": "[VALIDATION_ROOT]\\attempt-04\\runtime\\regression\\pytest\\test_copied_session_denied_at_0\\identity"
+          }
+        ],
+        "limitations": "Python audit hooks, not an OS firewall or hostile native-code sandbox"
+      },
+      "junit": {
+        "total": 77,
+        "fail": 0,
+        "error": 0,
+        "skip": 0,
+        "pass": 77
+      }
+    }
+  ],
+  "finished_at": "2026-10-21T02:38:17.387451+00:00",
+  "result": "FIXED_COMMIT_TARGETED_VALIDATION_PASS"
+}

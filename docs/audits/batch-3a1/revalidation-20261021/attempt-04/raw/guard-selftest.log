@@ -1,0 +1,17 @@
+test_arbitrary_bind_denied (__main__.GuardTests.test_arbitrary_bind_denied) ... ok
+test_arbitrary_loopback_connect_denied (__main__.GuardTests.test_arbitrary_loopback_connect_denied) ... ok
+test_asyncio_internal_ipc (__main__.GuardTests.test_asyncio_internal_ipc) ... ok
+test_concurrency_does_not_leak_allowance (__main__.GuardTests.test_concurrency_does_not_leak_allowance) ... ok
+test_connect_ex_cannot_bypass (__main__.GuardTests.test_connect_ex_cannot_bypass) ... ok
+test_dns_denied (__main__.GuardTests.test_dns_denied) ... ok
+test_external_ip_connect_denied (__main__.GuardTests.test_external_ip_connect_denied) ... ok
+test_ipv6_connect_denied (__main__.GuardTests.test_ipv6_connect_denied) ... ok
+test_ipv6_pair (__main__.GuardTests.test_ipv6_pair) ... ok
+test_localhost_service_connect_denied (__main__.GuardTests.test_localhost_service_connect_denied) ... ok
+test_pair_roundtrip (__main__.GuardTests.test_pair_roundtrip) ... ok
+test_udp_send_denied (__main__.GuardTests.test_udp_send_denied) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.019s
+
+OK

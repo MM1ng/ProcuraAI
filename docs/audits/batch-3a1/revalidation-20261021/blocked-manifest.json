@@ -1,0 +1,82 @@
+{
+  "result": "BLOCKED_BY_VALIDATION_HARNESS",
+  "fixed_commit": "5c4c466f813a43500e56f9090ee8b84d847132c2",
+  "independent_junit": {
+    "total": 26,
+    "pass": 0,
+    "fail": 26,
+    "error": 0,
+    "skip": 0
+  },
+  "regression": "NOT_EXECUTED",
+  "files": [
+    {
+      "path": "raw/execution.json",
+      "sha256": "31CB6481AC2DFE0FB85FF9C7F65248E268F323876084176E3AD52B8CE4683B22"
+    },
+    {
+      "path": "raw/green-protected-after.json",
+      "sha256": "36B85ED4E7A179818E5CD209BFF1CA151E7188D1235B351E23C20E1DCA7EB118"
+    },
+    {
+      "path": "raw/green-protected-before.json",
+      "sha256": "F02C6295F2565B3C627651BED4CCFA794AC0C1EC0024522FA637003ECAA380F1"
+    },
+    {
+      "path": "raw/green-source-after.json",
+      "sha256": "E4E3FDCE461153A58991DD623C964F7614E1AA368171BFF74654D01BD2A2A10A"
+    },
+    {
+      "path": "raw/green-source-before.json",
+      "sha256": "6E5C43FBEDCEC00EED07319A7100FB851458CAB11922E9CC99ED8B565625BE14"
+    },
+    {
+      "path": "raw/green.log",
+      "sha256": "D20F0AAB2217F413B79B3A011B96D9D565D1272929F2601D9DAA55EC856288CA"
+    },
+    {
+      "path": "raw/initial-runner.py",
+      "sha256": "25624A7E3D205F76C470C6F0F7E57E14B0AFF3A78DDFD7627203FD44BFE7C9BA"
+    },
+    {
+      "path": "attempt-02/raw/execution.json",
+      "sha256": "381175D557FEA8AA35B22D33E9903C3214A92694785C7D4FC0E78F011743C483"
+    },
+    {
+      "path": "attempt-02/raw/green-protected-after.json",
+      "sha256": "F815985D45A9E8F3ED437F3BD988EB266B817548942AC1B733938E6DB5461BBE"
+    },
+    {
+      "path": "attempt-02/raw/green-protected-before.json",
+      "sha256": "EE02F1A74F483E8E5800D90340D40F93D54A2B1E908CAA85CE21DAA3A015FDA8"
+    },
+    {
+      "path": "attempt-02/raw/green-source-after.json",
+      "sha256": "BBD985B7E8975D508AE650AC3C42FB1CA6B9EB35ACEF709C654CF1967FE5ABE7"
+    },
+    {
+      "path": "attempt-02/raw/green-source-before.json",
+      "sha256": "3FF7E7A583E42AA5CDEF8AD8281BE97B18ECC71C85EEE7A727DF07FFADB72AC9"
+    },
+    {
+      "path": "attempt-02/raw/green.log",
+      "sha256": "41D7A8D855A5A1D07F9D06DA0E5E6C384E50EE8414DCD682FABD2CFD457CB5B1"
+    },
+    {
+      "path": "validate.py",
+      "sha256": "8F89A0BDF620BE5E6B7E82E41B316819D8CBFE5736A3F09C2DBF7F7EAC21ADC4"
+    },
+    {
+      "path": "runtime/green/guard.json",
+      "sha256": "01878933DA19A665DD98EB16A7145C5739A25A042465972CFE24DB7BB399A62B"
+    },
+    {
+      "path": "attempt-02/runtime/green/guard.json",
+      "sha256": "05A9DBD9588488A84B132DB5E69F50E4789F777B34F70BED7AB8E94FEB9BD4A0"
+    },
+    {
+      "path": "attempt-02/runtime/green/green.xml",
+      "sha256": "C397B725EAAABD5B0269E66BEC4B11621F9F3F5D9A091B69BC86316184950E63"
+    }
+  ]
+}

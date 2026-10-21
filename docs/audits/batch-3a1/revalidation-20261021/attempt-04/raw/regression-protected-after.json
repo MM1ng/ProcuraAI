@@ -1,0 +1,26 @@
+{
+  "captured_at": "2026-10-21T02:38:17.354868+00:00",
+  "root": "[ORIGINAL_REPO]",
+  "files": {
+    "backend/procurement.db": {
+      "exists": true,
+      "sha256": "9856E4632942E002678A35C94E15E1F6E935E6E9A521F8A7A8D8ED579300734D"
+    },
+    "data/decision_runtime.sqlite3": {
+      "exists": true,
+      "sha256": "1597CB1A6D68AF6EBA86C266A44FACD77E759D2F42B96C21F87D5B6645224AD1"
+    },
+    "data/observability_logs.json": {
+      "exists": true,
+      "sha256": "FDB7F9BBEA816EF4EA5CCE565BBC1F271F37D61DA6C367AEA2CD833BD0C517EC"
+    },
+    "data/orders.json": {
+      "exists": true,
+      "sha256": "87E5D051A264534646DC7926B1C405EE90E916E7C83E72414EBC542B3B25D6D5"
+    },
+    "data/transaction_identity/registry.sqlite3": {
+      "exists": true,
+      "sha256": "27C4981242F95AB3189FE6C6401926D630783F252C40417A32E16303A59E36BF"
+    }
+  }
+}

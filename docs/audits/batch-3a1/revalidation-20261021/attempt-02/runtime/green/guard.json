@@ -1,0 +1,113 @@
+{
+  "network_policy": "deny Python socket connect/DNS/send events",
+  "write_allow_root": "[VALIDATION_ROOT]\\attempt-02\\runtime\\green",
+  "blocked_attempts": [
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    },
+    {
+      "event": "socket.connect",
+      "detail": "network disabled"
+    }
+  ],
+  "sqlite_paths": [],
+  "pytest_return_code": 1,
+  "limitations": "Python audit hooks, not an OS firewall or hostile native-code sandbox"
+}

@@ -1,0 +1,14 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows",
+  "packages": {
+    "pytest": "9.1.1",
+    "fastapi": "0.141.1",
+    "starlette": "1.6.0",
+    "anyio": "4.15.1",
+    "httpx": "0.28.1",
+    "sqlalchemy": "2.0.54"
+  },
+  "source": "Read-only sys.version and importlib.metadata.version from the reused interpreter",
+  "dependencies_installed": false
+}

@@ -1,0 +1,705 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="26" skipped="0" tests="26" time="3.265" timestamp="2026-10-21T10:19:50.373381+08:00" hostname="[HOST_REDACTED]"><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[None-None]" time="0.073"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274FFFCBF50&gt;, &lt;Mock id='2699759598048'&gt;, &lt;Mock id='2699759598288'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274F6346030&gt;
+configured = None, supplied = None
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+        reader.assert_not_called()
+        forbidden.assert_not_called()
+&gt;       assert response.status_code == 403
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:56: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[None-fixture-observability-admin-only]" time="0.011"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274960CD6D0&gt;, &lt;Mock id='2699756915936'&gt;, &lt;Mock id='2699756955808'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274960D4800&gt;
+configured = None, supplied = 'fixture-observability-admin-only'
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+        reader.assert_not_called()
+        forbidden.assert_not_called()
+&gt;       assert response.status_code == 403
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:56: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[-fixture-observability-admin-only]" time="0.010"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274964615B0&gt;, &lt;Mock id='2699760646384'&gt;, &lt;Mock id='2699760637552'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274964610A0&gt;
+configured = '', supplied = 'fixture-observability-admin-only'
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+        reader.assert_not_called()
+        forbidden.assert_not_called()
+&gt;       assert response.status_code == 403
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:56: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[   -fixture-observability-admin-only]" time="0.011"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274960DC8C0&gt;, &lt;Mock id='2699756816480'&gt;, &lt;Mock id='2699760640576'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027496462B70&gt;
+configured = '   ', supplied = 'fixture-observability-admin-only'
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+        reader.assert_not_called()
+        forbidden.assert_not_called()
+&gt;       assert response.status_code == 403
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:56: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[fixture-observability-admin-only-None]" time="0.010"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x0000027496463530&gt;, &lt;Mock id='2699760643696'&gt;, &lt;Mock id='2699760640912'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027496460B60&gt;
+configured = 'fixture-observability-admin-only', supplied = None
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+        reader.assert_not_called()
+        forbidden.assert_not_called()
+&gt;       assert response.status_code == 403
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:56: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[fixture-observability-admin-only-wrong]" time="0.010"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274964C4CE0&gt;, &lt;Mock id='2699761043264'&gt;, &lt;Mock id='2699761047008'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274964632C0&gt;
+configured = 'fixture-observability-admin-only', supplied = 'wrong'
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+        reader.assert_not_called()
+        forbidden.assert_not_called()
+&gt;       assert response.status_code == 403
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:56: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_traces_denied_before_read[fixture-observability-admin-only-fixture-llm-debug-only]" time="0.010"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274964C4E30&gt;, &lt;Mock id='2699756947840'&gt;, &lt;Mock id='2699761053920'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274964C7E60&gt;
+configured = 'fixture-observability-admin-only'
+supplied = 'fixture-llm-debug-only'
+
+    @pytest.mark.parametrize("configured,supplied", [
+        (None, None), (None, ADMIN), ("", ADMIN), ("   ", ADMIN),
+        (ADMIN, None), (ADMIN, "wrong"), (ADMIN, DEBUG),
+    ])
+    def test_traces_denied_before_read(boundary, monkeypatch, configured, supplied):
+        client, reader, forbidden, _ = boundary
+        if configured is not None:
+            monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", configured)
+        headers = {"X-Observability-Token": supplied} if supplied else {}
+        response = client.get("/api/observability/traces", headers=headers)
+        reader.assert_not_called()
+        forbidden.assert_not_called()
+&gt;       assert response.status_code == 403
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:56: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_normal_anonymous_caller_cannot_read_shared_traces" time="0.010"><failure message="assert 500 == 200&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274964C6870&gt;, &lt;Mock id='2699761051904'&gt;, &lt;Mock id='2699761049456'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274964C6DB0&gt;
+
+    def test_normal_anonymous_caller_cannot_read_shared_traces(boundary, monkeypatch):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", ADMIN)
+        init = client.post("/api/caller/init", headers={"Origin": ORIGIN})
+&gt;       assert init.status_code == 200
+E       assert 500 == 200
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:65: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_admin_can_read_real_isolated_traces" time="0.010"><failure message="assert 500 == 200&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274964C53D0&gt;, &lt;Mock id='2699761051088'&gt;, &lt;Mock id='2699761046384'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274964C7A70&gt;
+
+    def test_admin_can_read_real_isolated_traces(boundary, monkeypatch):
+        client, reader, forbidden, rows = boundary
+        monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", ADMIN)
+        response = client.get("/api/observability/traces?limit=1",
+                              headers={"X-Observability-Token": ADMIN})
+&gt;       assert response.status_code == 200
+E       assert 500 == 200
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:79: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[None-development-fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.011"><failure message="assert 500 == 404&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274964C54F0&gt;, &lt;Mock id='2699761052240'&gt;, &lt;Mock id='2699761044656'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274964C5E50&gt;
+enabled = None, environment = 'development'
+configured = 'fixture-llm-debug-only', supplied = 'fixture-llm-debug-only'
+status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 404
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[false-development-fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.010"><failure message="assert 500 == 404&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274964C7F80&gt;, &lt;Mock id='2699761043936'&gt;, &lt;Mock id='2699761053824'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274964C5100&gt;
+enabled = 'false', environment = 'development'
+configured = 'fixture-llm-debug-only', supplied = 'fixture-llm-debug-only'
+status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 404
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[garbage-development-fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.010"><failure message="assert 500 == 404&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x0000027496460710&gt;, &lt;Mock id='2699760635680'&gt;, &lt;Mock id='2699760646336'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027496462960&gt;
+enabled = 'garbage', environment = 'development'
+configured = 'fixture-llm-debug-only', supplied = 'fixture-llm-debug-only'
+status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 404
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-production-fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.010"><failure message="assert 500 == 404&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x0000027496460AD0&gt;, &lt;Mock id='2699760640336'&gt;, &lt;Mock id='2699760638704'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027496463DA0&gt;
+enabled = 'true', environment = 'production'
+configured = 'fixture-llm-debug-only', supplied = 'fixture-llm-debug-only'
+status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 404
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-prod-fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.010"><failure message="assert 500 == 404&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x0000027496586F90&gt;, &lt;Mock id='2699761829024'&gt;, &lt;Mock id='2699761834880'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027496460EF0&gt;
+enabled = 'true', environment = 'prod', configured = 'fixture-llm-debug-only'
+supplied = 'fixture-llm-debug-only', status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 404
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-staging-fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.018"><failure message="assert 500 == 404&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274965876B0&gt;, &lt;Mock id='2699756894256'&gt;, &lt;Mock id='2699761832720'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274965878C0&gt;
+enabled = 'true', environment = 'staging', configured = 'fixture-llm-debug-only'
+supplied = 'fixture-llm-debug-only', status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 404
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true--fixture-llm-debug-only-fixture-llm-debug-only-404]" time="0.012"><failure message="assert 500 == 404&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274960AE060&gt;, &lt;Mock id='2699756924768'&gt;, &lt;Mock id='2699761841072'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027496587AD0&gt;
+enabled = 'true', environment = '', configured = 'fixture-llm-debug-only'
+supplied = 'fixture-llm-debug-only', status = 404
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 404
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-development-None-fixture-llm-debug-only-403]" time="0.011"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274965ADCA0&gt;, &lt;Mock id='2699756754256'&gt;, &lt;Mock id='2699762000976'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274965AF080&gt;
+enabled = 'true', environment = 'development', configured = None
+supplied = 'fixture-llm-debug-only', status = 403
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-development--fixture-llm-debug-only-403]" time="0.011"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274965ACA70&gt;, &lt;Mock id='2699756754112'&gt;, &lt;Mock id='2699762002800'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274965AE150&gt;
+enabled = 'true', environment = 'development', configured = ''
+supplied = 'fixture-llm-debug-only', status = 403
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-development-   -fixture-llm-debug-only-403]" time="0.010"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x0000027496593470&gt;, &lt;Mock id='2699761884800'&gt;, &lt;Mock id='2699761889552'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274965AC740&gt;
+enabled = 'true', environment = 'development', configured = '   '
+supplied = 'fixture-llm-debug-only', status = 403
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-None-403]" time="0.011"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274965910A0&gt;, &lt;Mock id='2699756950864'&gt;, &lt;Mock id='2699761885664'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027496592750&gt;
+enabled = 'true', environment = 'development'
+configured = 'fixture-llm-debug-only', supplied = None, status = 403
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-wrong-403]" time="0.011"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274965917F0&gt;, &lt;Mock id='2699761891808'&gt;, &lt;Mock id='2699761878992'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274965920F0&gt;
+enabled = 'true', environment = 'development'
+configured = 'fixture-llm-debug-only', supplied = 'wrong', status = 403
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_llm_denied_never_enters_model_chain[true-development-fixture-llm-debug-only-fixture-observability-admin-only-403]" time="0.011"><failure message="assert 500 == 403&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x0000027496591250&gt;, &lt;Mock id='2699761886768'&gt;, &lt;Mock id='2699761892480'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027496592180&gt;
+enabled = 'true', environment = 'development'
+configured = 'fixture-llm-debug-only'
+supplied = 'fixture-observability-admin-only', status = 403
+
+    @pytest.mark.parametrize("enabled,environment,configured,supplied,status", [
+        (None, "development", DEBUG, DEBUG, 404),
+        ("false", "development", DEBUG, DEBUG, 404),
+        ("garbage", "development", DEBUG, DEBUG, 404),
+        ("true", "production", DEBUG, DEBUG, 404),
+        ("true", "prod", DEBUG, DEBUG, 404),
+        ("true", "staging", DEBUG, DEBUG, 404),
+        ("true", "", DEBUG, DEBUG, 404),
+        ("true", "development", None, DEBUG, 403),
+        ("true", "development", "", DEBUG, 403),
+        ("true", "development", "   ", DEBUG, 403),
+        ("true", "development", DEBUG, None, 403),
+        ("true", "development", DEBUG, "wrong", 403),
+        ("true", "development", DEBUG, ADMIN, 403),
+    ])
+    def test_llm_denied_never_enters_model_chain(boundary, monkeypatch, enabled,
+                                                environment, configured, supplied, status):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        if enabled is not None:
+            monkeypatch.setenv("LLM_TEST_ENABLED", enabled)
+        if configured is not None:
+            monkeypatch.setenv("LLM_TEST_TOKEN", configured)
+        headers = {"X-LLM-Test-Token": supplied} if supplied else {}
+        response = client.post("/api/llm/test", json={"message": "test"}, headers=headers)
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == status
+E       assert 500 == 403
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:113: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_authorized_debug_is_local_mock_even_when_mock_flag_false[development]" time="0.011"><failure message="assert 500 == 200&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274965ADF40&gt;, &lt;Mock id='2699762001456'&gt;, &lt;Mock id='2699761996272'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027496593710&gt;
+environment = 'development'
+
+    @pytest.mark.parametrize("environment", ["development", "test"])
+    def test_authorized_debug_is_local_mock_even_when_mock_flag_false(boundary, monkeypatch, environment):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        monkeypatch.setenv("LLM_TEST_ENABLED", "true")
+        monkeypatch.setenv("LLM_TEST_TOKEN", DEBUG)
+        monkeypatch.setenv("USE_MOCK_LLM", "false")
+        response = client.post("/api/llm/test", json={"message": "test"},
+                               headers={"X-LLM-Test-Token": DEBUG})
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == 200
+E       assert 500 == 200
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:128: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_authorized_debug_is_local_mock_even_when_mock_flag_false[test]" time="0.013"><failure message="assert 500 == 200&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274965AE780&gt;, &lt;Mock id='2699762001216'&gt;, &lt;Mock id='2699762001888'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274965AF260&gt;
+environment = 'test'
+
+    @pytest.mark.parametrize("environment", ["development", "test"])
+    def test_authorized_debug_is_local_mock_even_when_mock_flag_false(boundary, monkeypatch, environment):
+        client, reader, forbidden, _ = boundary
+        monkeypatch.setenv("APP_ENV", environment)
+        monkeypatch.setenv("LLM_TEST_ENABLED", "true")
+        monkeypatch.setenv("LLM_TEST_TOKEN", DEBUG)
+        monkeypatch.setenv("USE_MOCK_LLM", "false")
+        response = client.post("/api/llm/test", json={"message": "test"},
+                               headers={"X-LLM-Test-Token": DEBUG})
+        forbidden.assert_not_called()
+        reader.assert_not_called()
+&gt;       assert response.status_code == 200
+E       assert 500 == 200
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:128: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_business_caller_not_debug_authority" time="0.014"><failure message="assert 500 == 200&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code">boundary = (&lt;starlette.testclient.TestClient object at 0x0000027496584200&gt;, &lt;Mock id='2699761837088'&gt;, &lt;Mock id='2699761828832'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027496586BD0&gt;
+
+    def test_business_caller_not_debug_authority(boundary, monkeypatch):
+        client, _, forbidden, _ = boundary
+        monkeypatch.setenv("LLM_TEST_ENABLED", "true")
+        monkeypatch.setenv("LLM_TEST_TOKEN", DEBUG)
+        init = client.post("/api/caller/init", headers={"Origin": ORIGIN})
+&gt;       assert init.status_code == 200
+E       assert 500 == 200
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+
+tests\test_debug_access_batch3a1.py:143: AssertionError</failure></testcase><testcase classname="tests.test_debug_access_batch3a1" name="test_admin_comparison_uses_constant_time" time="0.013"><failure message="AssertionError: assert 500 == 200&#10; +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code&#10; +    where &lt;Response [500 Internal Server Error]&gt; = get('/api/observability/traces', headers={'X-Observability-Token': 'fixture-observability-admin-only'})&#10; +      where get = &lt;starlette.testclient.TestClient object at 0x00000274960BD3D0&gt;.get">boundary = (&lt;starlette.testclient.TestClient object at 0x00000274960BD3D0&gt;, &lt;Mock id='2699761834880'&gt;, &lt;Mock id='2699761841600'&gt;, [{'owner_actor_id': 'caller-a', 'message': 'private-a'}, {'owner_actor_id': 'caller-b', 'message': 'private-b'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000274965862A0&gt;
+
+    def test_admin_comparison_uses_constant_time(boundary, monkeypatch):
+        # Import during execution so the same source can run red before helper exists.
+        from app.services import debug_access
+        client, _, forbidden, _ = boundary
+        monkeypatch.setenv("OBSERVABILITY_ADMIN_TOKEN", ADMIN)
+        compare = Mock(wraps=debug_access.hmac.compare_digest)
+        monkeypatch.setattr(debug_access.hmac, "compare_digest", compare)
+&gt;       assert client.get("/api/observability/traces",
+                          headers={"X-Observability-Token": ADMIN}).status_code == 200
+E       AssertionError: assert 500 == 200
+E        +  where 500 = &lt;Response [500 Internal Server Error]&gt;.status_code
+E        +    where &lt;Response [500 Internal Server Error]&gt; = get('/api/observability/traces', headers={'X-Observability-Token': 'fixture-observability-admin-only'})
+E        +      where get = &lt;starlette.testclient.TestClient object at 0x00000274960BD3D0&gt;.get
+
+tests\test_debug_access_batch3a1.py:158: AssertionError</failure></testcase></testsuite></testsuites>
